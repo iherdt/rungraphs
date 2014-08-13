@@ -17,10 +17,9 @@ class CreateResults < ActiveRecord::Migration
       t.string       :finish_time
       t.string       :gun_time
       t.string       :pace_per_mile 
-      t.string     :ag_time 
-      t.integer      :ag_gender_place
-      t.float      :ag_percent
-      t.boolean    :club_points, default: false
+      t.string       :ag_time 
+      t.integer     :ag_gender_place
+      t.float         :ag_percent
       
       t.integer     :runner_id
       t.integer     :race_id

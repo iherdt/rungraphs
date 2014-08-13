@@ -10,6 +10,7 @@ class CreateRaces < ActiveRecord::Migration
       t.string    :location
       t.string    :weather
       t.string    :sponsor
+      t.boolean    :club_points, default: false
       
       t.timestamps
     end

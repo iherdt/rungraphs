@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20140813173813) do
     t.string   "location"
     t.string   "weather"
     t.string   "sponsor"
+    t.boolean  "club_points",   default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -50,7 +51,6 @@ ActiveRecord::Schema.define(version: 20140813173813) do
     t.string   "ag_time"
     t.integer  "ag_gender_place"
     t.float    "ag_percent"
-    t.boolean  "club_points",     default: false
     t.integer  "runner_id"
     t.integer  "race_id"
     t.datetime "created_at"
