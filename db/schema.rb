@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20140813173813) do
     t.string   "weather"
     t.string   "sponsor"
     t.boolean  "club_points",   default: false
+    t.string   "organization"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

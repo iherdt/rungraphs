@@ -69,6 +69,7 @@ namespace :nyrr do
     end
 
     race = Race.new
+    race.organization = "NYRR"
     race.name = link.text
     race.date = format_date(date)
 
