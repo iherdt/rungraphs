@@ -15,6 +15,7 @@
 # gem 'pg'
 #
 default: &default
+  host: localhost
   adapter: postgresql
   encoding: unicode
   # For details on connection pooling, see rails configuration guide
@@ -81,5 +82,5 @@ test:
 production:
   <<: *default
   database: rungraphs_production
-  username: rungraphs
+  username: loganyu
   password: <%= ENV['RUNGRAPHS_DATABASE_PASSWORD'] %>
