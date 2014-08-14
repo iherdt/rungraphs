@@ -39,3 +39,26 @@
               :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
               :class => 'btn btn-danger' %>
 </div>
+
+<div class="race-results-table">
+    <table class="table table-hover table-condensed">
+        <thead>
+            <tr>
+              <% @race.results.first.attributes.keys.each do |property| %>
+                <% next if (['created_at', 'updated_at'].include? property) %>
+                <th><%= property %></th>
+              <% end %>
+            </tr>
+        </thead>
+        <tbody>
+            <% @race.results.sort_by(&:overall_place).each do |result| %>
+              <tr>
+                <% result.attributes.each do |property, value| %>
+                  <% next if (['created_at', 'updated_at'].include? property) %>
+                  <td><%= value %></td>
+                <% end %>
+              </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>
