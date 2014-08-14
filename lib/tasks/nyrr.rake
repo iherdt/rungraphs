@@ -180,7 +180,6 @@ namespace :nyrr do
   end
 
   def format_date(date_str)
-    format_str = "%m/%d/" + (date_str =~ /\d{4}/ ? "%Y" : "%y")
-    date = Date.parse(date_str) rescue Date.strptime(date_str, format_str)
+    date = Date.strptime(date_str, '%m/%d/%y')
   end
 end
