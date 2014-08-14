@@ -1,0 +1,26 @@
+<%= form_for @runner, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :first_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :first_name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :last_name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :last_name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :birth_year, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :birth_year, :class => 'text_field' %>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                runners_path, :class => 'btn' %>
+  </div>
+<% end %>
