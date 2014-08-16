@@ -53,3 +53,4 @@ gem 'mechanize'
 gem 'json'
 
 gem 'jquery-rails'
+gem 'jquery-datatables-rails', '~> 2.2.1'
