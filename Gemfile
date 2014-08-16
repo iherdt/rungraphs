@@ -52,3 +52,4 @@ gem 'nokogiri'
 gem 'mechanize'
 gem 'json'
 
+gem 'jquery-rails'

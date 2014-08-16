@@ -54,3 +54,9 @@
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_race_path,
             :class => 'btn btn-primary' %>
+
+<script>
+$(document).ready(function(){
+    $('.table').dataTable();
+});
+</script>
