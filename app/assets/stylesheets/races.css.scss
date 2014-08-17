@@ -1,3 +1,18 @@
 // Place all the styles related to the races controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.results-page-header.page-header {
+  position: fixed;
+  height: 260px;
+  width: 100%;
+  z-index: 1;
+  margin: 0;
+}
+
+.race-page-content {
+  margin-top: 260px;
+  z-index: 2;
+  position: relative;
+  
+}
