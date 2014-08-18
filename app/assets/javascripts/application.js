@@ -15,6 +15,7 @@
 //= require jquery.serializeJSON
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
+//= require dataTables/extras/dataTables.fixedHeader
 //= require twitter/bootstrap
 //= require turbolinks
 //= require_tree .

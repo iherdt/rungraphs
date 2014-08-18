@@ -14,5 +14,26 @@
   margin-top: 260px;
   z-index: 2;
   position: relative;
-  
+}
+
+.results-table {
+  background: #fff;
+  margin: 0px !important;
+}
+
+.results-table-header {
+  height: auto;
+  text-align: center;
+  background-color: #fff;
+  margin-bottom: -6px;
+}
+
+.results-table-header div{
+  width: 300px;
+  height: 42px;
+  clear: none !important;
+  display: inline-block !important;
+  float: left !important;
+  padding: 0px !important;
+  margin: 0px !important;
 }

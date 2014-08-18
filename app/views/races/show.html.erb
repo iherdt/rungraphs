@@ -20,7 +20,7 @@
 
 <div class="race-page-content">
   <div class="race-results-table">
-      <table class="results-table table table-hover table-condensed">
+      <table class="results-table table table-hover">
           <thead>
               <tr>
                   <th>O</th>
@@ -61,14 +61,19 @@
 
 <script>
 $(document).ready(function(){
-    $('.results-table').dataTable( {
+  var $resultsTable = $('.results-table')
+    $resultsTable.dataTable( {
       "aaSorting": [],
       "aoColumnDefs": [
         { "orderable": false, "targets": "_all" }
       ],
       "pagingType": "full",
-      "dom": "fprtpi",
+      "dom": "<'results-table-header group'fpi>",
       "lengthMenu": [ 50 ]
     });
+    
+    new $.fn.dataTable.FixedHeader( $resultsTable, {
+      "offsetTop": 40
+    } );
 });
 </script>
