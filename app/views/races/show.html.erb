@@ -65,7 +65,21 @@ $(document).ready(function(){
       "pagingType": "full",
       "dom": "<'results-table-header group'fpi>",
       "lengthMenu": [ 50 ],
-      "responsive": true
+      // "responsive": true,
+      "columns": [
+        { "width": "34px" },
+        { "width": "34px" },
+        { "width": "34px" },
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+  ]
     });
     
     new $.fn.dataTable.FixedHeader( $resultsTable, {

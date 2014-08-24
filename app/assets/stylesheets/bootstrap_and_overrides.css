@@ -7,3 +7,20 @@
   */
 
 body { padding-top: 60px; }
+
+.table th, .table td {
+  text-align: center;
+}
+
+table.dataTable thead th, table.dataTable thead td {
+	padding: 2px 5px;
+}
+
+table.dataTable thead > tr > th {
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+	padding: 8px 4px;
+}
