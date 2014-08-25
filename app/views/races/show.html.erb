@@ -49,7 +49,7 @@
             </tr>
           </tfoot>
           <tbody>
-              <% @race.results.sort_by(&:overall_place).each do |result| %>
+              <% @race.results.sort_by(&:overall_place).first(100).each do |result| %>
                 <tr>
                     <td><%= result.overall_place %></td>
                     <td><%= result.gender_place %></td>
@@ -72,7 +72,7 @@
 
 <script>
 $(document).ready(function(){
-  var $resultsTable = $('.results-table').dataTable( {
+  var $resultsTable = $('.results-table').DataTable( {
       "aaSorting": [],
       "aoColumnDefs": [
         { "orderable": false, "targets": "_all" }
@@ -106,21 +106,18 @@ $(document).ready(function(){
         var title = $('.results-table thead th').eq( $(this).index() ).text();
         $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
     } );
- 
-    // DataTable
-    var table = $('.results-table').DataTable();
- 
+
     // Apply the search
-    .columns().eq( 0 ).each( function ( colIdx ) {
-        $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
-            table
+    $resultsTable.columns().eq( 0 ).each( function ( colIdx ) {
+        $( 'input', $resultsTable.column( colIdx ).footer() ).on( 'keyup change', function () {
+            $resultsTable
                 .column( colIdx )
                 .search( this.value )
                 .draw();
         } );
     } );
 
-    // $('.results-table').dataTable().columnFilter({aoColumns: [
+    // $resultsTable.columnFilter({aoColumns: [
     //     { type: "checkbox", values: [ 'Gecko', 'Trident'] },
     //     {},
     //     {},
