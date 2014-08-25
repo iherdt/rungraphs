@@ -73,15 +73,10 @@ namespace :nyrr do
     race.name = link.text
     race.date = format_date(date)
 
-    race_fields_array = []
-    get_rows(race_results_page)[0].css('td').each do |i|
-      race_fields_array << i.text
-    end
-
     scrape_race_info(race_results_page, race)
     race.save!
     
-    scrape_race_individual_page(race_results_page, race.id, race.date.year, race_fields_array)
+    scrape_race_individual_page(race_results_page, race.id, race.date.year)
   end
 
   def get_race_links(yearly_results_page)
@@ -96,9 +91,15 @@ namespace :nyrr do
     race_results_page.parser.xpath("//table[@cellpadding='3'][@cellspacing='0'][@border='1'][@bordercolor='#DDDDDD'][@style='border-collapse:collapse; border-color:#DDD']/tr")
   end
 
-  def scrape_race_individual_page(race_results_page, race_id, race_year, race_fields_array)
+  def scrape_race_individual_page(race_results_page, race_id, race_year)
     puts "      scraping page"
+
+
     rows = get_rows(race_results_page) 
+    race_fields_array = []
+    rows[0].css('td').each do |i|
+      race_fields_array << i.text
+    end
     scrape_result_rows(rows, race_id, race_year, race_fields_array)
 
     # if there is a next button, click and add those results too

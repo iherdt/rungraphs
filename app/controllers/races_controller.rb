@@ -10,6 +10,7 @@ class RacesController < ApplicationController
   # GET /races/1
   # GET /races/1.json
   def show
+    
   end
 
   # GET /races/new

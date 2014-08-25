@@ -16,6 +16,7 @@
 //= require dataTables/jquery.dataTables
 //= require dataTables/bootstrap/3/jquery.dataTables.bootstrap
 //= require dataTables/extras/dataTables.fixedHeader
+//= require jquery.dataTables.columnFilter.js
 //= require dataTables.responsive.min.js
 //= require dataTables.responsive.js
 //= require twitter/bootstrap
