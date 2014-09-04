@@ -40,8 +40,8 @@ namespace :nyrr do
 
   def scrape_yearly_results(yearly_results_page, year)
     puts "----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}"
-    race_links = get_race_links(yearly_results_page).reverse.drop 16
-    race_dates = get_race_dates(yearly_results_page).reverse.drop 16
+    race_links = get_race_links(yearly_results_page).reverse.drop 19
+    race_dates = get_race_dates(yearly_results_page).reverse.drop 19
     race_links.count.times do |i|
       scrape_individual_race_results(race_links[i], race_dates[i], year)
     end
@@ -94,7 +94,6 @@ namespace :nyrr do
   def scrape_race_individual_page(race_results_page, race_id, race_year)
     puts "      scraping page"
 
-
     rows = get_rows(race_results_page) 
     race_fields_array = []
     rows[0].css('td').each do |i|
@@ -106,7 +105,7 @@ namespace :nyrr do
     next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
     if next_500_link
       next_race_results_page = $a.click(next_500_link)
-      scrape_race_individual_page(next_race_results_page, race_id, race_year, race_fields_array)
+      scrape_race_individual_page(next_race_results_page, race_id, race_year)
     end
   end
 

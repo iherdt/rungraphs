@@ -75,7 +75,7 @@ $(document).ready(function(){
   var $resultsTable = $('.results-table').DataTable( {
       "aaSorting": [],
       "aoColumnDefs": [
-        { "orderable": false, "targets": "_all" }
+        { "orderable": false, "targets": "_all", type: "checkbox", values: [ 'Gecko', 'Trident'] }
       ],
       "pagingType": "full",
       "dom": "<'results-table-header group'fpi>",
@@ -117,20 +117,20 @@ $(document).ready(function(){
         } );
     } );
 
-    // $resultsTable.columnFilter({aoColumns: [
-    //     { type: "checkbox", values: [ 'Gecko', 'Trident'] },
-    //     {},
-    //     {},
-    //     {},
-    //     { type: "checkbox", values: [ 'A', 'C']  },
-    //     {},
-    //     {},
-    //     {},
-    //     {},
-    //     {},
-    //     {},
-    //     {}
-    //   ]});
+    $resultsTable.columnFilter({aoColumns: [
+        { type: "checkbox", values: [ 'Gecko', 'Trident'] },
+        {},
+        {},
+        {},
+        { type: "checkbox", values: [ 'A', 'C']  },
+        {},
+        {},
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]});
 
 });
 </script>
