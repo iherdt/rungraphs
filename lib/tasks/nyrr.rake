@@ -40,8 +40,8 @@ namespace :nyrr do
 
   def scrape_yearly_results(yearly_results_page, year)
     puts "----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}"
-    race_links = get_race_links(yearly_results_page).reverse.drop 19
-    race_dates = get_race_dates(yearly_results_page).reverse.drop 19
+    race_links = get_race_links(yearly_results_page).reverse.drop
+    race_dates = get_race_dates(yearly_results_page).reverse.drop
     race_links.count.times do |i|
       scrape_individual_race_results(race_links[i], race_dates[i], year)
     end
