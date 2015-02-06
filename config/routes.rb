@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   resources :runners
   resources :races
   resources :results
+  get 'search', to: 'search#search'
   #   resources :products do
   #     member do
   #       get 'short'
