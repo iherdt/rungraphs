@@ -7,10 +7,29 @@ class Race < ActiveRecord::Base
 	has_many :results, inverse_of: :race, dependent: :destroy
 	has_many :runners, through: :results
 
-	settings index: { number_of_shards: 1 } do
-	  mappings dynamic: 'false' do
-	    indexes :name, analyzer: 'english'
+	settings index: {
+		number_of_shards: 1
+		},
+		analysis: {
+			filter: {
+			    autocomplete_filter: {
+			      type: "edge_ngram",
+			      min_gram: 3,
+			      max_gram: 4
+		    	}
+			},
+			analyzer: {
+		    autocomplete: {
+		      tokenizer: "lowercase",
+		      filter: ["lowercase", "autocomplete_filter"],
+		      type: "custom"
+		    }
+		  }
+	  }	do
+	  mappings dynamic: 'true' do
+	    indexes :name, analyzer: 'autocomplete'
 	  end
+
 	end
 
 	def self.search(query)
@@ -19,9 +38,10 @@ class Race < ActiveRecord::Base
 	      query: {
 	        multi_match: {
 	          query: query,
-	          fields: ['name^10']
+	          fields: ['name']
 	        }
-	      }
+	      },
+	      fields: ['name', 'id', 'date']
 	    }
 	  )
 	end
