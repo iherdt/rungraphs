@@ -1,5 +1,44 @@
+<form action="<%= search_path %>" method="get">
+  <label for="search_race">Search</label>
+    <input
+      type="text"
+      name="q"
+      placeholder="Search"
+      id="race-search-input"
+      autocomplete="off">
+  <input class="sign-up-button" type="submit" value="Go">
+</form>
+
+<div class="race-results-container">
+</div>
+
 <ul>
   <% @races.each do |race| %>
-    <li> <%= race.name %> </li>
+    <li>
+    	<%= link_to "#{race.name} : #{race.date}", controller: "races", action: "show", id: "#{race.id}"%>
+    </li>
   <% end %>
 </ul>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#race-search-input").on("keyup", function (event) {
+      var $currentTarget = $(event.currentTarget);
+      $q = $("#race-search-input").val();
+
+      if ($q.length >= 2) {
+        $.ajax({
+          url: "<%= search_url %>",
+          type: "GET",
+          data: {'q': $q},
+          success: function (resp) {
+            $('.race-results-container').html(resp);
+          }
+        });
+      } else {
+        $('.race-results-container').empty();
+      }
+    });  
+  });
+
+</script>

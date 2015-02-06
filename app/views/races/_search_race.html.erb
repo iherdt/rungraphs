@@ -1,9 +1,7 @@
 <ul>
   <% races.each do |race| %>
     <li>
-      <h3>
         <%= link_to "#{race[:name]} : #{race[:date]}", controller: "races", action: "show", id: "#{race[:id]}"%>
-      </h3>
     </li>
   <% end %>
 </ul>
