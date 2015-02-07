@@ -69,7 +69,6 @@ namespace :nyrr do
     end
 
     race = Race.new
-    race.organization = "NYRR"
     race.name = link.text
     race.date = format_date(date)
 
@@ -94,24 +93,31 @@ namespace :nyrr do
   def scrape_race_individual_page(race_results_page, race_id, race_year)
     puts "      scraping page"
 
-    rows = get_rows(race_results_page) 
+    
+    rows = get_rows(race_results_page)
     race_fields_array = []
     rows[0].css('td').each do |i|
       race_fields_array << i.text
     end
     scrape_result_rows(rows, race_id, race_year, race_fields_array)
 
-    # if there is a next button, click and add those results too
-    next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
-    if next_500_link
-      next_race_results_page = $a.click(next_500_link)
-      scrape_race_individual_page(next_race_results_page, race_id, race_year)
-    end
+    # for now, limit to first 500 for each race because of cost of production
+
+    # # if there is a next button, click and add those results too
+    # next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
+    # if next_500_link
+    #   next_race_results_page = $a.click(next_500_link)
+    #   scrape_race_individual_page(next_race_results_page, race_id, race_year)
+    # end
   end
 
   def scrape_result_rows(rows, race_id, race_year, race_fields_array)
     rows.shift
+    # limit to 100 because of production size limits
+    limit = 100
+    count = 0
     rows.each do |row|
+      count += 1
       result = Result.new
       data_array = []
       row.css('td').each_with_index do |field, index|
@@ -150,6 +156,9 @@ namespace :nyrr do
       result.update_attributes("runner_id" => result_runner.id)
       result.update_attributes("race_id" => race_id)
       result.save!
+      if count == 100
+        break
+      end
     end
   end
 
