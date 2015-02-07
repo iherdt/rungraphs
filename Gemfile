@@ -3,6 +3,9 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.4'
+
+ruby '2.0.0'
+
 # Use postgresql as the database for Active Record
 gem 'pg'
 # Use SCSS for stylesheets
@@ -46,6 +49,7 @@ end
 group :production do
 	gem 'bonsai-elasticsearch-rails'
 	gem 'newrelic_rpm'
+	gem 'rails_12factor'
 end
 
 # bootstrap
