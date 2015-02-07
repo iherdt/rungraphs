@@ -113,8 +113,8 @@ namespace :nyrr do
 
   def scrape_result_rows(rows, race_id, race_year, race_fields_array)
     rows.shift
-    # limit to 100 because of production size limits
-    limit = 100
+    # limit to 50 because of production size limits
+    limit = 50
     count = 0
     rows.each do |row|
       count += 1
