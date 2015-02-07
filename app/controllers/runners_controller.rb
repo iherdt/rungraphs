@@ -4,7 +4,6 @@ class RunnersController < ApplicationController
   # GET /runners
   # GET /runners.json
   def index
-    @runners = Runner.all
   end
 
   # GET /runners/1

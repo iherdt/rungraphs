@@ -4,7 +4,6 @@ class RacesController < ApplicationController
   # GET /races
   # GET /races.json
   def index
-    @races = Race.all
   end
 
   # GET /races/1

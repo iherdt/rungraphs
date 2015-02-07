@@ -49,7 +49,7 @@
             </tr>
           </tfoot>
           <tbody>
-              <% @race.results.sort_by(&:overall_place).first(100).each do |result| %>
+              <% @race.results.sort_by(&:overall_place).each do |result| %>
                 <tr>
                     <td><%= result.overall_place %></td>
                     <td><%= result.gender_place %></td>

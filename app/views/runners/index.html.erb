@@ -1,40 +1,35 @@
-<%- model_class = Runner -%>
-<div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
-</div>
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:first_name) %></th>
-      <th><%= model_class.human_attribute_name(:last_name) %></th>
-      <th><%= model_class.human_attribute_name(:birth_year) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @runners.each do |runner| %>
-      <tr>
-        <td><%= link_to runner.id, runner_path(runner) %></td>
-        <td><%= runner.first_name %></td>
-        <td><%= runner.last_name %></td>
-        <td><%= runner.birth_year %></td>
-        <td><%=l runner.created_at %></td>
-        <td>
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_runner_path(runner), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      runner_path(runner),
-                      :method => :delete,
-                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                      :class => 'btn btn-mini btn-danger' %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<form action="<%= search_runners_url %>" method="get">
+  <label for="search_runner">Search</label>
+    <input
+      type="text"
+      name="q"
+      placeholder="Search for runners"
+      id="runner-search-input"
+      autocomplete="off">
+  <input class="sign-up-button" type="submit" value="Go">
+</form>
 
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_runner_path,
-            :class => 'btn btn-primary' %>
+<div class="runner-results-container">
+</div>
+
+<script type="text/javascript">
+
+    $("#runner-search-input").on("keyup", function (event) {
+      var $currentTarget = $(event.currentTarget);
+      $q = $("#runner-search-input").val();
+
+      if ($q.length >= 2) {
+        $.ajax({
+          url: "<%= search_runners_url %>",
+          type: "GET",
+          data: {'q': $q},
+          success: function (resp) {
+            $('.runner-results-container').html(resp);
+          }
+        });
+      } else {
+        $('.runner-results-container').empty();
+      }
+    });  
+
+</script>

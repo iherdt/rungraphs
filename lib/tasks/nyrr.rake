@@ -40,8 +40,8 @@ namespace :nyrr do
 
   def scrape_yearly_results(yearly_results_page, year)
     puts "----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}"
-    race_links = get_race_links(yearly_results_page).reverse.drop
-    race_dates = get_race_dates(yearly_results_page).reverse.drop
+    race_links = get_race_links(yearly_results_page).reverse.drop 1
+    race_dates = get_race_dates(yearly_results_page).reverse.drop 1
     race_links.count.times do |i|
       scrape_individual_race_results(race_links[i], race_dates[i], year)
     end
@@ -128,9 +128,8 @@ namespace :nyrr do
       #create or find runner
       birth_year = race_year - result.age
       runners = Runner.where(first_name: result.first_name, last_name: result.last_name)
-
       if runners.empty?
-        result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year )
+        result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year, team: result.team )
       else
         found = false
         runners.each do |runner|
@@ -142,7 +141,7 @@ namespace :nyrr do
         end
         
         if not found
-          result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year )
+          result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year, team: result.team )
         end
       end
  

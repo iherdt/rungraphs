@@ -1,4 +1,4 @@
-<form action="<%= search_path %>" method="get">
+<form action="<%= search_races_url %>" method="get">
   <label for="search_race">Search</label>
     <input
       type="text"
@@ -12,23 +12,15 @@
 <div class="race-results-container">
 </div>
 
-<ul>
-  <% @races.each do |race| %>
-    <li>
-    	<%= link_to "#{race.name} : #{race.date}", controller: "races", action: "show", id: "#{race.id}"%>
-    </li>
-  <% end %>
-</ul>
-
 <script type="text/javascript">
-  $(document).ready(function(){
+
     $("#race-search-input").on("keyup", function (event) {
       var $currentTarget = $(event.currentTarget);
       $q = $("#race-search-input").val();
 
       if ($q.length >= 2) {
         $.ajax({
-          url: "<%= search_url %>",
+          url: "<%= search_races_url %>",
           type: "GET",
           data: {'q': $q},
           success: function (resp) {
@@ -39,6 +31,5 @@
         $('.race-results-container').empty();
       }
     });  
-  });
 
 </script>
