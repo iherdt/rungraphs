@@ -43,6 +43,11 @@ group :development do
   gem 'binding_of_caller'
 end
 
+group :production do
+	gem 'bonsai-elasticsearch-rails', '~> 0.0.4'
+	gem 'newrelic_rpm'
+end
+
 # bootstrap
 gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
@@ -52,10 +57,7 @@ gem 'nokogiri'
 gem 'mechanize'
 gem 'json'
 
-gem 'jquery-rails'
 gem 'jquery-datatables-rails', '~> 2.2.1'
 
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
-
-gem 'newrelic_rpm'
