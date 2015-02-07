@@ -79,6 +79,4 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  Elasticsearch::Model.client = Elasticsearch::Client.new({url: "https://fig-1843390.us-east-1.bonsai.io/", logs: true})
 end
