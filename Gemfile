@@ -41,6 +41,9 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -62,6 +65,3 @@ gem 'mechanize'
 gem 'json'
 
 gem 'jquery-datatables-rails', '~> 2.2.1'
-
-gem 'elasticsearch-model'
-gem 'elasticsearch-rails'
