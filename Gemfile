@@ -44,7 +44,7 @@ group :development do
 end
 
 group :production do
-	gem 'bonsai-elasticsearch-rails', '~> 0.0.4'
+	gem 'bonsai-elasticsearch-rails'
 	gem 'newrelic_rpm'
 end
 
