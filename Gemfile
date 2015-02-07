@@ -57,3 +57,5 @@ gem 'jquery-datatables-rails', '~> 2.2.1'
 
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
+
+gem 'newrelic_rpm'
