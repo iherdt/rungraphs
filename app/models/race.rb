@@ -46,13 +46,13 @@ class Race < ActiveRecord::Base
 	  )
 	end
 end
-# Delete the previous races index in Elasticsearch
-Race.__elasticsearch__.client.indices.delete index: Race.index_name rescue nil
+# # Delete the previous races index in Elasticsearch
+# Race.__elasticsearch__.client.indices.delete index: Race.index_name rescue nil
  
-# Create the new index with the new mapping
-Race.__elasticsearch__.client.indices.create \
-  index: Race.index_name,
-  body: { settings: Race.settings.to_hash, mappings: Race.mappings.to_hash }
+# # Create the new index with the new mapping
+# Race.__elasticsearch__.client.indices.create \
+#   index: Race.index_name,
+#   body: { settings: Race.settings.to_hash, mappings: Race.mappings.to_hash }
  
-# Index all races records from the DB to Elasticsearch
-Race.import
+# # Index all races records from the DB to Elasticsearch
+# Race.import

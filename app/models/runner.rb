@@ -47,13 +47,13 @@ class Runner < ActiveRecord::Base
 	end
 end
 
-# Delete the previous runners index in Elasticsearch
-Runner.__elasticsearch__.client.indices.delete index: Runner.index_name rescue nil
+# # Delete the previous runners index in Elasticsearch
+# Runner.__elasticsearch__.client.indices.delete index: Runner.index_name rescue nil
  
-# Create the new index with the new mapping
-Runner.__elasticsearch__.client.indices.create \
-  index: Runner.index_name,
-  body: { settings: Runner.settings.to_hash, mappings: Runner.mappings.to_hash }
+# # Create the new index with the new mapping
+# Runner.__elasticsearch__.client.indices.create \
+#   index: Runner.index_name,
+#   body: { settings: Runner.settings.to_hash, mappings: Runner.mappings.to_hash }
  
-# Index all races records from the DB to Elasticsearch
-Runner.import
+# # Index all races records from the DB to Elasticsearch
+# Runner.import
