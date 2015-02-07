@@ -40,6 +40,7 @@ namespace :nyrr do
 
   def scrape_yearly_results(yearly_results_page, year)
     puts "----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}"
+    # limit results scraped to 10 per year because of size limits
     race_links = get_race_links(yearly_results_page).reverse.shift(10)
     race_dates = get_race_dates(yearly_results_page).reverse.shift(10)
     race_links.count.times do |i|
