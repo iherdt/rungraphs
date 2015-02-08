@@ -3,9 +3,20 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .results-page-header.page-header {
-  height: 280px;
-  width: 1170px;
+  height: 100%;
+  width: 100%;
   margin: 0;
+}
+
+.results-page-header {
+  .race-attribute {
+    float: left;
+    padding-right: 20px;
+    width: 130px;
+  }
+  .race-attribute-value {
+
+  }
 }
 
 .race-page-content {

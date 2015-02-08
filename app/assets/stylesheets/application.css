@@ -18,9 +18,3 @@
  *= require_self
  *= require_tree .
  */
-
-.group:after {
-  content: "";
-  clear: both;
-  display: table;
-}

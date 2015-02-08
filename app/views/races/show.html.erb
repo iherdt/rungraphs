@@ -1,13 +1,13 @@
 <%- model_class = Race -%>
 <div class="results-page-header page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
+  <h1><%= @race.name %></h1>
   
-  <dl class="dl-horizontal">
+  <dl>
     <% @race.attributes.each do |attribute, value| %>
       <% next if value.nil? %>
-      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity"].include? attribute %>
-      <dt><strong><%= model_class.human_attribute_name(attribute) %>:</strong></dt>
-      <dd>
+      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity", "name"].include? attribute %>
+      <dt class="race-attribute"><strong><%= model_class.human_attribute_name(attribute) %>:</strong></dt>
+      <dd class="race-attribute-value">
         <%= value %>
         <% case attribute %>
         <% when "distance" %>
