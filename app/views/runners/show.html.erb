@@ -6,8 +6,10 @@
 </div>
 
 <dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:team) %>:</strong></dt>
-  <dd><%= @runner.team %></dd>
+  <% if @runner.team != '0' && !@runner.team.blank? %>
+    <dt><strong><%= model_class.human_attribute_name(:team) %>:</strong></dt>
+    <dd><%= @runner.team %></dd>
+  <% end %>
   <dt><strong><%= model_class.human_attribute_name(:sex) %>:</strong></dt>
   <dd><%= @runner.sex %></dd>
   <dt><strong><%= model_class.human_attribute_name(:birth_year) %> (approx):</strong></dt>
@@ -41,7 +43,7 @@
                   </div>
                 </a>
               </td>
-              <td><%= result.race.date %></td>
+              <td><%= result.race.date.strftime("%B %d, %Y") %></td>
               <td><%= result.overall_place %></td>
               <td><%= result.gender_place %></td>
               <td><%= result.age_place %></td>
