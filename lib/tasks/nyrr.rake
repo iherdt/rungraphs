@@ -24,6 +24,15 @@ namespace :nyrr do
   "NetTime" => "net_time"
   }
 
+  CLUB_POINTS = {
+    "2014" => [1, 27, 37, 38, 41, 46, 48, 51, 57, 60],
+    "2013" => [1, 14, 16, 20, 23, 29, 32, 37, 45, 59],
+    "2012" => [4, 11, 16, 21, 23, 25, 31, 35, 41, 45],
+    "2011" => [4, 17, 19, 23, 26, 30, 33, 39, 44],
+    "2010" => [4, 16, 21, 26, 35, 29, 35, 41, 47, 52],
+    "2009" => [4, 18, 22, 28, 29, 31, 32, 38, 41, 46, 47]
+  }
+
   $a = Mechanize.new
   
   task :results, [:year] => :environment do |t, arg|
@@ -40,10 +49,11 @@ namespace :nyrr do
 
   def scrape_yearly_results(yearly_results_page, year)
     puts "----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}"
-    # limit results scraped to 10 per year because of size limits
-    race_links = get_race_links(yearly_results_page).reverse.shift(10)
-    race_dates = get_race_dates(yearly_results_page).reverse.shift(10)
+    race_links = get_race_links(yearly_results_page)
+    race_dates = get_race_dates(yearly_results_page)
     race_links.count.times do |i|
+      # only including club points races because of size limits
+      next if !CLUB_POINTS[year].include? i
       scrape_individual_race_results(race_links[i], race_dates[i], year)
     end
   end
