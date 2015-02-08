@@ -24,50 +24,54 @@
       <table class="results-table table table-hover">
           <thead>
               <tr>
-                  <th>O</th>
-                  <th>G</th>
-                  <th>A</th>
-                  <th>Name</th>
-                  <th>Team</th>
-                  <th>Sex</th>
-                  <th>Age</th>
-                  <th>Bib</th>
-                  <th> <%= @race_time_array[0] %> </th>
-                  <th>Pace</th>
-                  <th>AG Time</th>
-                  <th>AG%</th>
+                  <th class="race-header-title">Overall</th>
+                  <th class="race-header-title">Gender</th>
+                  <th class="race-header-title">AG</th>
+                  <th class="race-header-title">
+                    <input type="text" placeholder="Runner" />
+                  </th>
+                  <th>
+                    <select class="race-header-select">
+                      <option value="Team" select="selected">
+                        Team
+                      </option>
+                    </select>
+                  </th>
+                  <th>
+                    <select class="race-header-select">
+                      <option value="Sex" select="selected">
+                        Sex
+                      </option>
+                    </select>
+                  </th>
+                  <th>                    
+                    <select class="race-header-select">
+                      <option value="Age" select="selected">
+                        Age
+                      </option>
+                    </select>
+                  </th>
+                  <th class="race-header-title">Bib</th>
+                  <th class="race-header-title"> <%= @race_time_array[0] %> </th>
+                  <th class="race-header-title">Pace</th>
+                  <th class="race-header-title">AG Time</th>
+                  <th class="race-header-title">AG%</th>
               </tr>
           </thead>
-          <tfoot>
-            <tr>
-                  <th>O</th>
-                  <th>G</th>
-                  <th>A</th>
-                  <th>Name</th>
-                  <th>Team</th>
-                  <th>Sex</th>
-                  <th>Age</th>
-                  <th>Bib</th>
-                  <th> <%= @race_time_array[0] %> </th>
-                  <th>Pace</th>
-                  <th>AG Time</th>
-                  <th>AG%</th>
-            </tr>
-          </tfoot>
           <tbody>
               <% @race.results.sort_by(&:overall_place).each do |result| %>
                 <tr>
                     <td><%= result.overall_place %></td>
                     <td><%= result.gender_place %></td>
                     <td><%= result.age_place %></td>
-                    <td><%= link_to "#{result.first_name} #{result.last_name}", controller: "runners", action: "show", id: "#{result.runner.id}"%></td>
+                    <td><%= link_to "#{result.first_name.split.map(&:capitalize).join(' ')} #{result.last_name.split.map(&:capitalize).join(' ')}", controller: "runners", action: "show", id: "#{result.runner.id}"%></td>
                     <td><%= result.team %></td>
                     <td><%= result.sex %></td>
                     <td><%= result.age %></td>
                     <td><%= result.bib %></td>
-                    <td><%= result.send(@race_time_array[1]) %></td>
-                    <td><%= result.pace_per_mile %></td>
-                    <td><%= result.ag_time %> </td>
+                    <td><%= result.send(@race_time_array[1]).prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %></td>
+                    <td><%= result.pace_per_mile.prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %></td>
+                    <td><%= result.ag_time.prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %> </td>
                     <td><%= result.ag_percent %>%</td>
                 </tr>
               <% end %>
@@ -81,61 +85,64 @@
   var $resultsTable = $('.results-table').DataTable( {
       "aaSorting": [],
       "aoColumnDefs": [
-        { "orderable": false, "targets": "_all", type: "checkbox", values: [ 'Gecko', 'Trident'] }
+        { "orderable": false, "targets": "_all" }
       ],
-      "pagingType": "full",
-      "dom": "<'results-table-header group'fpi>",
+      "pagingType": "simple_numbers",
+      "dom": "<bottom'results-table-header'p>",
       "lengthMenu": [ 10 ],
+      "bLengthChange": false,
       // "responsive": true,
       "columns": [
-        { "width": "34px" },
-        { "width": "34px" },
-        { "width": "34px" },
+        {"width": "70px", "orderable": true},
+        {"width": "70px", "orderable": true},
+        {"width": "65px", "orderable": true},
+        {},
         null,
         null,
         null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null
-      ]
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": true }
+      ],
     });
+
+
+
     
-    new $.fn.dataTable.FixedHeader( $resultsTable, {
-      "offsetTop": 40
-    } );
+    // new $.fn.dataTable.FixedHeader( $resultsTable, {
+    //   "offsetTop": 40
+    // } );
 
     // Setup - add a text input to each footer cell
-    $('.results-table tfoot th').each( function () {
-        var title = $('.results-table thead th').eq( $(this).index() ).text();
-        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-    } );
+    // $('.results-table tfoot th').each( function () {
+    //     var title = $('.results-table thead th').eq( $(this).index() ).text();
+    //     $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+    // } );
 
     // Apply the search
-    $resultsTable.columns().eq( 0 ).each( function ( colIdx ) {
-        $( 'input', $resultsTable.column( colIdx ).footer() ).on( 'keyup change', function () {
-            $resultsTable
-                .column( colIdx )
-                .search( this.value )
-                .draw();
-        } );
-    } );
+    // $resultsTable.columns().eq( 0 ).each( function ( colIdx ) {
+    //     $( 'input', $resultsTable.column( colIdx ).footer() ).on( 'keyup change', function () {
+    //         $resultsTable
+    //             .column( colIdx )
+    //             .search( this.value )
+    //             .draw();
+    //     } );
+    // } );
 
-    $resultsTable.columnFilter({aoColumns: [
-        { type: "checkbox", values: [ 'Gecko', 'Trident'] },
-        {},
-        {},
-        {},
-        { type: "checkbox", values: [ 'A', 'C']  },
-        {},
-        {},
-        {},
-        {},
-        {},
-        {},
-        {}
-      ]});
-
+    // $resultsTable.columnFilter({aoColumns: [
+    //     { type: "checkbox", values: [ 'Gecko', 'Trident'] },
+    //     {},
+    //     {},
+    //     {},
+    //     { type: "checkbox", values: [ 'A', 'C']  },
+    //     {},
+    //     {},
+    //     {},
+    //     {},
+    //     {},
+    //     {},
+    //     {}
+    //   ]});
 </script>

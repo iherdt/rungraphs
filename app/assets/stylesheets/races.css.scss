@@ -68,11 +68,8 @@ div#DataTables_Table_0_filter {
 
 /* navigation bar */
 .dataTables_wrapper .dataTables_paginate {
-  float: left;
-  text-align: right;
-  /* padding-top: 0.25em; */
-  padding-left: 45px;
-  padding-right: 45px;
+  text-align: center;
+  width: 100%;
 }
 
 /* entry amount bar */
@@ -84,8 +81,21 @@ div#DataTables_Table_0_filter {
   padding-right: 45px;
 }
 
+.race-header-title {
+padding-bottom: 6px;
+}
+
+.race-header-select {
+  width: 69px;
+  background: white;
+  border: none;
+  font-weight: bold;
+  color: black;
+  padding-bottom: 0px;
+}
+
 tfoot input {
-        width: 100%;
+        width: 60px;
         padding: 3px;
         box-sizing: border-box;
 }
