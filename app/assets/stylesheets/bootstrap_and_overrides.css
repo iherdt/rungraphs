@@ -6,13 +6,10 @@
   =require twitter-bootstrap-static/fontawesome
   */
 
-
-html, body, h1, h2, div, img, label, input, form, button, ul, ol, li, a, textarea, p {
+  html, body, h1, h2, div, img, label, input, form, button, ul, ol, li, a, textarea, p {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 100%;
-  font: inherit;
   vertical-align: baseline;
   color: black;
 }
