@@ -1,28 +1,39 @@
-<h1>Races Search</h1>
-
-<form action="<%= search_path %>" method="get">
+<form action="<%= search_races_url %>" method="get">
   <label for="search_race">Search</label>
     <input
       type="text"
       name="q"
-      placeholder="Search"
+      placeholder="Search for races"
       id="race-search-input"
       autocomplete="off">
   <input class="sign-up-button" type="submit" value="Go">
 </form>
- 
+
+<form action="<%= search_runners_url %>" method="get">
+  <label for="search_runner">Search</label>
+    <input
+      type="text"
+      name="q"
+      placeholder="Search for runners"
+      id="runner-search-input"
+      autocomplete="off">
+  <input class="sign-up-button" type="submit" value="Go">
+</form>
+
 <div class="race-results-container">
 </div>
 
+<div class="runner-results-container">
+</div>
+
 <script type="text/javascript">
-  $(document).ready(function(){
     $("#race-search-input").on("keyup", function (event) {
       var $currentTarget = $(event.currentTarget);
       $q = $("#race-search-input").val();
 
       if ($q.length >= 2) {
         $.ajax({
-          url: "<%= search_url %>",
+          url: "<%= search_races_url %>",
           type: "GET",
           data: {'q': $q},
           success: function (resp) {
@@ -33,6 +44,23 @@
         $('.race-results-container').empty();
       }
     });  
-  });
+
+    $("#runner-search-input").on("keyup", function (event) {
+      var $currentTarget = $(event.currentTarget);
+      $q = $("#runner-search-input").val();
+
+      if ($q.length >= 2) {
+        $.ajax({
+          url: "<%= search_runners_url %>",
+          type: "GET",
+          data: {'q': $q},
+          success: function (resp) {
+            $('.runner-results-container').html(resp);
+          }
+        });
+      } else {
+        $('.runner-results-container').empty();
+      }
+    });  
 
 </script>

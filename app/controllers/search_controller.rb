@@ -1,4 +1,7 @@
 class SearchController < ApplicationController
+	def search
+	end
+	
 	def search_races
 	    results = Race.search params[:q]
 	    races = parse_race_results(results)

@@ -8,18 +8,53 @@
   <dd><%= @runner.first_name %></dd>
   <dt><strong><%= model_class.human_attribute_name(:last_name) %>:</strong></dt>
   <dd><%= @runner.last_name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:birth_year) %>:</strong></dt>
-  <dd><%= @runner.birth_year %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:team) %>:</strong></dt>
+  <dd><%= @runner.team %></dd>
 </dl>
 
-<div class="form-actions">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              runners_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_runner_path(@runner), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              runner_path(@runner),
-              :method => 'delete',
-              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-              :class => 'btn btn-danger' %>
-</div>
+<table class="results-table table table-hover">
+    <thead>
+        <tr>
+            <th>Race</th>
+            <th>O</th>
+            <th>G</th>
+            <th>A</th>
+            <th>Age</th>
+            <th>Bib</th>
+            <th>Time</th>
+            <th>Pace</th>
+            <th>AG Time</th>
+            <th>AG%</th>
+        </tr>
+    </thead>
+    <tfoot>
+      <tr>
+            <th>Race</th>
+            <th>O</th>
+            <th>G</th>
+            <th>A</th>
+            <th>Age</th>
+            <th>Bib</th>
+            <th>Time</th>
+            <th>Pace</th>
+            <th>AG Time</th>
+            <th>AG%</th>
+      </tr>
+    </tfoot>
+    <tbody>
+        <% @results.each do |result| %>
+          <tr>
+              <td><%= link_to "#{result.race.name}", controller: "races", action: "show", id: "#{result.race.id}"%></td>
+              <td><%= result.overall_place %></td>
+              <td><%= result.gender_place %></td>
+              <td><%= result.age_place %></td>
+              <td><%= result.age %></td>
+              <td><%= result.bib %></td>
+              <td><%= result.finish_time %></td>
+              <td><%= result.pace_per_mile %></td>
+              <td><%= result.ag_time %> </td>
+              <td><%= result.ag_percent %>%</td>
+          </tr>
+        <% end %>
+    </tbody>
+</table>

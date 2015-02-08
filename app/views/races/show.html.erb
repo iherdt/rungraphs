@@ -54,7 +54,7 @@
                     <td><%= result.overall_place %></td>
                     <td><%= result.gender_place %></td>
                     <td><%= result.age_place %></td>
-                    <td><%= result.first_name + ' ' + result.last_name %></td>
+                    <td><%= link_to "#{result.last_name} #{result.last_name}", controller: "runners", action: "show", id: "#{result.runner.id}"%></td>
                     <td><%= result.team %></td>
                     <td><%= result.sex %></td>
                     <td><%= result.age %></td>
@@ -71,7 +71,7 @@
 </div>
 
 <script>
-$(document).ready(function(){
+
   var $resultsTable = $('.results-table').DataTable( {
       "aaSorting": [],
       "aoColumnDefs": [
@@ -132,5 +132,4 @@ $(document).ready(function(){
         {}
       ]});
 
-});
 </script>
