@@ -109,3 +109,18 @@ td.dataTables_empty {
   vertical-align: middle;
   font-size: 30px;
 }
+
+/* NAV BAR */
+
+.header-search-bar {
+  float: left;
+}
+
+.header-search-bar-input {
+  padding: 8px 6px !important;
+  margin-bottom: 0px !important;
+};
+
+.header-buttons-container {
+  float: left;
+}

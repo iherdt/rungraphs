@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   get 'search', to: 'search#search'
   get 'search_races', to: 'search#search_races'
   get 'search_runners', to: 'search#search_runners'
+  get 'search_all', to: 'search#search_all'
   #   resources :products do
   #     member do
   #       get 'short'

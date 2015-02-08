@@ -1,0 +1,11 @@
+<ul>
+  <% results.each do |result| %>
+    <li>
+    	<% if result[:type] == "runner" %>
+        	<%= link_to "#{result[:first_name]} #{result[:last_name]} : #{result[:team]}", controller: "runners", action: "show", id: "#{result[:id]}"%>
+        <% else %>
+        	<%= link_to "#{result[:name]} : #{result[:date]}", controller: "races", action: "show", id: "#{result[:id]}"%>
+        <% end %>
+    </li>
+  <% end %>
+</ul>
