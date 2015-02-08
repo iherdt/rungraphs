@@ -5,9 +5,15 @@
   <dl class="dl-horizontal">
     <% @race.attributes.each do |attribute, value| %>
       <% next if value.nil? %>
-      <% next if ["club_points", "id", "created_at", "updated_at"].include? attribute %>
+      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity"].include? attribute %>
       <dt><strong><%= model_class.human_attribute_name(attribute) %>:</strong></dt>
-      <dd><%= value%></dd>
+      <dd>
+        <%= value %>
+        <% case attribute %>
+        <% when "distance" %>
+          miles
+        <% end %>
+      </dd>
     <% end %>
   </dl>
 </div>
@@ -26,7 +32,7 @@
                   <th>Sex</th>
                   <th>Age</th>
                   <th>Bib</th>
-                  <th>Net Time</th>
+                  <th> <%= @race_time_array[0] %> </th>
                   <th>Pace</th>
                   <th>AG Time</th>
                   <th>AG%</th>
@@ -42,7 +48,7 @@
                   <th>Sex</th>
                   <th>Age</th>
                   <th>Bib</th>
-                  <th>Time</th>
+                  <th> <%= @race_time_array[0] %> </th>
                   <th>Pace</th>
                   <th>AG Time</th>
                   <th>AG%</th>
@@ -59,7 +65,7 @@
                     <td><%= result.sex %></td>
                     <td><%= result.age %></td>
                     <td><%= result.bib %></td>
-                    <td><%= result.net_time %></td>
+                    <td><%= result.send(@race_time_array[1]) %></td>
                     <td><%= result.pace_per_mile %></td>
                     <td><%= result.ag_time %> </td>
                     <td><%= result.ag_percent %>%</td>
@@ -79,7 +85,7 @@
       ],
       "pagingType": "full",
       "dom": "<'results-table-header group'fpi>",
-      "lengthMenu": [ 50 ],
+      "lengthMenu": [ 10 ],
       // "responsive": true,
       "columns": [
         { "width": "34px" },

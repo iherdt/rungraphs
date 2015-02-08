@@ -4,12 +4,14 @@ class RacesController < ApplicationController
   # GET /races
   # GET /races.json
   def index
-    @races = Race.all
+    @races = Race.all.order(:date => :desc)
   end
 
   # GET /races/1
   # GET /races/1.json
   def show
+    @race = Race.find(params[:id])
+    @race_time_array = get_race_time_title_and_type(@race)
   end
 
   # GET /races/new
@@ -70,5 +72,15 @@ class RacesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def race_params
       params[:race]
+    end
+
+    def get_race_time_title_and_type(race)
+      if race.results.first.net_time
+        ["Net Time", "net_time"]
+      elsif race.results.first.finish_time
+        ["Finish Time", "finish_time"]
+      else
+        ["Gun Time", "gun_time"]
+      end
     end
 end

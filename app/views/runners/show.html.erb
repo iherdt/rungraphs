@@ -4,10 +4,8 @@
 </div>
 
 <dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:first_name) %>:</strong></dt>
-  <dd><%= @runner.first_name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:last_name) %>:</strong></dt>
-  <dd><%= @runner.last_name %></dd>
+  <dt><strong>Name:</strong></dt>
+  <dd><%= @runner.first_name %> <%= @runner.last_name %></dd>
   <dt><strong><%= model_class.human_attribute_name(:team) %>:</strong></dt>
   <dd><%= @runner.team %></dd>
   <dt><strong><%= model_class.human_attribute_name(:sex) %>:</strong></dt>
@@ -26,7 +24,8 @@
             <th>A</th>
             <th>Age</th>
             <th>Bib</th>
-            <th>Net Time</th>
+            <th>Team</th>
+            <th>Time</th>
             <th>Pace</th>
             <th>AG Time</th>
             <th>AG%</th>
@@ -42,7 +41,14 @@
               <td><%= result.age_place %></td>
               <td><%= result.age %></td>
               <td><%= result.bib %></td>
-              <td><%= result.net_time %></td>
+              <td><%= result.team %></td>
+              <% if result.net_time %>
+                <td><%= result.net_time %></td>
+              <% elsif result.finish_time %>
+                <td><%= result.finish_time %></td>
+              <% else %>
+                <td><%= result.gun_time %></td>
+              <% end %>
               <td><%= result.pace_per_mile %></td>
               <td><%= result.ag_time %> </td>
               <td><%= result.ag_percent %>%</td>
