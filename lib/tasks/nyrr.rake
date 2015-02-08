@@ -26,10 +26,10 @@ namespace :nyrr do
 
   CLUB_POINTS = {
     "2014" => [1, 27, 37, 38, 41, 46, 48, 51, 57, 60],
-    "2013" => [1, 14, 16, 20, 23, 29, 32, 37, 45, 59],
+    "2013" => [1, 14, 17, 20, 23, 29, 32, 37, 45, 48],
     "2012" => [4, 11, 16, 21, 23, 25, 31, 35, 41, 45],
     "2011" => [4, 17, 19, 23, 26, 30, 33, 39, 44],
-    "2010" => [4, 16, 21, 26, 35, 29, 35, 41, 47, 52],
+    "2010" => [4, 16, 21, 26, 29, 35, 41, 47, 52],
     "2009" => [4, 18, 22, 28, 29, 31, 32, 38, 41, 46, 47]
   }
 
@@ -125,7 +125,7 @@ namespace :nyrr do
   def scrape_result_rows(rows, race_id, race_year, race_fields_array)
     rows.shift
     # limit to 100 because of production size limits
-    limit = 100
+    limit = 120
     count = 0
     rows.each do |row|
       count += 1

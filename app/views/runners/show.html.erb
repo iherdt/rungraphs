@@ -20,6 +20,7 @@
     <thead>
         <tr>
             <th>Race</th>
+            <th>Date</th>
             <th>O</th>
             <th>G</th>
             <th>A</th>
@@ -31,24 +32,11 @@
             <th>AG%</th>
         </tr>
     </thead>
-    <tfoot>
-      <tr>
-            <th>Race</th>
-            <th>O</th>
-            <th>G</th>
-            <th>A</th>
-            <th>Age</th>
-            <th>Bib</th>
-            <th>Net Time</th>
-            <th>Pace</th>
-            <th>AG Time</th>
-            <th>AG%</th>
-      </tr>
-    </tfoot>
     <tbody>
         <% @results.each do |result| %>
           <tr>
               <td><%= link_to "#{result.race.name}", controller: "races", action: "show", id: "#{result.race.id}"%></td>
+              <td><%= result.race.date %></td>
               <td><%= result.overall_place %></td>
               <td><%= result.gender_place %></td>
               <td><%= result.age_place %></td>

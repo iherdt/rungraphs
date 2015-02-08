@@ -4,6 +4,8 @@ class RunnersController < ApplicationController
   # GET /runners
   # GET /runners.json
   def index
+    team = 'nbr'
+    @runners = Runner.where(team: team)
   end
 
   # GET /runners/1
