@@ -11,8 +11,7 @@ class RunnersController < ApplicationController
   # GET /runners/1
   # GET /runners/1.json
   def show
-    @runner = Runner.find(params[:id])
-    @results = @runner.results
+    @runner = Runner.includes(:results).find(params[:id])
   end
 
   # GET /runners/new

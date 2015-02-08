@@ -75,3 +75,37 @@ table.dataTable thead > tr > th {
 table.dataTable tbody th, table.dataTable tbody td {
   padding: 8px 4px;
 }
+
+table.dataTable tbody td.result-table-runner-td {
+  padding: 0px 4px;
+}
+
+.result-table-runner-field {
+  padding: 8px 0px;
+  &:hover {
+    color: #109cfb;
+  };
+  &:active {
+    background-color: #f1f1f1;
+  };
+}
+
+td.result-table-race-td {
+  padding: 0px 8px;
+}
+
+.result-table-race-field {
+  padding: 8px 0px;
+  &:hover {
+    color: #109cfb;
+  };
+  &:active {
+    background-color: #f1f1f1;
+  };
+}
+
+td.dataTables_empty {
+  height: 360px;
+  vertical-align: middle;
+  font-size: 30px;
+}

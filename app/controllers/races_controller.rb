@@ -10,7 +10,7 @@ class RacesController < ApplicationController
   # GET /races/1
   # GET /races/1.json
   def show
-    @race = Race.find(params[:id])
+    @race = Race.includes(:results).find(params[:id])
     @race_time_array = get_race_time_title_and_type(@race)
   end
 

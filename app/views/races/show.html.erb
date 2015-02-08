@@ -11,7 +11,11 @@
         <%= value %>
         <% case attribute %>
         <% when "distance" %>
-          miles
+          <% if @race.distance == "1.0" %>
+            miles
+          <% else %>
+            mile
+          <% end %>
         <% end %>
       </dd>
     <% end %>
@@ -28,27 +32,41 @@
                   <th class="race-header-title">Gender</th>
                   <th class="race-header-title">AG</th>
                   <th class="race-header-title">
-                    <input type="text" placeholder="Runner" />
+                    <input type="text" placeholder="Runner" class="runner-text-input"/>
                   </th>
                   <th>
-                    <select class="race-header-select">
-                      <option value="Team" select="selected">
+                    <select class="race-header-select race-select-team">
+                      <option value="" select="selected">
                         Team
                       </option>
                     </select>
                   </th>
                   <th>
-                    <select class="race-header-select">
-                      <option value="Sex" select="selected">
+                    <select class="race-header-select race-select-sex">
+                      <option value="" select="selected">
                         Sex
+                      </option>
+                      <option value="M">
+                        M
+                      </option>
+                      <option value="F">
+                        F
                       </option>
                     </select>
                   </th>
                   <th>                    
-                    <select class="race-header-select">
-                      <option value="Age" select="selected">
+                    <select class="race-header-select race-select-age">
+                      <option value="" select="selected">
                         Age
                       </option>
+                      <option value="0-19">
+                        &#60; 19
+                      </option>
+                      <% (2..9).each do |i| %>
+                        <option value="<%=i%>0-<%=i%>9">
+                          <%=i%>0 - <%=i%>9
+                        </option>
+                      <% end %>
                     </select>
                   </th>
                   <th class="race-header-title">Bib</th>
@@ -64,8 +82,21 @@
                     <td><%= result.overall_place %></td>
                     <td><%= result.gender_place %></td>
                     <td><%= result.age_place %></td>
-                    <td><%= link_to "#{result.first_name.split.map(&:capitalize).join(' ')} #{result.last_name.split.map(&:capitalize).join(' ')}", controller: "runners", action: "show", id: "#{result.runner.id}"%></td>
-                    <td><%= result.team %></td>
+                    <td class="result-table-runner-td">
+                      <a href="<%= runner_url(result.runner.id) %>">
+                        <div class="result-table-runner-field">
+                          <%= "#{result.first_name.split.map(&:capitalize).join(' ')} #{result.last_name.split.map(&:capitalize).join(' ')}" %>
+                        </div>
+                      </a>
+                    </td>
+                    <td>
+                      <% if result.team == " " %>
+                        0
+                      <% else %>
+                        <%= result.team %>
+                      <% end %>
+                    </td>
+                    </td>
                     <td><%= result.sex %></td>
                     <td><%= result.age %></td>
                     <td><%= result.bib %></td>
@@ -108,41 +139,60 @@
       ],
     });
 
+    // Text Search
+    $( '.runner-text-input' ).on( 'keyup change', function () {
+        $resultsTable
+            .column( 3 )
+            .search( this.value )
+            .draw();
+    } );
+
+    // populate select team
+    $resultsTable.column(4).data().unique().sort().each( function ( d, j ) {
+        $('.race-select-team').append( '<option value="'+d+'">'+d+'</option>' );;
+    } );
+
+    // Team Select
+    $( '.race-select-team' ).change( function () {
+        $resultsTable
+            .column( 4 )
+            .search( this.value )
+            .draw();
+    } );
+
+    // Gender Select
+    $( '.race-select-sex' ).change( function () {
+        $resultsTable
+            .column( 5 )
+            .search( this.value )
+            .draw();
+    } );
+
+    /* Custom filtering function which will search data in column four between two values */
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var min = parseInt( $( '.race-select-age' ).val().substring(0, 2), 10 );
+            var max = parseInt( $( '.race-select-age' ).val().substring(3, 5), 10 );
+            var age = parseFloat( data[6] ) || 0; // use data for the age column
+     
+            if ( ( isNaN( min ) && isNaN( max ) ) ||
+                 ( isNaN( min ) && age <= max ) ||
+                 ( min <= age   && isNaN( max ) ) ||
+                 ( min <= age   && age <= max ) )
+            {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    // Age group select
+    $( '.race-select-age' ).change( function () {
+        var min = $( '.race-select-age' ).val().substring(0, 2);
+        var max = $( '.race-select-age' ).val().substring(3, 5);
+        $resultsTable
+            .draw();
+    } );
 
 
-    
-    // new $.fn.dataTable.FixedHeader( $resultsTable, {
-    //   "offsetTop": 40
-    // } );
-
-    // Setup - add a text input to each footer cell
-    // $('.results-table tfoot th').each( function () {
-    //     var title = $('.results-table thead th').eq( $(this).index() ).text();
-    //     $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-    // } );
-
-    // Apply the search
-    // $resultsTable.columns().eq( 0 ).each( function ( colIdx ) {
-    //     $( 'input', $resultsTable.column( colIdx ).footer() ).on( 'keyup change', function () {
-    //         $resultsTable
-    //             .column( colIdx )
-    //             .search( this.value )
-    //             .draw();
-    //     } );
-    // } );
-
-    // $resultsTable.columnFilter({aoColumns: [
-    //     { type: "checkbox", values: [ 'Gecko', 'Trident'] },
-    //     {},
-    //     {},
-    //     {},
-    //     { type: "checkbox", values: [ 'A', 'C']  },
-    //     {},
-    //     {},
-    //     {},
-    //     {},
-    //     {},
-    //     {},
-    //     {}
-    //   ]});
 </script>
