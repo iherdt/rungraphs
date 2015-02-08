@@ -102,7 +102,7 @@ namespace :nyrr do
   end
 
   def scrape_race_individual_page(race_results_page, race_id, race_year)
-    puts "      scraping page"
+    puts "scraping page"
 
     
     rows = get_rows(race_results_page)
@@ -124,8 +124,8 @@ namespace :nyrr do
 
   def scrape_result_rows(rows, race_id, race_year, race_fields_array)
     rows.shift
-    # limit to 50 because of production size limits
-    limit = 50
+    # limit to 100 because of production size limits
+    limit = 100
     count = 0
     rows.each do |row|
       count += 1
@@ -146,7 +146,7 @@ namespace :nyrr do
       birth_year = race_year - result.age
       runners = Runner.where(first_name: result.first_name, last_name: result.last_name)
       if runners.empty?
-        result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year, team: result.team )
+        result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year, team: result.team, sex: result.sex )
       else
         found = false
         runners.each do |runner|
@@ -158,7 +158,7 @@ namespace :nyrr do
         end
         
         if not found
-          result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year, team: result.team )
+          result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year, team: result.team, sex: result.sex )
         end
       end
  
@@ -167,7 +167,7 @@ namespace :nyrr do
       result.update_attributes("runner_id" => result_runner.id)
       result.update_attributes("race_id" => race_id)
       result.save!
-      if count == 100
+      if count == limit
         break
       end
     end

@@ -26,7 +26,7 @@
                   <th>Sex</th>
                   <th>Age</th>
                   <th>Bib</th>
-                  <th>Time</th>
+                  <th>Net Time</th>
                   <th>Pace</th>
                   <th>AG Time</th>
                   <th>AG%</th>
@@ -54,12 +54,12 @@
                     <td><%= result.overall_place %></td>
                     <td><%= result.gender_place %></td>
                     <td><%= result.age_place %></td>
-                    <td><%= link_to "#{result.last_name} #{result.last_name}", controller: "runners", action: "show", id: "#{result.runner.id}"%></td>
+                    <td><%= link_to "#{result.first_name} #{result.last_name}", controller: "runners", action: "show", id: "#{result.runner.id}"%></td>
                     <td><%= result.team %></td>
                     <td><%= result.sex %></td>
                     <td><%= result.age %></td>
                     <td><%= result.bib %></td>
-                    <td><%= result.finish_time %></td>
+                    <td><%= result.net_time %></td>
                     <td><%= result.pace_per_mile %></td>
                     <td><%= result.ag_time %> </td>
                     <td><%= result.ag_percent %>%</td>
