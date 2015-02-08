@@ -2,6 +2,8 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+/* SHOW PAGE */
+
 .results-page-header.page-header {
   height: 100%;
   width: 100%;
@@ -94,10 +96,36 @@ padding-bottom: 6px;
   padding-bottom: 0px;
 }
 
-
-
 tfoot input {
         width: 60px;
         padding: 3px;
         box-sizing: border-box;
+}
+
+/* INDEX PAGE */
+
+.races-container {
+
+  .race-container {
+
+    border: 1px solid #c7c7c7;
+    margin: 15px 0px;
+    padding: 15px 40px;
+    background-color: #f8f8f8;
+    &:active {
+      background-color: #c7c7c7;
+    };
+    &:hover {
+      background-color: #d9e0e2;
+    };
+
+    .race-attribute {
+      float: left;
+      padding-right: 20px;
+      width: 130px;
+    }
+    .race-attribute-value {
+
+    }
+  }
 }

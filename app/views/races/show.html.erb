@@ -6,15 +6,23 @@
     <% @race.attributes.each do |attribute, value| %>
       <% next if value.nil? %>
       <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity", "name"].include? attribute %>
-      <dt class="race-attribute"><strong><%= model_class.human_attribute_name(attribute) %>:</strong></dt>
+      <dt class="race-attribute">
+        <strong>
+          <% if attribute == "date_and_time" %>
+            date / time:
+          <% else %>
+            <%= attribute %>:
+          <% end %>
+        </strong>
+      </dt>
       <dd class="race-attribute-value">
         <%= value %>
         <% case attribute %>
         <% when "distance" %>
-          <% if @race.distance == "1.0" %>
-            miles
-          <% else %>
+          <% if value == 1.0 %>
             mile
+          <% else %>
+            miles
           <% end %>
         <% end %>
       </dd>
