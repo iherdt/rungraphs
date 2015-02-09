@@ -101,7 +101,7 @@
                       <% if result.team != '0' && !result.team.blank? %>
                         <a href="<%= team_url(result.team) %>">
                           <div class="result-table-clickable-field">
-                            <%= result.team %>
+                            <%= result.team.upcase %>
                           </div>
                         </a>  
                       <% end %>

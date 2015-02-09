@@ -58,7 +58,8 @@ div {
 
 .navbar-inner {
   width: 100%;
-  padding-top: 5px;
+  padding-top: 4px;
+  padding-bottom: 2px;
   background: #50ae26;
 }
 
@@ -74,6 +75,7 @@ div {
 
 .nav.nav-pills {
   margin-left: 25px;
+  padding-top: 2px;
 }
 
 .navbar .nav>li>a {
@@ -81,10 +83,6 @@ div {
   text-shadow: none;
   font-weight: bold;
   letter-spacing: 0.7px;
-}
-
-.navbar .nav {
-  margin-top: 3px;
 }
 
 .table th, .table td {

@@ -1,8 +1,11 @@
-<h1>Team#index</h1>
-<% @teams.each do |team| %>
-	<a href="<%=team_url(team.slug)%>"> 
-		<div class="team-container">
-			<%= team.name %>
-		</div>
-	</a>
-<% end %>
+<div class="races-container">
+	<ul>
+		<% @teams.each do |team| %>
+			<a href="<%=team_url(team.slug)%>"> 
+				<li class="team-container">
+					<h2><%= team.name %></h2>
+				</div>
+			</a>
+		<% end %>
+	</ul>
+</div>

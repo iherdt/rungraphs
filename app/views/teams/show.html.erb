@@ -1,6 +1,10 @@
 <div class="page-header">
   <h1>
-    <%= @team.name %>
+  	<% if !TEAMS[@team.name].empty? %>
+    	<%= TEAMS[@team.name] %>
+    <% else %>
+    	<%= @team.name.upcase %>
+    <% end %>
   </h1>
 </div>
 

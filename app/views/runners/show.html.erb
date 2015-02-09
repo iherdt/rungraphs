@@ -8,7 +8,13 @@
 <dl class="dl-horizontal">
   <% if @runner.team != '0' && !@runner.team.blank? %>
     <dt><strong>Team:</strong></dt>
-    <dd><%= @runner.team %></dd>
+    <dd>
+      <% if !TEAMS[@runner.team].empty? %>
+        <%= TEAMS[@runner.team] %>
+      <% else %>
+        <%= @runner.team.upcase %>
+      <% end %>
+    </dd>
   <% else %>
     <dt><strong>Team:</strong></dt>
     <dd>unattached</dd>
