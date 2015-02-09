@@ -7,12 +7,15 @@
 
 <dl class="dl-horizontal">
   <% if @runner.team != '0' && !@runner.team.blank? %>
-    <dt><strong><%= model_class.human_attribute_name(:team) %>:</strong></dt>
+    <dt><strong>Team:</strong></dt>
     <dd><%= @runner.team %></dd>
+  <% else %>
+    <dt><strong>Team:</strong></dt>
+    <dd>unattached</dd>
   <% end %>
-  <dt><strong><%= model_class.human_attribute_name(:sex) %>:</strong></dt>
+  <dt><strong>Sex:</strong></dt>
   <dd><%= @runner.sex %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:birth_year) %> (approx):</strong></dt>
+  <dt><strong> Birth year (approx):</strong></dt>
   <dd><%= @runner.birth_year %></dd>
 </dl>
 

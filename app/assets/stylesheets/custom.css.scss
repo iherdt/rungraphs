@@ -8,6 +8,7 @@ html, body, h1, h2, div, img, label, input, form, button, ul, ol, li, a, textare
 
 body {
   min-width: 800px;
+
 }
 
 input, textarea {
@@ -123,4 +124,45 @@ td.dataTables_empty {
 
 .header-buttons-container {
   float: left;
+}
+
+.all-results-container {
+  display: none;
+  position: fixed;
+  border: 1px solid #dcdcdc;
+  border-bottom: none;
+  width: 380px;
+  left: 141px;
+  top: 44px;
+  z-index: 1;
+  background: white;
+  border-radius: 2px;
+  padding-top: 3px;
+}
+
+/* BODY */
+
+.content-container {
+  padding: 10px 20px;
+  width: 100%;
+}
+
+.search-all-item {
+  border-bottom: 1px solid #dcdcdc;
+  padding: 9px 20px;
+  &:hover {
+    background-color: #f8f8f8;
+  };
+  &:active {
+    background-color: #c7c7c7;
+  };
+
+  .search-all-left {
+    font-weight: bold;
+  }
+
+  .search-all-right {
+    font-size: 12px;
+    padding-left: 20px;
+  }
 }

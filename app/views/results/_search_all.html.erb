@@ -1,11 +1,29 @@
 <ul>
   <% results.each do |result| %>
-    <li>
+    <li class="search-all-item">
     	<% if result[:type] == "runner" %>
-        	<%= link_to "#{result[:first_name]} #{result[:last_name]} : #{result[:team]}", controller: "runners", action: "show", id: "#{result[:id]}"%>
-        <% else %>
-        	<%= link_to "#{result[:name]} : #{result[:date]}", controller: "races", action: "show", id: "#{result[:id]}"%>
-        <% end %>
+    		<a href="<%=runner_url(result[:id])%>">
+	    		<div class="search-all-left">
+	    			<%= "#{result[:first_name].split.map(&:capitalize).join(' ')} #{result[:last_name].split.map(&:capitalize).join(' ')}" %>
+	    		</div>
+	    		<div class="search-all-right">
+	    			<% if result[:team] != '0' && !result[:team].blank? %>
+					  	Team: <%= result[:team].upcase %>
+					  <% else %>
+					  	unattached
+						<% end %>
+	    		</div>
+	    	</a>
+      <% else %>
+         <a href="<%=race_url(result[:id])%>">
+	    		<div class="search-all-left">
+	    			<%= "#{result[:name]}" %>
+	    		</div>
+	    		<div class="search-all-right">
+					  <%= Date.parse(result[:date]).strftime("%B %d, %Y") %>
+	    		</div>
+	    	</a>
+      <% end %>
     </li>
   <% end %>
 </ul>

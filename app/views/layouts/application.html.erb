@@ -64,21 +64,52 @@
         <!-- </div> -->
         </div>
       </div>
+    </div>
 
+    <div class="all-results-container">
+    </div>
 
-      <div class="container">
-        <div class="row">
-          <div class="span12">
-            <%= bootstrap_flash %>
+    <div class="container">
+      <div class="row">
+        <div class="span12">
+          <%= bootstrap_flash %>
 
-            <%= yield %>
-          </div>
+          <%= yield %>
         </div>
       </div>
+    </div>
 
-      <footer>
-        <p>&copy; Logan Yu 2014</p>
-      </footer>
-    </div> <!-- container -->    
+    <footer>
+      
+    </footer>
+   <!-- container -->
+
+  <script type="text/javascript">
+      $("#all-search-input").on("keyup", function (event) {
+        var $currentTarget = $(event.currentTarget);
+        $q = $("#all-search-input").val();
+
+        $('.all-results-container').empty();
+        $('.all-results-container').hide();
+
+        if ($q.length >= 2) {
+          $.ajax({
+            url: "<%= search_all_url %>",
+            type: "GET",
+            data: {'q': $q},
+            success: function (resp) {
+              if (resp != '<ul>\n</ul>') {
+                $('.all-results-container').html(resp);
+                $('.all-results-container').show();
+              } else {
+                  $('.all-results-container').empty();
+                  $('.all-results-container').hide();
+                }
+              }
+          });
+        }
+      });  
+
+  </script>
   </body>
 </html>
