@@ -113,6 +113,13 @@ td.dataTables_empty {
 
 /* NAV BAR */
 
+.logo-picture {
+  width: 20px;
+  padding-top: 5px;
+  padding-right: 6px;
+  float: left;
+}
+
 .header-search-bar {
   float: left;
 }
@@ -131,8 +138,8 @@ td.dataTables_empty {
   position: fixed;
   border: 1px solid #dcdcdc;
   border-bottom: none;
-  width: 380px;
-  left: 141px;
+  width: 340px;
+  left: 166px;
   top: 44px;
   z-index: 1;
   background: white;

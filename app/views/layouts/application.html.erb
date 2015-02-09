@@ -41,9 +41,12 @@
     <div class="navbar">
       <div class="navbar-inner">
         <!-- <div class="container"> -->
-        <div class="header-logo">
-          <a class="brand header-item" href="<%= search_url %>">Rungraphs</a>
-        </div>
+        <a href="<%= search_url %>" class="header-logo">
+          <div class="logo-picture">
+            <img src="<%=asset_path "runlogo.png"%>">
+          </div>
+          <div class="brand header-item">Rungraphs</div>
+        </a>
         <div class="header-search-bar">
           <form action="<%= search_races_url %>" method="get">
             <input
