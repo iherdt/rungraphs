@@ -3,6 +3,8 @@ require 'elasticsearch/model'
 class Race < ActiveRecord::Base
 	include Elasticsearch::Model
  	include Elasticsearch::Model::Callbacks
+ 	extend FriendlyId
+  friendly_id :generate_custom_slug, :use => :slugged
   
 	has_many :results, inverse_of: :race, dependent: :destroy
 	has_many :runners, through: :results
@@ -41,10 +43,15 @@ class Race < ActiveRecord::Base
 	          fields: ['name']
 	        }
 	      },
-	      fields: ['name', 'id', 'date']
+	      fields: ['name', 'id', 'date', 'slug']
 	    }
 	  )
 	end
+
+	def generate_custom_slug
+    "#{self.name} #{self.date.year}"
+  end
+
 end
 # Delete the previous races index in Elasticsearch
 Race.__elasticsearch__.client.indices.delete index: Race.index_name rescue nil

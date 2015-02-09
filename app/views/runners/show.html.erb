@@ -40,7 +40,7 @@
         <% @runner.results.each do |result| %>
           <tr>
               <td class="result-table-race-td">
-                <a href="<%= race_url(result.race.id) %>">
+                <a href="<%= race_url(result.race.slug) %>">
                   <div class="result-table-race-field">
                     <%= "#{result.race.name}" %>
                   </div>

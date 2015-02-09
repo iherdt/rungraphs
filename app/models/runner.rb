@@ -3,6 +3,8 @@ require 'elasticsearch/model'
 class Runner < ActiveRecord::Base
 	include Elasticsearch::Model
  	include Elasticsearch::Model::Callbacks
+ 	extend FriendlyId
+  friendly_id :generate_custom_slug, :use => :slugged
   
   has_many :results, inverse_of: :runner
   has_many :races, through: :results
@@ -41,10 +43,14 @@ class Runner < ActiveRecord::Base
 	          fields: ['first_name', 'last_name', 'team']
 	        }
 	      },
-	      fields: ['first_name', 'last_name', 'team', 'id']
+	      fields: ['first_name', 'last_name', 'team', 'id', 'slug']
 	    }
 	  )
 	end
+
+	def generate_custom_slug
+    "#{self.first_name} #{self.last_name}"
+  end
 end
 
 # Delete the previous runners index in Elasticsearch

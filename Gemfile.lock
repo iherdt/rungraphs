@@ -65,6 +65,8 @@ GEM
     execjs (2.3.0)
     faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
+    friendly_id (5.1.0)
+      activerecord (>= 4.0.0)
     hashie (3.4.0)
     hike (1.2.3)
     http-cookie (1.0.2)
@@ -193,6 +195,7 @@ DEPENDENCIES
   coffee-rails (~> 4.0.0)
   elasticsearch-model
   elasticsearch-rails
+  friendly_id (~> 5.1.0)
   jbuilder (~> 2.0)
   jquery-datatables-rails (~> 2.2.1)
   jquery-rails

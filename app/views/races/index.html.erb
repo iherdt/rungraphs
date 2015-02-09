@@ -1,7 +1,7 @@
 <div class="races-container">
 	<ul>
 	  <% @races.each do |race| %>
-	  	<a href="<%=race_url(race.id)%>">
+	  	<a href="<%=race_url(race.slug)%>">
 	  	<li class="race-container">
 	  		<h2 class="race-name">
 	  			<%=race.name%>

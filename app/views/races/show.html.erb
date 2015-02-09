@@ -5,7 +5,7 @@
   <dl>
     <% @race.attributes.each do |attribute, value| %>
       <% next if value.nil? %>
-      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity", "name"].include? attribute %>
+      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity", "name", "slug"].include? attribute %>
       <dt class="race-attribute">
         <strong>
           <% if attribute == "date_and_time" %>
@@ -91,7 +91,7 @@
                     <td><%= result.gender_place %></td>
                     <td><%= result.age_place %></td>
                     <td class="result-table-runner-td">
-                      <a href="<%= runner_url(result.runner.id) %>">
+                      <a href="<%= runner_url(result.runner.slug) %>">
                         <div class="result-table-runner-field">
                           <%= "#{result.first_name.split.map(&:capitalize).join(' ')} #{result.last_name.split.map(&:capitalize).join(' ')}" %>
                         </div>

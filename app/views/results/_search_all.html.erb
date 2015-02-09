@@ -2,7 +2,7 @@
   <% results.each do |result| %>
     <li class="search-all-item">
     	<% if result[:type] == "runner" %>
-    		<a href="<%=runner_url(result[:id])%>">
+    		<a href="<%=runner_url(result[:slug])%>">
 	    		<div class="search-all-left">
 	    			<%= "#{result[:first_name].split.map(&:capitalize).join(' ')} #{result[:last_name].split.map(&:capitalize).join(' ')}" %>
 	    		</div>
@@ -15,7 +15,7 @@
 	    		</div>
 	    	</a>
       <% else %>
-         <a href="<%=race_url(result[:id])%>">
+         <a href="<%=race_url(result[:slug])%>">
 	    		<div class="search-all-left">
 	    			<%= "#{result[:name]}" %>
 	    		</div>
