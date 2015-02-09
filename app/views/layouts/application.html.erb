@@ -47,7 +47,7 @@
           <div class="logo-picture">
             <img src="<%=asset_path "runlogo.png"%>">
           </div>
-          <div class="brand header-item">Rungraphs</div>
+          <div class="brand header-item"><div style="color:black">RUN</div><div style="color:white">GRAPHS</div></div>
         </a>
         <div class="header-search-bar">
           <form action="<%= search_races_url %>" method="get">
@@ -62,8 +62,8 @@
         </div>
         <div class="header-buttons-container">
           <ul class="nav nav-pills">
-            <li class='header-item' role="presentation"><a href="<%= races_url %>">Races</a></li>
-            <li class='header-item' role="presentation"><a href="<%= teams_url %>">Teams</a></li>
+            <li class='header-item' role="presentation"><a href="<%= races_url %>">RACES</a></li>
+            <li class='header-item' role="presentation"><a href="<%= teams_url %>">TEAMS</a></li>
           </ul>
         <!-- </div> -->
         </div>
@@ -73,7 +73,7 @@
     <div class="all-results-container">
     </div>
 
-    <div class="container">
+    <div class="container content-container">
       <div class="row">
         <div class="span12">
           <%= bootstrap_flash %>
@@ -93,10 +93,8 @@
         var $currentTarget = $(event.currentTarget);
         $q = $("#all-search-input").val();
 
-        $('.all-results-container').empty();
-        $('.all-results-container').hide();
-
         if ($q.length >= 2) {
+          
           $.ajax({
             url: "<%= search_all_url %>",
             type: "GET",
@@ -104,13 +102,15 @@
             success: function (resp) {
               if (resp != '<ul>\n</ul>') {
                 $('.all-results-container').html(resp);
-                $('.all-results-container').show();
+                $('.all-results-container').show();  
               } else {
                   $('.all-results-container').empty();
                   $('.all-results-container').hide();
                 }
               }
           });
+        } else {
+          $('.all-results-container').hide();
         }
       });  
 

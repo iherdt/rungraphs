@@ -52,8 +52,35 @@ div {
   display: table;
 }
 
+.navbar {
+  width: 100%
+}
+
 .navbar-inner {
+  width: 100%;
   padding-top: 5px;
+  background: #50ae26;
+}
+
+.brand.header-item {
+  div {
+    display: inline-block;
+  }
+  text-shadow: none;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  font-size: 25px;
+}
+
+.nav.nav-pills {
+  margin-left: 25px;
+}
+
+.navbar .nav>li>a {
+  color: white;
+  text-shadow: none;
+  font-weight: bold;
+  letter-spacing: 0.7px;
 }
 
 .navbar .nav {
@@ -145,7 +172,7 @@ td.dataTables_empty {
   border: 1px solid #dcdcdc;
   border-bottom: none;
   width: 340px;
-  left: 166px;
+  left: 233px;
   top: 44px;
   z-index: 1;
   background: white;
@@ -156,8 +183,7 @@ td.dataTables_empty {
 /* BODY */
 
 .content-container {
-  padding: 10px 20px;
-  width: 100%;
+  padding-bottom: 35px;
 }
 
 .search-all-item {
