@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :runners
   resources :races
   resources :results
-  get 'home', to: 'home#home'
+  get 'home', to: 'home#home', :path => ''
   get 'search_races', to: 'search#search_races'
   get 'search_runners', to: 'search#search_runners'
   get 'search_all', to: 'search#search_all'
