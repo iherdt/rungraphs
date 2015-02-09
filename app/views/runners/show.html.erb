@@ -15,7 +15,7 @@
   <% end %>
   <dt><strong>Sex:</strong></dt>
   <dd><%= @runner.sex %></dd>
-  <dt><strong> Birth year (approx):</strong></dt>
+  <dt><strong> Birth year:</strong></dt>
   <dd><%= @runner.birth_year %></dd>
 </dl>
 
@@ -39,9 +39,9 @@
     <tbody>
         <% @runner.results.each do |result| %>
           <tr>
-              <td class="result-table-race-td">
+              <td class="runner-table-clickable-td">
                 <a href="<%= race_url(result.race.slug) %>">
-                  <div class="result-table-race-field">
+                  <div class="runner-table-clickable-field">
                     <%= "#{result.race.name}" %>
                   </div>
                 </a>
@@ -52,7 +52,15 @@
               <td><%= result.age_place %></td>
               <td><%= result.age %></td>
               <td><%= result.bib %></td>
-              <td><%= result.team %></td>
+                    <td class="runner-table-clickable-td">
+                      <% if result.team != '0' && !result.team.blank? %>
+                        <a href="<%= team_url(result.team) %>">
+                          <div class="runner-table-clickable-field">
+                            <%= result.team %>
+                          </div>
+                        </a>  
+                      <% end %>
+                    </td>
               <% if result.net_time %>
                 <td><%= result.net_time %></td>
               <% elsif result.finish_time %>

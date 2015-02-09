@@ -77,11 +77,15 @@ table.dataTable tbody th, table.dataTable tbody td {
   padding: 8px 4px;
 }
 
-table.dataTable tbody td.result-table-runner-td {
+/* clickable fields in datatables */
+
+/* results show table */
+
+table.dataTable tbody td.result-table-clickable-td {
   padding: 0px 4px;
 }
 
-.result-table-runner-field {
+.result-table-clickable-field {
   padding: 8px 0px;
   &:hover {
     color: #109cfb;
@@ -91,11 +95,13 @@ table.dataTable tbody td.result-table-runner-td {
   };
 }
 
-td.result-table-race-td {
+/* runner show table */
+
+td.runner-table-clickable-td {
   padding: 0px 8px;
 }
 
-.result-table-race-field {
+.runner-table-clickable-field {
   padding: 8px 0px;
   &:hover {
     color: #109cfb;

@@ -10,7 +10,7 @@
 			  <dl>
 			    <% race.attributes.each do |attribute, value| %>
 			      <% next if value.nil? %>
-			      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity", "name"].include? attribute %>
+			      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity", "name", "slug"].include? attribute %>
 			      <dt class="race-attribute">
 			        <strong>
 			          <% if attribute == "date_and_time" %>

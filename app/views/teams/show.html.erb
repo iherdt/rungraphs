@@ -1,0 +1,26 @@
+<div class="page-header">
+  <h1>
+    <%= @team.name %>
+  </h1>
+</div>
+
+<div class="team-roster-container">
+	<ul>
+	  <% @runners.each do |runner| %>
+	  	<a href="<%=runner_url(runner.slug)%>">
+	  	<li class="runner-container">
+	  		<h2 class="runner-name">
+	  			<%= "#{runner.first_name.split.map(&:capitalize).join(' ')} #{runner.last_name.split.map(&:capitalize).join(' ')}" %>
+	  		</h2>
+	  		<div class="runner-details">
+			  <dl>
+				  <dt class="runner-attribute"><strong>Sex:</strong></dt>
+				  <dd class="runner-value"><%= runner.sex %></dd>
+				  <dt class="runner-attribute"><strong> Birth year:</strong></dt>
+				  <dd class="runner-value"><%= runner.birth_year %></dd>
+			  </dl>
+	  		</div>
+		</li>
+	  <% end %>
+	</ul>
+</div>

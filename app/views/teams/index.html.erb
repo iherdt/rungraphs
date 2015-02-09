@@ -1,0 +1,8 @@
+<h1>Team#index</h1>
+<% @teams.each do |team| %>
+	<a href="<%=team_url(team.slug)%>"> 
+		<div class="team-container">
+			<%= team.name %>
+		</div>
+	</a>
+<% end %>

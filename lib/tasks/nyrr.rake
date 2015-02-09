@@ -149,13 +149,16 @@ namespace :nyrr do
         result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year, team: result.team, sex: result.sex )
       else
         found = false
-        runners.each do |runner|
-          if runner.birth_year.between? birth_year - 1, birth_year + 1
-            result_runner = runner
-            found = true
-            break
-          end
-        end
+
+        # commented out to assume runner with same name is the same runner
+
+        # runners.each do |runner|
+        #   if runner.birth_year.between? birth_year - 1, birth_year + 1
+        #     result_runner = runner
+        #     found = true
+        #     break
+        #   end
+        # end
         
         if not found
           result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year, team: result.team, sex: result.sex )
