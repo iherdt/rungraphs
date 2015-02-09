@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'search#search'
+  root 'home#home'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   resources :runners
   resources :races
   resources :results
-  get 'search', to: 'search#search'
+  get 'home', to: 'home#home'
   get 'search_races', to: 'search#search_races'
   get 'search_runners', to: 'search#search_runners'
   get 'search_all', to: 'search#search_all'
