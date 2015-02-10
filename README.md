@@ -1,6 +1,6 @@
-== README
-
 ##Rungraphs
+
+The site is live at <a href="http://www.rungraphs.com" target=_blank>www.rungraphs.com</a>
 
 A ruby on rails platform for displaying race results.
 
