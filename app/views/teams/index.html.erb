@@ -1,10 +1,18 @@
-<div class="races-container">
+<div class="teams-container">
 	<ul>
 		<% @teams.each do |team| %>
-			<a href="<%=team_url(team.slug)%>"> 
+			<a href="<%=team_url(team.slug)%>">
 				<li class="team-container">
-					<h2><%= team.name %></h2>
-				</div>
+					<div class="team-name-container">
+						<h2>
+				      <% if !TEAMS[team.name].empty? %>
+				        <%= TEAMS[team.name] %>
+				      <% else %>
+				        <%= team.name.upcase %>
+				      <% end %>
+				    </h2>
+				  </div>
+				</li>
 			</a>
 		<% end %>
 	</ul>
