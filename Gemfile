@@ -42,9 +42,21 @@ gem 'spring',        group: :development
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+end
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
+end
+
+group :test do
+  gem 'faker'
+  gem 'capybara'
+  gem 'guard-rspec'
+  gem 'launchy'
 end
 
 group :production do
@@ -66,3 +78,5 @@ gem 'jquery-datatables-rails', '~> 2.2.1'
 gem 'newrelic_rpm'
 
 gem 'friendly_id', '~> 5.1.0'
+
+gem 'kaminari'
