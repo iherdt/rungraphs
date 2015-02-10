@@ -11,15 +11,7 @@ class RunnersController < ApplicationController
   # GET /runners/1
   # GET /runners/1.json
   def show
-  end
-
-  # GET /runners/new
-  def new
-    @runner = Runner.new
-  end
-
-  # GET /runners/1/edit
-  def edit
+    @results = @runner.results.sort_by{ |result| result.race.date }.reverse
   end
 
   # POST /runners

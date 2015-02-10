@@ -43,7 +43,7 @@
         </tr>
     </thead>
     <tbody>
-        <% @runner.results.each do |result| %>
+        <% @results.each do |result| %>
           <tr>
               <td class="runner-table-clickable-td">
                 <a href="<%= race_url(result.race.slug) %>">

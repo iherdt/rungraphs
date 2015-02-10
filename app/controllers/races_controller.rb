@@ -11,6 +11,7 @@ class RacesController < ApplicationController
   # GET /races/1.json
   def show
     @race_time_array = get_race_time_title_and_type(@race)
+    @results = @race.results.sort_by(&:overall_place)
   end
 
   # GET /races/new
