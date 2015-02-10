@@ -50,7 +50,7 @@
           <div class="brand header-item"><div style="color:black">RUN</div><div style="color:white">GRAPHS</div></div>
         </a>
         <div class="header-search-bar">
-          <form action="<%= search_races_url %>" method="get">
+          <form class="search-form">
             <input
               type="text"
               name="q"
@@ -112,7 +112,14 @@
         } else {
           $('.all-results-container').hide();
         }
-      });  
+      });
+
+      $(".search-form").on('submit', function(event) {
+        event.preventDefault();
+        $('.search-all-item').first().click();
+        $('.all-results-container').hide();
+        $(".search-form").find("input[type=text], textarea").val("");
+      })
 
   </script>
   </body>
