@@ -74,7 +74,7 @@
         "nyf" => "",
         "nyfd" => "",
         "nyfr" => "",
-        "nyh" => "",
+        "nyh" => "New York Harriers",
         "nypd" => "",
         "nyrc" => "",
         "nyu" => "",
