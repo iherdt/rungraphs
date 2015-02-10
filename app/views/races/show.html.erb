@@ -103,7 +103,7 @@
                           <div class="result-table-clickable-field">
                             <%= result.team.upcase %>
                           </div>
-                        </a>  
+                        </a>
                       <% end %>
                     </td>
                     </td>
@@ -159,7 +159,10 @@
 
     // populate select team
     $resultsTable.column(4).data().unique().sort().each( function ( d, j ) {
-        $('.race-select-team').append( '<option value="'+d+'">'+d+'</option>' );;
+        if ($(d).children) {
+          var choice = $(d).children().text().replace(/ |\n/g,'');
+          $('.race-select-team').append( '<option value="'+choice+'">'+choice+'</option>' );
+        }
     } );
 
     // Team Select
