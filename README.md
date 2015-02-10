@@ -23,14 +23,14 @@ Race results were displayed using Datatables.js with customizations to filter an
 The runner *show* page displays a runner's info as well as a runner's races.
 
 ####Upcoming features
--Runner stats pages will also display a runner's best performances in different distances
--Race result pages will include stats and analysis. Such as course records, number of men and women, avg finish time, data visualizations showing mean and standard deviation by age and sex, yearly participation of specific races, yearly differences in weather, team particiation in races
--A **Versus** tab to search for two runners and compare best times across various distances
--A **Team Versus** tab to simulate a race between two teams
--Team stats and analysis (number of runners, join date of each runner, changes in number of runners per race)
--Display Options/Infinite scroll for race and team pages
--change loading to load results on race show pages after rendering to speed up rendering when complete race results are added
+-   Runner stats pages will also display a runner's best performances in different distances
+-   Race result pages will include stats and analysis. Such as course records, number of men and women, avg finish time, data visualizations showing mean and standard deviation by age and sex, yearly participation of specific races, yearly differences in weather, team particiation in races
+-   A **Versus** tab to search for two runners and compare best times across various distances
+-   A **Team Versus** tab to simulate a race between two teams
+-   Team stats and analysis (number of runners, join date of each runner, changes in number of runners per race)
+-   Display Options/Infinite scroll for race and team pages
+-   change loading to load results on race show pages after rendering to speed up rendering when complete race results are added
 
 ####Testing
-Unit tests will be created using RSpec, FactoryGirl, and Faker.
-Behavioral tests will be created using Cucumber
+-   Unit tests will be created using RSpec, FactoryGirl, and Faker.
+-   Behavioral tests will be created using Cucumber
