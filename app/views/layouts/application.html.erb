@@ -121,6 +121,16 @@
         $(".search-form").find("input[type=text], textarea").val("");
       })
 
+      // autofocus on text input when '/' is clicked if not in an input field
+      $( 'body' ).keypress(function( event ) {
+        if (!$("input").is(":focus")) {
+                  if ( event.which == 47 ) {
+          event.preventDefault();
+            $( ".search-form :input" ).focus();
+          };
+        }
+      });
+
   </script>
   </body>
 </html>
