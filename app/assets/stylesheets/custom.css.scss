@@ -166,12 +166,10 @@ td.dataTables_empty {
 
 .all-results-container {
   display: none;
-  position: fixed;
+  position: absolute;
   border: 1px solid #dcdcdc;
   border-bottom: none;
   width: 340px;
-  left: 233px;
-  top: 44px;
   z-index: 1;
   background: white;
   border-radius: 2px;
