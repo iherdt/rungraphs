@@ -16,8 +16,8 @@ class Race < ActiveRecord::Base
 			filter: {
 			    autocomplete_filter: {
 			      type: "edge_ngram",
-			      min_gram: 3,
-			      max_gram: 4
+			      min_gram: 6,
+			      max_gram: 7
 		    	}
 			},
 			analyzer: {

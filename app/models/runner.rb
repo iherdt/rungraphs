@@ -40,7 +40,9 @@ class Runner < ActiveRecord::Base
 	      query: {
 	        multi_match: {
 	          query: query,
-	          fields: ['first_name', 'last_name', 'team']
+	          type: "most_fields",
+	          operator: "or",
+	          fields: ["first_name", "last_name"]
 	        }
 	      },
 	      fields: ['first_name', 'last_name', 'team', 'id', 'slug']
@@ -50,6 +52,10 @@ class Runner < ActiveRecord::Base
 
 	def generate_custom_slug
     "#{self.first_name} #{self.last_name}"
+  end
+
+  def full_name
+  	[first_name, last_name].join(' ')
   end
 end
 
