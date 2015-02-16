@@ -43,12 +43,12 @@
     <div class="navbar">
       <div class="navbar-inner">
         <!-- <div class="container"> -->
-        <a href="<%= home_url %>" class="header-logo">
+        <!-- <a href="<%= home_url %>" class="header-logo"> -->
           <div class="logo-picture">
             <img src="<%=asset_path "runlogo.png"%>">
           </div>
           <div class="brand header-item"><div style="color:black">RUN</div><div style="color:white">GRAPHS</div></div>
-        </a>
+        <!-- </a> -->
         <div class="header-search-bar">
           <form class="search-form">
             <input
@@ -122,7 +122,7 @@
       // autofocus on text input when '/' is clicked if not in an input field
       $( 'body' ).keypress(function( event ) {
         if (!$("input").is(":focus")) {
-                  if ( event.which == 47 ) {
+          if ( event.which == 47 ) {
           event.preventDefault();
             $( ".search-form :input" ).focus();
           };
