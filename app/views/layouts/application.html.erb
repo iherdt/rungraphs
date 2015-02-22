@@ -99,8 +99,8 @@
             data: {'q': $q},
             success: function (resp) {
               if (resp != '<ul>\n</ul>') {
-                $('.all-results-container').html(resp);
-                $('.all-results-container').show();  
+                $('.all-results-container').html(resp); 
+                $('.all-results-container').show();
               } else {
                   $('.all-results-container').empty();
                   $('.all-results-container').hide();
