@@ -4,7 +4,7 @@
 # require 'json'
 
 namespace :nyrr do
-  
+
   RESULT_PROPERTIES = {
   "Last Name" => "last_name",
   "First Name" => "first_name",
@@ -34,7 +34,7 @@ namespace :nyrr do
   }
 
   $a = Mechanize.new
-  
+
   task :results, [:year] => :environment do |t, arg|
     all_results_page = "http://web2.nyrrc.org/cgi-bin/start.cgi/aes-programs/results/resultsarchive.htm"
     yearly_results_page = get_yearly_results_page(all_results_page, arg[:year])
@@ -53,7 +53,7 @@ namespace :nyrr do
     race_dates = get_race_dates(yearly_results_page)
     race_links.count.times do |i|
       # only including club points races because of size limits
-      next if !CLUB_POINTS[year].include? i
+      # next if !CLUB_POINTS[year].include? i
       scrape_individual_race_results(race_links[i], race_dates[i], year)
     end
   end
@@ -85,7 +85,7 @@ namespace :nyrr do
 
     scrape_race_info(race_results_page, race)
     race.save!
-    
+
     scrape_race_individual_page(race_results_page, race.id, race.date.year)
   end
 
@@ -104,7 +104,7 @@ namespace :nyrr do
   def scrape_race_individual_page(race_results_page, race_id, race_year)
     puts "scraping page"
 
-    
+
     rows = get_rows(race_results_page)
     race_fields_array = []
     rows[0].css('td').each do |i|
@@ -115,20 +115,16 @@ namespace :nyrr do
     # for now, limit to first 500 for each race because of cost of production
 
     # # if there is a next button, click and add those results too
-    # next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
-    # if next_500_link
-    #   next_race_results_page = $a.click(next_500_link)
-    #   scrape_race_individual_page(next_race_results_page, race_id, race_year)
-    # end
+    next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
+    if next_500_link
+      next_race_results_page = $a.click(next_500_link)
+      scrape_race_individual_page(next_race_results_page, race_id, race_year)
+    end
   end
 
   def scrape_result_rows(rows, race_id, race_year, race_fields_array)
     rows.shift
-    # limit to 100 because of production size limits
-    limit = 120
-    count = 0
     rows.each do |row|
-      count += 1
       result = Result.new
       data_array = []
       row.css('td').each_with_index do |field, index|
@@ -141,12 +137,22 @@ namespace :nyrr do
         end
       end
       result.save
-      
+
       #create or find runner
       birth_year = race_year - result.age
       runners = Runner.where(first_name: result.first_name, last_name: result.last_name)
       if runners.empty?
-        result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year, team: result.team, sex: result.sex )
+        result_runner = Runner.create(
+          first_name: result.first_name,
+          last_name: result.last_name,
+          birth_year: birth_year,
+          team: result.team,
+          sex: result.sex,
+          full_name: "#{result.first_name} #{result.last_name}",
+          city: result.city,
+          state: result.state,
+          country: result.country
+        )
       else
         found = false
 
@@ -159,20 +165,27 @@ namespace :nyrr do
         #     break
         #   end
         # end
-        
+
         if not found
-          result_runner = Runner.create(first_name: result.first_name, last_name: result.last_name, birth_year: birth_year, team: result.team, sex: result.sex )
+          result_runner = Runner.create(
+            first_name: result.first_name,
+            last_name: result.last_name,
+            birth_year: birth_year,
+            team: result.team,
+            sex: result.sex,
+            full_name: "#{result.first_name} #{result.last_name}",
+            city: result.city,
+            state: result.state,
+            country: result.country
+          )
         end
       end
- 
+
       result_runner.save!
 
       result.update_attributes("runner_id" => result_runner.id)
       result.update_attributes("race_id" => race_id)
       result.save!
-      if count == limit
-        break
-      end
     end
   end
 
