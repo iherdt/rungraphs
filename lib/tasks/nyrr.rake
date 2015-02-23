@@ -59,6 +59,13 @@ namespace :nyrr do
   end
 
   def scrape_individual_race_results(link, date, year)
+    # skip if race with same name and date exists
+    if !Race.where(name: link.text, date: format_date(date)).empty?
+      puts "Skipping #{date} #{link.text}"
+      return
+    end
+
+
     # click on individual race result page
     race_results_cover_page = $a.click(link)
     puts "Scraping #{date} #{link.text}"
