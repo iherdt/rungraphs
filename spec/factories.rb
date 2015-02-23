@@ -1,4 +1,10 @@
-FactoryGirl.define do
+FactoryGirl.define do  factory :projected_result do
+    
+  end
+  factory :projected_race do
+    
+  end
+
   factory :race do
     name "Sayville Brewery 10 Miler"
     Date Date.new(2015,1,10)

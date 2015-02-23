@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150223174152) do
+ActiveRecord::Schema.define(version: 20150223205048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,45 @@ ActiveRecord::Schema.define(version: 20150223174152) do
   add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", using: :btree
   add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
   add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
+
+  create_table "projected_races", force: true do |t|
+    t.string   "name"
+    t.date     "date"
+    t.float    "distance"
+    t.integer  "temperature"
+    t.integer  "humidity"
+    t.string   "date_and_time"
+    t.string   "location"
+    t.string   "weather"
+    t.string   "sponsor"
+    t.boolean  "club_points",   default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "projected_results", force: true do |t|
+    t.string   "last_name"
+    t.string   "first_name"
+    t.string   "sex"
+    t.integer  "age"
+    t.integer  "bib"
+    t.string   "team"
+    t.string   "city"
+    t.string   "state"
+    t.string   "country"
+    t.integer  "overall_place"
+    t.integer  "gender_place"
+    t.integer  "age_place"
+    t.string   "net_time"
+    t.string   "pace_per_mile"
+    t.string   "ag_time"
+    t.integer  "ag_gender_place"
+    t.float    "ag_percent"
+    t.integer  "runner_id"
+    t.integer  "projected_race_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "races", force: true do |t|
     t.string   "name"
