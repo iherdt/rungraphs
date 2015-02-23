@@ -138,6 +138,12 @@ namespace :nyrr do
       end
       result.save
 
+      # find or create team
+      team = Team.where(name: result.team)
+      if team.empty?
+        Team.create(name: result.team)
+      end
+
       #create or find runner
       birth_year = race_year - result.age
       runners = Runner.where(first_name: result.first_name, last_name: result.last_name)
