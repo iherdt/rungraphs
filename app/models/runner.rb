@@ -5,7 +5,7 @@ class Runner < ActiveRecord::Base
  	include Elasticsearch::Model::Callbacks
  	extend FriendlyId
   friendly_id :generate_custom_slug, :use => :slugged
-  
+
   has_many :results, inverse_of: :runner
   has_many :races, through: :results
 
@@ -51,7 +51,7 @@ class Runner < ActiveRecord::Base
 	end
 
 	def generate_custom_slug
-    "#{self.first_name} #{self.last_name}"
+    ["#{self.first_name} #{self.last_name}", "#{self.first_name} #{self.last_name} #{self.city}"]
   end
 
   def full_name
@@ -61,11 +61,11 @@ end
 
 # Delete the previous runners index in Elasticsearch
 Runner.__elasticsearch__.client.indices.delete index: Runner.index_name rescue nil
- 
+
 # Create the new index with the new mapping
 Runner.__elasticsearch__.client.indices.create \
   index: Runner.index_name,
   body: { settings: Runner.settings.to_hash, mappings: Runner.mappings.to_hash }
- 
+
 # Index all races records from the DB to Elasticsearch
 Runner.import
