@@ -23,5 +23,8 @@ class CreateProjectedResults < ActiveRecord::Migration
 
       t.timestamps
     end
+
+      add_index :projected_results, :runner_id
+      add_index :projected_results, :projected_race_id
   end
 end

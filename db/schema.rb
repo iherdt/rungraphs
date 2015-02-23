@@ -68,6 +68,9 @@ ActiveRecord::Schema.define(version: 20150223205048) do
     t.datetime "updated_at"
   end
 
+  add_index "projected_results", ["projected_race_id"], name: "index_projected_results_on_projected_race_id", using: :btree
+  add_index "projected_results", ["runner_id"], name: "index_projected_results_on_runner_id", using: :btree
+
   create_table "races", force: true do |t|
     t.string   "name"
     t.date     "date"
