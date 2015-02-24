@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150223205048) do
+ActiveRecord::Schema.define(version: 20150224030251) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,7 +42,10 @@ ActiveRecord::Schema.define(version: 20150223205048) do
     t.boolean  "club_points",   default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "slug"
   end
+
+  add_index "projected_races", ["slug"], name: "index_projected_races_on_slug", unique: true, using: :btree
 
   create_table "projected_results", force: true do |t|
     t.string   "last_name"
@@ -66,6 +69,7 @@ ActiveRecord::Schema.define(version: 20150223205048) do
     t.integer  "projected_race_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "full_name"
   end
 
   add_index "projected_results", ["projected_race_id"], name: "index_projected_results_on_projected_race_id", using: :btree
@@ -113,6 +117,8 @@ ActiveRecord::Schema.define(version: 20150223205048) do
     t.integer  "race_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "date"
+    t.float    "distance"
   end
 
   add_index "results", ["race_id"], name: "index_results_on_race_id", using: :btree

@@ -93,7 +93,7 @@ namespace :nyrr do
     scrape_race_info(race_results_page, race)
     race.save!
 
-    scrape_race_individual_page(race_results_page, race.id, race.date.year)
+    scrape_race_individual_page(race_results_page, race)
   end
 
   def get_race_links(yearly_results_page)
@@ -108,7 +108,7 @@ namespace :nyrr do
     race_results_page.parser.xpath("//table[@cellpadding='3'][@cellspacing='0'][@border='1'][@bordercolor='#DDDDDD'][@style='border-collapse:collapse; border-color:#DDD']/tr")
   end
 
-  def scrape_race_individual_page(race_results_page, race_id, race_year)
+  def scrape_race_individual_page(race_results_page, race)
     puts "scraping page"
 
 
@@ -117,7 +117,7 @@ namespace :nyrr do
     rows[0].css('td').each do |i|
       race_fields_array << i.text
     end
-    scrape_result_rows(rows, race_id, race_year, race_fields_array)
+    scrape_result_rows(rows, race, race_fields_array)
 
     # for now, limit to first 500 for each race because of cost of production
 
@@ -125,14 +125,14 @@ namespace :nyrr do
     next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
     if next_500_link
       next_race_results_page = $a.click(next_500_link)
-      scrape_race_individual_page(next_race_results_page, race_id, race_year)
+      scrape_race_individual_page(next_race_results_page, race)
     end
   end
 
-  def scrape_result_rows(rows, race_id, race_year, race_fields_array)
+  def scrape_result_rows(rows, race, race_fields_array)
     rows.shift
     rows.each do |row|
-      result = Result.new
+      result = Result.new(distance: race.distance, date: race.date)
       data_array = []
       row.css('td').each_with_index do |field, index|
         property = RESULT_PROPERTIES[race_fields_array[index]]
@@ -143,7 +143,6 @@ namespace :nyrr do
           result.update_attributes("age" => field.text[1..2].to_i)
         end
       end
-      result.save
 
       # find or create team
       team = Team.where(name: result.team)
@@ -152,7 +151,7 @@ namespace :nyrr do
       end
 
       #create or find runner
-      birth_year = race_year - result.age
+      birth_year = race.year - result.age
       runners = Runner.where(first_name: result.first_name, last_name: result.last_name)
       if runners.empty?
         result_runner = Runner.create(
