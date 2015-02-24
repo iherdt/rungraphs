@@ -20,10 +20,9 @@ Rails.application.routes.draw do
   # Example resource route with options:
   resources :runners
   resources :races
-  resources :results
   resources :teams
+  resources :projected_races, :path => 'projections'
 
-  
   get 'search_races', to: 'search#search_races'
   get 'search_runners', to: 'search#search_runners'
   get 'search_all', to: 'search#search_all'

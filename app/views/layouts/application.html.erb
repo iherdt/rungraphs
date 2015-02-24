@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link href="/icon.ico" rel="shortcut icon" /> 
-    
+    <link href="/icon.ico" rel="shortcut icon" />
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -66,6 +66,7 @@
           <ul class="nav nav-pills">
             <li class='header-item' role="presentation"><a href="<%= races_url %>">RACES</a></li>
             <li class='header-item' role="presentation"><a href="<%= teams_url %>">TEAMS</a></li>
+            <li class='header-item' role="presentation"><a href="<%= projected_races_url %>">PROJECTIONS </a></li>
           </ul>
         <!-- </div> -->
         </div>
@@ -82,7 +83,7 @@
     </div>
 
     <footer>
-      
+
     </footer>
    <!-- container -->
 
@@ -92,14 +93,14 @@
         $q = $("#all-search-input").val();
 
         if ($q.length >= 2) {
-          
+
           $.ajax({
             url: "<%= search_all_url %>",
             type: "GET",
             data: {'q': $q},
             success: function (resp) {
               if (resp != '<ul>\n</ul>') {
-                $('.all-results-container').html(resp); 
+                $('.all-results-container').html(resp);
                 $('.all-results-container').show();
               } else {
                   $('.all-results-container').empty();
