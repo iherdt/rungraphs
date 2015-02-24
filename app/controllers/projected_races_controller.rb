@@ -10,7 +10,16 @@ class ProjectedRacesController < ApplicationController
   # GET /projected_races/1
   # GET /projected_races/1.json
   def show
-    @projected_results = @projected_race.projected_results.order("net_time")
+    @projected_results = @projected_race.projected_results.includes(:runner).order("net_time")
+    @projected_results.each_with_index do |pr, i|
+      pr.overall_place = i + 1
+    end
+    @projected_results.select{|pr| pr.sex == 'M'}.each_with_index do |pr, i|
+      pr.gender_place = i + 1
+    end
+    @projected_results.select{|pr| pr.sex == 'F'}.each_with_index do |pr, i|
+      pr.gender_place = i + 1
+    end
   end
 
   private

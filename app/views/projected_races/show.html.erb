@@ -1,1 +1,210 @@
-show page
+<%- model_class = ProjectedRace -%>
+<div class="results-page-header page-header">
+  <h1>Projection: <%= @projected_race.name %></h1>
+
+  <dl>
+    <% @projected_race.attributes.each do |attribute, value| %>
+      <% next if value.nil? %>
+      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity", "name", "slug"].include? attribute %>
+      <dt class="race-attribute">
+        <strong>
+          <% if attribute == "date_and_time" %>
+            date / time:
+          <% else %>
+            <%= attribute %>:
+          <% end %>
+        </strong>
+      </dt>
+      <dd class="race-attribute-value">
+        <%= value %>
+        <% case attribute %>
+        <% when "distance" %>
+          <% if value == 1.0 %>
+            mile
+          <% else %>
+            miles
+          <% end %>
+        <% end %>
+      </dd>
+    <% end %>
+  </dl>
+</div>
+
+
+<div class="race-page-content">
+  <div class="race-results-table">
+      <table class="results-table table table-hover">
+          <thead>
+              <tr>
+                  <th class="race-header-title">Overall</th>
+                  <th class="race-header-title">Gender</th>
+                  <th class="race-header-title">
+                    <input type="text" placeholder="Runner" class="runner-text-input"/>
+                  </th>
+                  <th>
+                    <select class="race-header-select race-select-team">
+                      <option value="" select="selected">
+                        Team
+                      </option>
+                    </select>
+                  </th>
+                  <th>
+                    <select class="race-header-select race-select-sex">
+                      <option value="" select="selected">
+                        Sex
+                      </option>
+                      <option value="M">
+                        M
+                      </option>
+                      <option value="F">
+                        F
+                      </option>
+                    </select>
+                  </th>
+                  <th>
+                    <select class="race-header-select race-select-age">
+                      <option value="" select="selected">
+                        Age
+                      </option>
+                      <option value="0-19">
+                        &#60; 19
+                      </option>
+                      <% (2..9).each do |i| %>
+                        <option value="<%=i%>0-<%=i%>9">
+                          <%=i%>0 - <%=i%>9
+                        </option>
+                      <% end %>
+                    </select>
+                  </th>
+                  <th class="race-header-title">Bib</th>
+                  <th class="race-header-title">Net Time</th>
+                  <th class="race-header-title">Pace</th>
+              </tr>
+          </thead>
+          <tbody>
+            <% @projected_results.each do |result| %>
+                <tr>
+                    <td><%= result.overall_place %></td>
+                    <td><%= result.gender_place %></td>
+                    <% unless result.runner.nil? %>
+                      <td class="result-table-clickable-td">
+                        <a href="<%= runner_url(result.runner.slug) %>">
+                          <div class="result-table-clickable-field">
+                            <%= "#{result.first_name.split.map(&:capitalize).join(' ')} #{result.last_name.split.map(&:capitalize).join(' ')}" %>
+                          </div>
+                        </a>
+                      </td>
+                      <td class="result-table-clickable-td">
+                        <% if result.team != '0' && !result.team.blank? %>
+                          <a href="<%= team_url(result.team) %>">
+                            <div class="result-table-clickable-field">
+                              <%= result.team.upcase %>
+                            </div>
+                          </a>
+                        <% end %>
+                      </td>
+                    <% else %>
+                      <td>
+                        <%= result.full_name.split.map(&:capitalize).join(' ') %>
+                      </td>
+                      <td>
+                        <%= result.team %>
+                      </td>
+                    <% end %>
+                    <td><%= result.sex %></td>
+                    <td><%= result.age %></td>
+                    <td><%= result.bib %></td>
+                    <td><%= result.net_time %></td>
+                    <td><%= result.pace_per_mile %></td>
+                </tr>
+              <% end %>
+          </tbody>
+      </table>
+  </div>
+</div>
+
+<script>
+
+  var $resultsTable = $('.results-table').DataTable( {
+      "aaSorting": [],
+      "aoColumnDefs": [
+        { "orderable": false, "targets": "_all" }
+      ],
+      "pagingType": "simple_numbers",
+      "dom": "ip<bottom'results-table-header'pi>",
+      "lengthMenu": [ 100 ],
+      "bLengthChange": false,
+      // "responsive": true,
+      "columns": [
+        {"width": "70px", "orderable": true},
+        {"width": "70px", "orderable": true},
+        {},
+        null,
+        null,
+        null,
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": true }
+      ],
+    });
+
+    // Text Search
+    $( '.runner-text-input' ).on( 'keyup change', function () {
+        $resultsTable
+            .column( 2 )
+            .search( this.value )
+            .draw();
+    } );
+
+    // populate select team
+    $resultsTable.column(3).data().unique().sort().each( function ( d, j ) {
+        if ($(d).children) {
+          var choice = $(d).children().text().replace(/ |\n/g,'');
+          $('.race-select-team').append( '<option value="'+choice+'">'+choice+'</option>' );
+        }
+    } );
+
+    // Team Select
+    $( '.race-select-team' ).change( function () {
+        $resultsTable
+            .column( 3 )
+            .search( this.value )
+            .draw();
+    } );
+
+    // Gender Select
+    $( '.race-select-sex' ).change( function () {
+        $resultsTable
+            .column( 4 )
+            .search( this.value )
+            .draw();
+    } );
+
+    /* Custom filtering function which will search data in column four between two values */
+    $.fn.dataTable.ext.search.push(
+        function( settings, data, dataIndex ) {
+            var min = parseInt( $( '.race-select-age' ).val().substring(0, 2), 10 );
+            var max = parseInt( $( '.race-select-age' ).val().substring(3, 5), 10 );
+            var age = parseFloat( data[6] ) || 0; // use data for the age column
+
+            if ( ( isNaN( min ) && isNaN( max ) ) ||
+                 ( isNaN( min ) && age <= max ) ||
+                 ( min <= age   && isNaN( max ) ) ||
+                 ( min <= age   && age <= max ) )
+            {
+                return true;
+            }
+            return false;
+        }
+    );
+
+    // Age group select
+    $( '.race-select-age' ).change( function () {
+        var min = $( '.race-select-age' ).val().substring(0, 2);
+        var max = $( '.race-select-age' ).val().substring(3, 5);
+        $resultsTable
+            .draw();
+    } );
+
+
+</script>

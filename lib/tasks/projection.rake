@@ -49,7 +49,7 @@ namespace :projection do
         runner = runners[0]
         p runner
 
-        projected_result.update_attributes("runner_id" => runner.id, "team" => runner.team, "state" => runner.state)
+        projected_result.update_attributes("runner_id" => runner.id, "team" => runner.team, "state" => runner.state, "age" => Time.now.year - runner.birth_year)
 
         # TODO, limit best to races within the last year
         # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
@@ -73,11 +73,13 @@ namespace :projection do
         puts "projected_time_in_seconds #{projected_time_in_seconds}"
         projected_time = "#{sprintf "%02d",(projected_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) % 60).round}"
         puts "projected_time #{projected_time}"
-        projected_result.update_attributes("net_time" => projected_time)
+        projected_pace_in_seconds = projected_time_in_seconds / projected_race.distance
+        projected_pace = "#{sprintf "%02d", (projected_pace_in_seconds / 60).floor}:#{sprintf "%02d", ((projected_pace_in_seconds % 3600) % 60).round}"
+        projected_result.update_attributes("net_time" => projected_time, "pace_per_mile" => projected_pace )
 
       else
         puts "Not found: #{runner_info['name']} "
-        projected_result.update_attributes("team" => '?')
+        projected_result.update_attributes("team" => 'UNK')
       end
 
       puts

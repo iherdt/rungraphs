@@ -9,7 +9,7 @@
   <% if @runner.team != '0' && !@runner.team.blank? %>
     <dt><strong>Team:</strong></dt>
     <dd>
-      <% if !TEAMS[@runner.team].empty? %>
+      <% if !TEAMS[@runner.team].nil? %>
         <%= TEAMS[@runner.team] %>
       <% else %>
         <%= @runner.team.upcase %>
