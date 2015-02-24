@@ -21,8 +21,8 @@
   <% end %>
   <dt><strong>Sex:</strong></dt>
   <dd><%= @runner.sex %></dd>
-  <dt><strong> Birth year:</strong></dt>
-  <dd><%= @runner.birth_year %></dd>
+  <dt><strong> hometown:</strong></dt>
+  <dd><%= "#{@runner.city}, #{@runner.state} #{@runner.country}" %></dd>
 </dl>
 
 <table class="results-table table table-hover">
@@ -64,7 +64,7 @@
                           <div class="runner-table-clickable-field">
                             <%= result.team.upcase %>
                           </div>
-                        </a>  
+                        </a>
                       <% end %>
                     </td>
               <% if result.net_time %>

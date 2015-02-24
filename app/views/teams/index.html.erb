@@ -1,11 +1,12 @@
 <div class="teams-container">
 	<ul>
 		<% @teams.each do |team| %>
+			<% next if team.name == "0" || team.name.blank?%>
 			<a href="<%=team_url(team.slug)%>">
 				<li class="team-container">
 					<div class="team-name-container">
 						<h2>
-				      <% if !TEAMS[team.name].empty? %>
+				      <% if !TEAMS[team.name].nil? %>
 				        <%= TEAMS[team.name] %>
 				      <% else %>
 				        <%= team.name.upcase %>

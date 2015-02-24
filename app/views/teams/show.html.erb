@@ -1,6 +1,6 @@
 <div class="page-header">
   <h1>
-  	<% if !TEAMS[@team.name].empty? %>
+  	<% if !TEAMS[@team.name].nil? %>
     	<%= TEAMS[@team.name] %>
     <% else %>
     	<%= @team.name.upcase %>
@@ -20,8 +20,8 @@
 			  <dl>
 				  <dt class="runner-attribute"><strong>Sex:</strong></dt>
 				  <dd class="runner-value"><%= runner.sex %></dd>
-				  <dt class="runner-attribute"><strong> Birth year:</strong></dt>
-				  <dd class="runner-value"><%= runner.birth_year %></dd>
+				  <dt class="runner-attribute"><strong> Hometown:</strong></dt>
+				  <dd class="runner-value"><%= "#{runner.city}, #{runner.state} #{runner.country}" %></dd>
 			  </dl>
 	  		</div>
 		</li>
