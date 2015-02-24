@@ -6,6 +6,6 @@ class ProjectedRace < ActiveRecord::Base
    has_many :runners, through: :projected_results
 
    def generate_custom_slug
-     "#{self.name}"
+     self.name
    end
 end
