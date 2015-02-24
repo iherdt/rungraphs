@@ -1,11 +1,11 @@
 <ul>
   <% results.each do |result| %>
-    
+
     	<% if result[:type] == "runner" %>
     		<a href="<%=runner_url(result[:slug])%>">
     			<li class="search-all-item">
 		    		<div class="search-all-left">
-		    			<%= "#{result[:first_name].split.map(&:capitalize).join(' ')} #{result[:last_name].split.map(&:capitalize).join(' ')}" %>
+		    			<%= "#{result[:full_name].split.map(&:capitalize).join(' ')}" %>
 		    		</div>
 		    		<div class="search-all-right">
 		    			<% if result[:team] != '0' && !result[:team].blank? %>

@@ -38,7 +38,7 @@ end
 def parse_runner_results(results)
 	runners = []
     results.as_json.each do |result|
-    	runners << {first_name: result["fields"]["first_name"][0], last_name: result["fields"]["last_name"][0], team: result["fields"]["team"][0], id: result["fields"]["id"][0], score: result["fields"]["score"], type: "runner", slug: result["fields"]["slug"] }
+    	runners << {full_name: result["fields"]["full_name"][0], team: result["fields"]["team"][0], id: result["fields"]["id"][0], score: result["fields"]["score"], type: "runner", slug: result["fields"]["slug"] }
     end
     runners
 end

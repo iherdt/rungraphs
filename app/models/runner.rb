@@ -16,7 +16,7 @@ class Runner < ActiveRecord::Base
 			filter: {
 			    autocomplete_filter: {
 			      type: "edge_ngram",
-			      min_gram: 3,
+			      min_gram: 2,
 			      max_gram: 4
 		    	}
 			},
@@ -40,12 +40,10 @@ class Runner < ActiveRecord::Base
 	      query: {
 	        multi_match: {
 	          query: query,
-	          type: "most_fields",
-	          operator: "or",
-	          fields: ["first_name", "last_name"]
+	          fields: ["full_name"]
 	        }
 	      },
-	      fields: ['first_name', 'last_name', 'team', 'id', 'slug']
+	      fields: ['full_name', 'team', 'id', 'slug']
 	    }
 	  )
 	end
