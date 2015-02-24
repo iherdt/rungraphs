@@ -4,14 +4,13 @@ class ProjectedRacesController < ApplicationController
   # GET /projected_races
   # GET /projected_races.json
   def index
-    @races = Race.all.order(:date => :desc)
+    @projected_races = ProjectedRace.all.order(:date => :desc)
   end
 
   # GET /projected_races/1
   # GET /projected_races/1.json
   def show
-    @race_time_array = get_race_time_title_and_type(@race)
-    @results = @race.results.sort_by(&:overall_place)
+    @projected_results = @projected_race.projected_results.order("net_time")
   end
 
   private
