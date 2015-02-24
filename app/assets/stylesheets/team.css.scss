@@ -52,12 +52,11 @@
 
     .runner-attribute {
       float: left;
-      padding-right: 20px;
-      width: 130px;
+      width: 100px;
     }
-    .runner-attribute-value {
-      float: right;
-      width: 249px;
+    .runner-value {
+      width: 140px;
+      float: left;
     }
   }
 }
