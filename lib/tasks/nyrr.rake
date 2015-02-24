@@ -151,7 +151,7 @@ namespace :nyrr do
       end
 
       #create or find runner
-      birth_year = race.year - result.age
+      birth_year = race.date.year - result.age
       runners = Runner.where(first_name: result.first_name, last_name: result.last_name)
       if runners.empty?
         result_runner = Runner.create(
@@ -196,7 +196,7 @@ namespace :nyrr do
       result_runner.save!
 
       result.update_attributes("runner_id" => result_runner.id)
-      result.update_attributes("race_id" => race_id)
+      result.update_attributes("race_id" => race.id)
       result.save!
     end
   end
