@@ -75,7 +75,7 @@ namespace :projection do
         puts "projected_time #{projected_time}"
         projected_pace_in_seconds = projected_time_in_seconds / projected_race.distance
         projected_pace = "#{sprintf "%02d", (projected_pace_in_seconds / 60).floor}:#{sprintf "%02d", ((projected_pace_in_seconds % 3600) % 60).round}"
-        projected_result.update_attributes("net_time" => projected_time, "pace_per_mile" => projected_pace )
+        projected_result.update_attributes("net_time" => projected_time, "pace_per_mile" => projected_pace, "ag_percent" => best_result.ag_percent)
 
       else
         puts "Not found: #{runner_info['name']} "
