@@ -82,6 +82,7 @@
                   <th class="race-header-title">Bib</th>
                   <th class="race-header-title">Net Time</th>
                   <th class="race-header-title">Pace</th>
+                  <th class="race-header-title">AG%</th>
               </tr>
           </thead>
           <tbody>
@@ -119,6 +120,7 @@
                     <td><%= result.bib %></td>
                     <td><%= result.net_time %></td>
                     <td><%= result.pace_per_mile %></td>
+                    <td><%= result.ag_percent %>%</td>
                 </tr>
               <% end %>
           </tbody>
@@ -145,6 +147,7 @@
         null,
         null,
         null,
+        { "orderable": true },
         { "orderable": true },
         { "orderable": true },
         { "orderable": true }
@@ -208,6 +211,5 @@
         $resultsTable
             .draw();
     } );
-
 
 </script>
