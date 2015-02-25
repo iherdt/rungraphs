@@ -31,6 +31,11 @@ namespace :projection do
     roster_data_hash = JSON.parse(json_roster_data)
 
     roster_data_hash['list'].each do |runner_info|
+      next if projected_race.runners.any? do |runner|
+        runner.first_name == runner_info['fname'] &&
+        runner.last_name == runner_info['lname'] &&
+        runner.city == runner_info['city']
+      end
       # create result
       projected_result = ProjectedResult.create(
           first_name: runner_info['fname'],
@@ -53,7 +58,7 @@ namespace :projection do
 
         # TODO, limit best to races within the last year
         # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
-        best_result = runner.results.where.not(ag_percent: nil, distance: 1.0).where("date" < "?", 1.year.ago).where("date > ?", 1.year.ago).order('ag_percent DESC').[0]
+        best_result = runner.results.where.not(ag_percent: nil, distance: 1.0).where("date" < "?", 1.year.ago).where("date > ?", 1.year.ago).order('ag_percent DESC')[0]
         p best_result
 
         # if runner has no times with ag%, choose the best pace
