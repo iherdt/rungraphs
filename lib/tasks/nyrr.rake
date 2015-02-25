@@ -68,7 +68,7 @@ namespace :nyrr do
 
     # click on individual race result page
     race_results_cover_page = $a.click(link)
-    puts "Scraping #{date} #{link.text}"
+    puts "Scraping Race #{date} #{link.text}"
 
     if race_results_cover_page.form.nil? || race_results_cover_page.form.radiobutton_with(:value => /500/).nil?
       puts "    ****Failed. Improper result form."

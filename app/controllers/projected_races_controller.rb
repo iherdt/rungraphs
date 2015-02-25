@@ -69,13 +69,13 @@ class ProjectedRacesController < ApplicationController
         if runners['M'].count > 5
           total_time_in_seconds = runners['M'].take(5).inject(0) { |total_time, runner| total_time + runner[:net_time_in_seconds] }
           total_time = "#{sprintf "%02d",(total_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) % 60).round}"
-          male_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners['M'].take(7) }
+          male_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners['M'].take(10) }
         end
         runners['F'].sort_by!{ |r| r[:net_time_in_seconds] }
         if runners['F'].count > 5
           total_time_in_seconds = runners['F'].take(5).inject(0) { |total_time, runner| total_time + runner[:net_time_in_seconds] }
           total_time = "#{sprintf "%02d",(total_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) % 60).round}"
-          female_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners['F'].take(7) }
+          female_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners['F'].take(10) }
         end
       end
 
