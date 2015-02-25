@@ -128,6 +128,48 @@
   </div>
 </div>
 
+<div>
+  <h3> Men's results </h3>
+  <% 1.upto(10) do |i| %>
+    <ul>
+      <li>Team: <%= @men_scores[i][:team] %></li>
+      <li>Place: <%= i  %></li>
+      <li>Time: <%= @men_scores[i][:total_time] %></li>
+      <li> Runners
+        <ul>
+          <% @men_scores[i][:runners].each do |runner| %>
+            <li>
+              <%= runner[:name] %> - <%= runner[:net_time] %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    </ul>
+    <br>
+  <% end %>
+</div>
+
+<div>
+  <h3> Women's results </h3>
+  <% 1.upto(10) do |i| %>
+    <ul>
+      <li>Team: <%= @women_scores[i][:team] %></li>
+      <li>Place: <%= i %></li>
+      <li>Time: <%= @women_scores[i][:total_time] %></li>
+      <li> Runners
+        <ul>
+          <% @women_scores[i][:runners].each do |runner| %>
+            <li>
+              <%= runner[:name] %> - <%= runner[:net_time] %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    </ul>
+    <br>
+  <% end %>
+</div>
+
 <script>
 
   var $resultsTable = $('.results-table').DataTable( {

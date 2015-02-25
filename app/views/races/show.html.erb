@@ -114,8 +114,13 @@
                     <td><%= result.bib %></td>
                     <td><%= result.send(@race_time_array[1]).prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %></td>
                     <td><%= result.pace_per_mile.prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %></td>
-                    <td><%= result.ag_time.prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %> </td>
-                    <td><%= result.ag_percent %>%</td>
+                    <% unless result.ag_time.nil? %>
+                      <td><%= result.ag_time.prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %> </td>
+                      <td><%= result.ag_percent %>%</td>
+                    <% else %>
+                      <td></td>
+                      <td></td>
+                    <% end %>
                 </tr>
               <% end %>
           </tbody>
