@@ -5,7 +5,7 @@ require 'open-uri'
 
 =begin
 
-rake projection:new['http://api.rtrt.me/events/NYRR-WASHINGTONHEIGHTS5K-2015/profiles?max=10000&total=1&appid=4d7a9ceb0be65b3cc4948ee9&token=b0976a5c7c82e1de4563de76ddc72601&search=&callback=jcb8&func=na&parms=%7B%22browser%22%3Afalse%7D&settings=%7B%22setWait%22%3Afalse%7D&_=1424658974485',3.1,'Washington Heights 5k 2015','March 1st 2015 9:00am']
+rake projection:new["http://api.rtrt.me/events/NYRR-WASHINGTONHEIGHTS5K-2015/profiles?max=10000&total=1&appid=4d7a9ceb0be65b3cc4948ee9&token=b0976a5c7c82e1de4563de76ddc72601&search=&callback=jcb8&func=na&parms=%7B%22browser%22%3Afalse%7D&settings=%7B%22setWait%22%3Afalse%7D&_=1424658974485",3.1,"Washington Heights 5k 2015","March 1st 2015 9:00am"]
 
 ProjectedRace.first.projected_results.order("net_time").each_with_index {|r,i| puts "#{i+1}\t#{r.sex}\t#{r.team}\t#{r.net_time}\t#{r.full_name}"}
 
