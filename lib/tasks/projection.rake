@@ -53,7 +53,7 @@ namespace :projection do
 
         # TODO, limit best to races within the last year
         # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
-        best_result = runner.results.where.not(ag_percent: nil, distance: 1.0).order('ag_percent DESC')[0]
+        best_result = runner.results.where.not(ag_percent: nil, distance: 1.0).where("date" < "?", 1.year.ago).where("date > ?", 1.year.ago).order('ag_percent DESC').[0]
         p best_result
 
         # if runner has no times with ag%, choose the best pace
