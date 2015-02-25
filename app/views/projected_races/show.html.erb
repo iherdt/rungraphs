@@ -259,7 +259,7 @@
         function( settings, data, dataIndex ) {
             var min = parseInt( $( '.race-select-age' ).val().substring(0, 2), 10 );
             var max = parseInt( $( '.race-select-age' ).val().substring(3, 5), 10 );
-            var age = parseFloat( data[6] ) || 0; // use data for the age column
+            var age = parseFloat( data[5] ) || 0; // use data for the age column
 
             if ( ( isNaN( min ) && isNaN( max ) ) ||
                  ( isNaN( min ) && age <= max ) ||
