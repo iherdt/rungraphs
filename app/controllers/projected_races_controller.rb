@@ -29,7 +29,7 @@ class ProjectedRacesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_projected_race
-        @projected_race = ProjectedRace.includes(:projected_results).friendly.find(params[:id])
+        @projected_race = ProjectedRace.includes(:projected_results).friendly.find_by_slug!(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
