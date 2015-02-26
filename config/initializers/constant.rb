@@ -43,7 +43,7 @@
         # "gstc" => "",
         # "hhh" => "",
         # "hhrt" => "",
-        # "hoha" => "",
+        "hoha" => "Hoboken Harriers",
         # "hrr" => "",
         # "hsxc" => "",
         # "ibrt" => "",
