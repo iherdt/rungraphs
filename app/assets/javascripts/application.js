@@ -21,4 +21,6 @@
 //= require dataTables.responsive.js
 //= require twitter/bootstrap
 //= require turbolinks
+//= require spin
+//= require jquery.spin
 //= require_tree .

@@ -130,6 +130,11 @@
         }
       });
 
+    	var spinner = new Spinner().spin();
+    	$( 'a' ).click(function() {
+    		$('.content-container').html(spinner.el);
+    	})
+
   </script>
   </body>
 </html>
