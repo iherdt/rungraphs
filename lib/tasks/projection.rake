@@ -33,8 +33,7 @@ namespace :projection do
     roster_data_hash['list'].each do |runner_info|
       next if projected_race.runners.any? do |runner|
         runner.first_name == runner_info['fname'] &&
-        runner.last_name == runner_info['lname'] &&
-        runner.city == runner_info['city']
+        runner.last_name == runner_info['lname']
       end
       # create result
       projected_result = ProjectedResult.create(
