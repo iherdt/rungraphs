@@ -131,6 +131,7 @@
 <script>
 
   var $resultsTable = $('.results-table').DataTable( {
+      "deferRender": true,
       "aaSorting": [],
       "aoColumnDefs": [
         { "orderable": false, "targets": "_all" }
