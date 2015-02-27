@@ -68,7 +68,7 @@ namespace :nyrr do
 
     # click on individual race result page
     race_results_cover_page = $a.click(link)
-    puts "Scraping Race #{date} #{link.text}"
+    puts "---------Scraping Race #{date} #{link.text}---------"
 
     if race_results_cover_page.form.nil? || race_results_cover_page.form.radiobutton_with(:value => /500/).nil?
       puts "    ****Failed. Improper result form."
@@ -109,23 +109,22 @@ namespace :nyrr do
   end
 
   def scrape_race_individual_page(race_results_page, race)
-    puts "scraping page"
+    loop do
+      puts "---------scraping page---------"
+      rows = get_rows(race_results_page)
+      race_fields_array = []
+      rows[0].css('td').each do |i|
+        race_fields_array << i.text
+      end
+      scrape_result_rows(rows, race, race_fields_array)
 
+      # # if there is a next button, click and add those results too
+      next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
 
-    rows = get_rows(race_results_page)
-    race_fields_array = []
-    rows[0].css('td').each do |i|
-      race_fields_array << i.text
-    end
-    scrape_result_rows(rows, race, race_fields_array)
+      # break unless next_500_link
+      break if next_500_link.blank?
 
-    # for now, limit to first 500 for each race because of cost of production
-
-    # # if there is a next button, click and add those results too
-    next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
-    if next_500_link
       next_race_results_page = $a.click(next_500_link)
-      scrape_race_individual_page(next_race_results_page, race)
     end
   end
 
@@ -198,6 +197,7 @@ namespace :nyrr do
       result.update_attributes("runner_id" => result_runner.id)
       result.update_attributes("race_id" => race.id)
       result.save!
+      puts "#{result.overall_place}: #{result.first_name} #{result.last_name}"
     end
   end
 
