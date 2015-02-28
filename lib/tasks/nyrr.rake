@@ -110,7 +110,7 @@ namespace :nyrr do
 
   def scrape_race_individual_page(race_results_page, race)
     loop do
-      puts "---------scraping page---------"
+      puts "------------------------------------scraping page---------------------------------------------"
       rows = get_rows(race_results_page)
       race_fields_array = []
       rows[0].css('td').each do |i|
@@ -124,7 +124,7 @@ namespace :nyrr do
       # break unless next_500_link
       break if next_500_link.blank?
 
-      next_race_results_page = $a.click(next_500_link)
+      race_results_page = $a.click(next_500_link)
     end
   end
 
@@ -197,7 +197,7 @@ namespace :nyrr do
       result.update_attributes("runner_id" => result_runner.id)
       result.update_attributes("race_id" => race.id)
       result.save!
-      puts "#{result.overall_place}: #{result.first_name} #{result.last_name}"
+      puts "Runner------------------#{result.overall_place}: #{result.first_name} #{result.last_name}------------------"
     end
   end
 
