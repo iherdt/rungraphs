@@ -197,7 +197,7 @@ namespace :nyrr do
       result.update_attributes("runner_id" => result_runner.id)
       result.update_attributes("race_id" => race.id)
       result.save!
-      puts "Runner------------------#{result.overall_place}: #{result.first_name} #{result.last_name}------------------"
+      puts "------------------------------------#{result.overall_place}: #{result.first_name} #{result.last_name}------------------------------------"
     end
   end
 
