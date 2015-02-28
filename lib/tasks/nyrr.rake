@@ -86,12 +86,22 @@ namespace :nyrr do
       return
     end
 
-    race = Race.new
-    race.name = link.text
-    race.date = format_date(date)
+    # race = Race.new
+    # race.name = link.text
+    # race.date = format_date(date)
+    #
+    # scrape_race_info(race_results_page, race)
+    # race.save!
+    race = Race.last
 
-    scrape_race_info(race_results_page, race)
-    race.save!
+    44.times do
+      next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
+
+    # break unless next_500_link
+    # break if next_500_link.blank?
+
+      race_results_page = $a.click(next_500_link)
+    end
 
     scrape_race_individual_page(race_results_page, race)
   end
