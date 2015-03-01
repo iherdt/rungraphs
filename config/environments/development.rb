@@ -34,4 +34,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  #  Rails logger output on STDOUT with custom beat heroku 60 second timeout
+  config.middleware.use Rails::Rack::LogTailer
 end

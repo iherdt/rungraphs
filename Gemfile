@@ -85,3 +85,8 @@ gem 'friendly_id', '~> 5.1.0'
 gem 'kaminari'
 
 gem 'spinjs-rails'
+
+# beat 60 second heroku timeout
+gem 'heroku-forward'
+gem 'foreman'
+gem 'thin'
