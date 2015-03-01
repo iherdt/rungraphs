@@ -35,10 +35,18 @@ namespace :nyrr do
 
   $a = Mechanize.new
 
-  task :results, [:year] => :environment do |t, arg|
+  # when scraping old race results, start from most recent to least recent to set teams to the most recent team
+  task :old_results, [:year] => :environment do |t, arg|
     all_results_page = "http://web2.nyrrc.org/cgi-bin/start.cgi/aes-programs/results/resultsarchive.htm"
     yearly_results_page = get_yearly_results_page(all_results_page, arg[:year])
-    scrape_yearly_results(yearly_results_page, arg[:year])
+    scrape_yearly_results(yearly_results_page, arg[:year], "old")
+  end
+
+  task :new_results => :environment do |t, arg|
+    year = Time.now.year
+    all_results_page = "http://web2.nyrrc.org/cgi-bin/start.cgi/aes-programs/results/resultsarchive.htm"
+    yearly_results_page = get_yearly_results_page(all_results_page, year)
+    scrape_yearly_results(yearly_results_page, year, "new")
   end
 
   def get_yearly_results_page(all_results_page, year)
@@ -47,24 +55,30 @@ namespace :nyrr do
     end.click_button
   end
 
-  def scrape_yearly_results(yearly_results_page, year)
+  def scrape_yearly_results(yearly_results_page, year, type_of_result)
     puts "----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}"
     race_links = get_race_links(yearly_results_page)
     race_dates = get_race_dates(yearly_results_page)
+
+    # scrape from oldest to newest so the latest teams are set
+    if type_of_result == "new"
+      race_links.reverse!
+      race_dates.reverse!
+    end
+
     race_links.count.times do |i|
       # only including club points races because of size limits
       # next if !CLUB_POINTS[year].include? i
-      scrape_individual_race_results(race_links[i], race_dates[i], year)
+      scrape_individual_race_results(race_links[i], race_dates[i], year, type_of_result)
     end
   end
 
-  def scrape_individual_race_results(link, date, year)
+  def scrape_individual_race_results(link, date, year, type_of_result)
     # skip if race with same name and date exists
     if !Race.where(name: link.text, date: format_date(date)).empty?
       puts "Skipping #{date} #{link.text}"
       return
     end
-
 
     # click on individual race result page
     race_results_cover_page = $a.click(link)
@@ -93,7 +107,7 @@ namespace :nyrr do
     scrape_race_info(race_results_page, race)
     race.save!
 
-    scrape_race_individual_page(race_results_page, race)
+    scrape_race_individual_page(race_results_page, race, type_of_result)
   end
 
   def get_race_links(yearly_results_page)
@@ -108,76 +122,43 @@ namespace :nyrr do
     race_results_page.parser.xpath("//table[@cellpadding='3'][@cellspacing='0'][@border='1'][@bordercolor='#DDDDDD'][@style='border-collapse:collapse; border-color:#DDD']/tr")
   end
 
-  def scrape_race_individual_page(race_results_page, race)
+  def scrape_race_individual_page(race_results_page, race, type_of_result)
+    i = 0
     loop do
-      puts "------------------------------------scraping page---------------------------------------------"
+      i++
+      puts "------------------------------------scraping page #{i}---------------------------------------------"
       rows = get_rows(race_results_page)
       race_fields_array = []
       rows[0].css('td').each do |i|
         race_fields_array << i.text
       end
-      scrape_result_rows(rows, race, race_fields_array)
 
-      # # if there is a next button, click and add those results too
-      next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
-
-      # break unless next_500_link
-      break if next_500_link.blank?
-
-      race_results_page = $a.click(next_500_link)
-    end
-  end
-
-  def scrape_result_rows(rows, race, race_fields_array)
-    rows.shift
-    rows.each do |row|
-      result = Result.new(distance: race.distance, date: race.date)
-      data_array = []
-      row.css('td').each_with_index do |field, index|
-        property = RESULT_PROPERTIES[race_fields_array[index]]
-        if property
-          result.update_attributes(property => field.text.downcase)
-        elsif race_fields_array[index] == "Sex/Age"
-          result.update_attributes("sex" => field.text[0])
-          result.update_attributes("age" => field.text[1..2].to_i)
-        end
-      end
-
-      # find or create team
-      team = Team.where(name: result.team)
-      if team.empty?
-        Team.create(name: result.team)
-      end
-
-      #create or find runner
-      birth_year = race.date.year - result.age
-      runners = Runner.where(first_name: result.first_name, last_name: result.last_name)
-      if runners.empty?
-        result_runner = Runner.create(
-          first_name: result.first_name,
-          last_name: result.last_name,
-          birth_year: birth_year,
-          team: result.team,
-          sex: result.sex,
-          full_name: "#{result.first_name} #{result.last_name}",
-          city: result.city,
-          state: result.state,
-          country: result.country
-        )
-      else
-        found = false
-
-        # commented out to assume runner with same name is the same runner
-
-        runners.each do |runner|
-          if runner.birth_year.between? birth_year - 1, birth_year + 1
-            result_runner = runner
-            found = true
-            break
+      # remove separate method because of stack problems with large races
+      # scrape_result_rows(rows, race, race_fields_array)
+      rows.shift
+      rows.each do |row|
+        result = Result.new(distance: race.distance, date: race.date)
+        data_array = []
+        row.css('td').each_with_index do |field, index|
+          property = RESULT_PROPERTIES[race_fields_array[index]]
+          if property
+            result.update_attributes(property => field.text.downcase)
+          elsif race_fields_array[index] == "Sex/Age"
+            result.update_attributes("sex" => field.text[0])
+            result.update_attributes("age" => field.text[1..2].to_i)
           end
         end
 
-        if not found
+        # find or create team
+        team = Team.where(name: result.team)
+        if team.empty?
+          Team.create(name: result.team)
+        end
+
+        #create or find runner
+        birth_year = race.date.year - result.age
+        runners = Runner.where(first_name: result.first_name, last_name: result.last_name)
+        if runners.empty?
           result_runner = Runner.create(
             first_name: result.first_name,
             last_name: result.last_name,
@@ -189,17 +170,129 @@ namespace :nyrr do
             state: result.state,
             country: result.country
           )
+        else
+          found = false
+
+          # commented out to assume runner with same name is the same runner
+
+          runners.each do |runner|
+            if runner.birth_year.between? birth_year - 1, birth_year + 1
+              result_runner = runner
+              found = true
+              break
+            end
+          end
+
+          if not found
+            result_runner = Runner.create(
+              first_name: result.first_name,
+              last_name: result.last_name,
+              birth_year: birth_year,
+              team: result.team,
+              sex: result.sex,
+              full_name: "#{result.first_name} #{result.last_name}",
+              city: result.city,
+              state: result.state,
+              country: result.country
+            )
+          else
+            # change runner team to latest if scraping new results
+            if type_of_result == "new"
+              result_runner.update_attributes("team" => result.team)
+            end
+          end
         end
+
+        result_runner.save!
+
+        result.update_attributes("runner_id" => result_runner.id)
+        result.update_attributes("race_id" => race.id)
+        result.save!
+        puts "------------------------------------#{result.overall_place}: #{result.first_name} #{result.last_name}------------------------------------"
       end
 
-      result_runner.save!
+      # # if there is a next button, click and add those results too
+      next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
 
-      result.update_attributes("runner_id" => result_runner.id)
-      result.update_attributes("race_id" => race.id)
-      result.save!
-      puts "------------------------------------#{result.overall_place}: #{result.first_name} #{result.last_name}------------------------------------"
+      # break unless next_500_link
+      break if next_500_link.blank?
+
+      race_results_page = $a.click(next_500_link)
     end
   end
+
+  # def scrape_result_rows(rows, race, race_fields_array)
+  #   rows.shift
+  #   rows.each do |row|
+  #     result = Result.new(distance: race.distance, date: race.date)
+  #     data_array = []
+  #     row.css('td').each_with_index do |field, index|
+  #       property = RESULT_PROPERTIES[race_fields_array[index]]
+  #       if property
+  #         result.update_attributes(property => field.text.downcase)
+  #       elsif race_fields_array[index] == "Sex/Age"
+  #         result.update_attributes("sex" => field.text[0])
+  #         result.update_attributes("age" => field.text[1..2].to_i)
+  #       end
+  #     end
+  #
+  #     # find or create team
+  #     team = Team.where(name: result.team)
+  #     if team.empty?
+  #       Team.create(name: result.team)
+  #     end
+  #
+  #     #create or find runner
+  #     birth_year = race.date.year - result.age
+  #     runners = Runner.where(first_name: result.first_name, last_name: result.last_name)
+  #     if runners.empty?
+  #       result_runner = Runner.create(
+  #         first_name: result.first_name,
+  #         last_name: result.last_name,
+  #         birth_year: birth_year,
+  #         team: result.team,
+  #         sex: result.sex,
+  #         full_name: "#{result.first_name} #{result.last_name}",
+  #         city: result.city,
+  #         state: result.state,
+  #         country: result.country
+  #       )
+  #     else
+  #       found = false
+  #
+  #       # commented out to assume runner with same name is the same runner
+  #
+  #       runners.each do |runner|
+  #         if runner.birth_year.between? birth_year - 1, birth_year + 1
+  #           result_runner = runner
+  #           found = true
+  #           break
+  #         end
+  #       end
+  #
+  #       if not found
+  #         result_runner = Runner.create(
+  #           first_name: result.first_name,
+  #           last_name: result.last_name,
+  #           birth_year: birth_year,
+  #           team: result.team,
+  #           sex: result.sex,
+  #           full_name: "#{result.first_name} #{result.last_name}",
+  #           city: result.city,
+  #           state: result.state,
+  #           country: result.country
+  #         )
+  #       end
+  #     end
+  #
+  #     result_runner.save!
+  #
+  #     result.update_attributes("runner_id" => result_runner.id)
+  #     result.update_attributes("race_id" => race.id)
+  #     result.save!
+  #     puts "------------------------------------#{result.overall_place}: #{result.first_name} #{result.last_name}------------------------------------"
+  #   end
+  # end
 
   def scrape_race_info(race_results_page, race)
     race_info = race_results_page.parser.xpath("//span[@class='text']")[0]
