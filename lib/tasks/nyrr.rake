@@ -125,7 +125,7 @@ namespace :nyrr do
   def scrape_race_individual_page(race_results_page, race, type_of_result)
     i = 0
     loop do
-      i++
+      i += 1
       puts "------------------------------------scraping page #{i}---------------------------------------------"
       rows = get_rows(race_results_page)
       race_fields_array = []
