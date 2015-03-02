@@ -142,12 +142,14 @@ namespace :nyrr do
         row.css('td').each_with_index do |field, index|
           property = RESULT_PROPERTIES[race_fields_array[index]]
           if property
-            result.update_attributes(property => field.text.downcase)
+            result.update_attributes(property => field.text)
           elsif race_fields_array[index] == "Sex/Age"
             result.update_attributes("sex" => field.text[0])
             result.update_attributes("age" => field.text[1..2].to_i)
           end
         end
+
+        next if !race.results.where(overall_place: result.overall_place).empty?
 
         # find or create team
         team = Team.where(name: result.team)
@@ -229,7 +231,7 @@ namespace :nyrr do
   #     row.css('td').each_with_index do |field, index|
   #       property = RESULT_PROPERTIES[race_fields_array[index]]
   #       if property
-  #         result.update_attributes(property => field.text.downcase)
+  #         result.update_attributes(property => field.text)
   #       elsif race_fields_array[index] == "Sex/Age"
   #         result.update_attributes("sex" => field.text[0])
   #         result.update_attributes("age" => field.text[1..2].to_i)
