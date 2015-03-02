@@ -126,7 +126,7 @@ namespace :nyrr do
     i = 0
     loop do
       i += 1
-      puts "------------------------------------scraping page #{i}---------------------------------------------"
+      puts "--------------------------scraping page #{i}------------------------------"
       rows = get_rows(race_results_page)
       race_fields_array = []
       rows[0].css('td').each do |i|
@@ -210,7 +210,7 @@ namespace :nyrr do
         result.update_attributes("runner_id" => result_runner.id)
         result.update_attributes("race_id" => race.id)
         result.save!
-        puts "#{race.name}------------------------------------#{result.overall_place}: #{result.first_name} #{result.last_name}------------------------------------"
+        puts "#{race.name}- #{result.overall_place}: #{result.first_name} #{result.last_name}"
       end
 
       # # if there is a next button, click and add those results too
