@@ -5,20 +5,21 @@ require 'open-uri'
 
 =begin
 
-rake projection:new['http://api.rtrt.me/events/NYRR-WASHINGTONHEIGHTS5K-2015/profiles?max=10000&total=1&appid=4d7a9ceb0be65b3cc4948ee9&token=b0976a5c7c82e1de4563de76ddc72601&search=&callback=jcb8&func=na&parms=%7B%22browser%22%3Afalse%7D&settings=%7B%22setWait%22%3Afalse%7D&_=1424658974485',3.1,'Washington Heights 5k 2015','March 1st 2015 9:00am']
+rake projection:new['http://api.rtrt.me/events/NYH2015/profiles?max=20000&total=1&appid=4d7a9ceb0be65b3cc4948ee9&token=28fe740982943849db51a5b5fe046ef9&search=&callback=jcb5&func=na&parms=%7B%22browser%22%3Afalse%7D&settings=%7B%22setWait%22%3Afalse%7D&_=1425254321149',13.1,'NYC Half 2015','March 15th 2015 7:30am','03/15/15']
 
 ProjectedRace.first.projected_results.order("net_time").each_with_index {|r,i| puts "#{i+1}\t#{r.sex}\t#{r.team}\t#{r.net_time}\t#{r.full_name}"}
 
 =end
 namespace :projection do
 
-  task :new, [:roster_link, :distance, :name,:date_and_time] => :environment do |t, arg|
+  task :new, [:roster_link, :distance, :name,:date_and_time, :date] => :environment do |t, arg|
     roster_link = arg[:roster_link]
     distance = arg[:distance]
     name = arg[:name]
     date_and_time = arg[:date_and_time]
+    date = format_date( arg[:date])
 
-    projected_race = ProjectedRace.create(name: name, date_and_time: date_and_time, distance: distance)
+    projected_race = ProjectedRace.create(name: name, date_and_time: date_and_time, distance: distance, date: date)
     create_new_result_projections(projected_race, roster_link)
     # add_overall_places_to_projected_runners(projected_race)
     # add_gender_places_to_projected_runners()
@@ -105,5 +106,9 @@ namespace :projection do
 
 
   def add_age_group_places_to_projected_runners()
+  end
+
+  def format_date(date_str)
+    date = Date.strptime(date_str, '%m/%d/%y')
   end
 end
