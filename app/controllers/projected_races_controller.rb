@@ -24,6 +24,17 @@ class ProjectedRacesController < ApplicationController
     team_scores = get_projected_team_results(@projected_results)
     @men_scores = team_scores[0]
     @women_scores = team_scores[1]
+
+    if @men_scores.count < 20
+      @men_teams_to_display = @men_scores.count
+    else
+      @men_teams_to_display = 20
+    end
+    if @women_scores.count < 20
+      @women_teams_to_display = @women_scores.count
+    else
+      @women_teams_to_display = 20
+    end
   end
 
   private

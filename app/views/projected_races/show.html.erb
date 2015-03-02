@@ -134,7 +134,7 @@
   </div>
   <div class="mens-results-container team-results-column">
     <h3 class="team-gender-results-title"> Men's Results </h3>
-    <% @men_scores.count.times do |i| %>
+    <% @men_teams_to_display.times do |i| %>
       <div class="team-results-container">
         <div class="team-title-container group">
           <div class="team-title">
@@ -165,7 +165,7 @@
   </div>
   <div class="womens-results-container team-results-column">
     <h3 class="team-gender-results-title"> Women's Results </h3>
-    <% @women_scores.count.times do |i| %>
+    <% @women_teams_to_display.times do |i| %>
       <div class="team-results-container">
         <div class="team-title-container group">
           <div class="team-title">
