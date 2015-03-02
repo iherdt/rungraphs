@@ -30,12 +30,15 @@ namespace :projection do
     roster_data = open(roster_link).read
     json_roster_data = /{.+}/.match(roster_data)[0]
     roster_data_hash = JSON.parse(json_roster_data)
+    counter = 0
 
     roster_data_hash['list'].each do |runner_info|
       next if projected_race.runners.any? do |runner|
         runner.first_name == runner_info['fname'] &&
         runner.last_name == runner_info['lname']
       end
+      counter += 1
+
       # create result
       projected_result = ProjectedResult.create(
           first_name: runner_info['fname'],
@@ -66,6 +69,7 @@ namespace :projection do
           best_result = runner.results.order('pace_per_mile DESC')[0]
         end
 
+        puts counter
         # calculate projected time
         # T2 = T1 x (D2/D1)1.06
         best_time = DateTime.parse(best_result.net_time)
