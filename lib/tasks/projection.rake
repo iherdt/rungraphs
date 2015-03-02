@@ -5,7 +5,7 @@ require 'open-uri'
 
 =begin
 
-rake projection:new['http://api.rtrt.me/events/NYH2015/profiles?max=20000&total=1&appid=4d7a9ceb0be65b3cc4948ee9&token=28fe740982943849db51a5b5fe046ef9&search=&callback=jcb5&func=na&parms=%7B%22browser%22%3Afalse%7D&settings=%7B%22setWait%22%3Afalse%7D&_=1425254321149',13.1,'NYC Half 2015','March 15th 2015 7:30am','03/15/15']
+rake projection:new['http://api.rtrt.me/events/NYH2015/profiles?max=30000&total=1&appid=4d7a9ceb0be65b3cc4948ee9&token=28fe740982943849db51a5b5fe046ef9&search=&callback=jcb5&func=na&parms=%7B%22browser%22%3Afalse%7D&settings=%7B%22setWait%22%3Afalse%7D&_=1425254321149',13.1,'NYC Half 2015','March 15th 2015 7:30am','03/15/15']
 
 ProjectedRace.first.projected_results.order("net_time").each_with_index {|r,i| puts "#{i+1}\t#{r.sex}\t#{r.team}\t#{r.net_time}\t#{r.full_name}"}
 
@@ -33,11 +33,19 @@ namespace :projection do
     counter = 0
 
     roster_data_hash['list'].each do |runner_info|
-      next if projected_race.runners.any? do |runner|
-        runner.first_name == runner_info['fname'] &&
-        runner.last_name == runner_info['lname']
+      if projected_race.projected_results.any? do |projected_result|
+        projected_result.first_name == runner_info['fname'] &&
+        projected_result.last_name == runner_info['lname'] &&
+        projected_result.city == runner_info['city']
+      end
+        if runner_info['bib'] < projected_result.bib
+          projected_result.update_attributes("bib" => runner_info['bib'])
+          projected_result.save!
+          next
+        end
       end
       counter += 1
+      puts counter
 
       # create result
       projected_result = ProjectedResult.create(
@@ -51,8 +59,14 @@ namespace :projection do
           projected_race_id: projected_race.id
         )
 
+        if runner_info['city']
+          city = runner_info['city'].downcase
+        else
+          city = nil
+        end
+
       # add runner and projected time
-      runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase)
+      runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase, city: city)
       if !runners.empty? && !runners[0].results.empty?
         runner = runners[0]
         p runner
@@ -69,7 +83,6 @@ namespace :projection do
           best_result = runner.results.order('pace_per_mile DESC')[0]
         end
 
-        puts counter
         # calculate projected time
         # T2 = T1 x (D2/D1)1.06
         best_time = DateTime.parse(best_result.net_time)
@@ -88,7 +101,7 @@ namespace :projection do
 
       else
         puts "Not found: #{runner_info['name']} "
-        projected_result.update_attributes("team" => 'UNK')
+        projected_result.update_attributes("team" => '---')
       end
 
       puts
