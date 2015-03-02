@@ -8,7 +8,7 @@ require 'bundler'
 $stdout.sync = true
 Bundler.require(:rack)
 
-port = (ARGV.first || ENV['PORT'] || 3000).to_i
+port = (ARGV.first || ENV['PORT'] || 3001).to_i
 env = ENV['RACK_ENV'] || 'development'
 
 require 'em-proxy'
