@@ -127,6 +127,74 @@
   </div>
 </div>
 
+<div class="team-results-main-container">
+  <div class="team-results-title">
+    <h2> Team Results </h2>
+  </div>
+  <div class="mens-results-container team-results-column">
+    <h3 class="team-gender-results-title"> Men's Results </h3>
+    <% @men_scores.count.times do |i| %>
+      <div class="team-results-container">
+        <div class="team-title-container group">
+          <div class="team-title">
+            <%= i + 1  %>
+            :
+            <% if !TEAMS[@men_scores[i][:team]].nil? %>
+              <%= TEAMS[@men_scores[i][:team]] %>
+            <% else %>
+              <%= @men_scores[i][:team].upcase %>
+            <% end %>
+          </div>
+          <div class="team-time"><%= @men_scores[i][:total_time].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %></div>
+        </div>
+        <div class="team-runners-container">
+          <% @men_scores[i][:runners].each do |runner| %>
+            <div class="runner-container">
+              <div class="runner-name-container">
+                <%= runner[:name] %>
+              </div>
+              <div class="runner-time-container">
+                <%= runner[:net_time].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="womens-results-container team-results-column">
+    <h3 class="team-gender-results-title"> Women's Results </h3>
+    <% @women_scores.count.times do |i| %>
+      <div class="team-results-container">
+        <div class="team-title-container group">
+          <div class="team-title">
+            <%= i + 1  %>
+            :
+            <% if !TEAMS[@women_scores[i][:team]].nil? %>
+              <%= TEAMS[@women_scores[i][:team]] %>
+            <% else %>
+              <%= @women_scores[i][:team].upcase %>
+            <% end %>
+          </div>
+          <div class="team-time"><%= @women_scores[i][:total_time].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %></div>
+        </div>
+        <div class="team-runners-container">
+          <% @women_scores[i][:runners].each do |runner| %>
+            <div class="runner-container">
+              <div class="runner-name-container">
+                <%= runner[:name] %>
+              </div>
+              <div class="runner-time-container">
+                <%= runner[:net_time].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
 <script>
 
   var $resultsTable = $('.results-table').DataTable( {
