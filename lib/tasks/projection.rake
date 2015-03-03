@@ -82,9 +82,9 @@ namespace :projection do
           best_result = runner.results.where.not(ag_percent: nil, distance: 1.0).where("date > ?", 1.year.ago).order('ag_percent DESC')[0]
         end
 
-        # if still no best time, find the race with best pace
+        # if still no best time, find the most recent race
         if best_result.nil?
-          best_result = runner.results.order('pace_per_mile DESC')[0]
+          best_result = runner.results.order('date DESC')[0]
         end
 
         # calculate projected time
