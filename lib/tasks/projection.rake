@@ -68,14 +68,12 @@ namespace :projection do
       runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase, city: city)
       if !runners.empty? && !runners[0].results.empty?
         runner = runners[0]
-        p runner
 
         projected_result.update_attributes("runner_id" => runner.id, "team" => runner.team, "state" => runner.state, "age" => Time.now.year - runner.birth_year)
 
         # TODO, limit best to races within the last year
         # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
         best_result = runner.results.where.not(ag_percent: nil, distance: 1.0).where("date > ?", 1.year.ago).order('ag_percent DESC')[0]
-        p best_result
 
         # if runner has results in last year, find all time best result
         if best_result.nil?
@@ -89,8 +87,10 @@ namespace :projection do
 
         # calculate projected time
         # T2 = T1 x (D2/D1)1.06
-        best_time = DateTime.parse(best_result.net_time)
         puts counter
+        puts runner.full_name
+        p best_result
+        best_time = DateTime.parse(best_result.net_time)
         puts "best_time #{best_time.hour}:#{(best_time.min)}:#{best_time.sec}"
         best_time_in_seconds = best_time.hour * 60 * 60 + best_time.min * 60 + best_time.sec
         puts "best_time_in_seconds #{best_time_in_seconds}"
