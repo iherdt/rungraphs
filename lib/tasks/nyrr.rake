@@ -126,9 +126,9 @@ namespace :nyrr do
   end
 
   def scrape_race_individual_page(race_results_page, race, type_of_result)
-    i = 2000
+    i = 20500
 
-    4.times do |i|
+    41.times do |i|
       next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
 
       race_results_page = $a.click(next_500_link)
