@@ -20,7 +20,8 @@ class SearchController < ApplicationController
 	    runners = parse_runner_results(results)
 
 	    all = races + runners
-		all_results = all.sort_by {|hash| hash["_score"] }
+		all_results = all.sort_by {|hash| hash[:score] }.reverse
+		p all_results
 		render partial: 'results/search_all', locals: { results: all_results }
 	end
 end
@@ -30,7 +31,7 @@ private
 def parse_race_results(results)
 	races = []
     results.as_json.each do |result|
-    	races << {name: result["fields"]["name"][0], date: result["fields"]["date"][0], id: result["fields"]["id"][0], score: result["fields"]["score"], type: "race", slug: result["fields"]["slug"] }
+    	races << {name: result["fields"]["name"][0], date: result["fields"]["date"][0], id: result["fields"]["id"][0], score: result["_score"], type: "race", slug: result["fields"]["slug"] }
     end
     races
 end
@@ -38,7 +39,7 @@ end
 def parse_runner_results(results)
 	runners = []
     results.as_json.each do |result|
-    	runners << {full_name: result["fields"]["full_name"][0], team: result["fields"]["team"][0], id: result["fields"]["id"][0], score: result["fields"]["score"], type: "runner", slug: result["fields"]["slug"] }
+    	runners << {full_name: result["fields"]["full_name"][0], team: result["fields"]["team"][0], id: result["fields"]["id"][0], score: result["_score"], type: "runner", slug: result["fields"]["slug"] }
     end
     runners
 end
