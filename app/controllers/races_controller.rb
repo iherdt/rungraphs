@@ -108,17 +108,17 @@ class RacesController < ApplicationController
         net_time = "#{sprintf "%02d",(net_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((net_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((net_time_in_seconds % 3600) % 60).round}"
 
         if team_rosters.include? pr.team
-          if pr.sex == 'M'
-            team_rosters[pr.team]['M'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
+          if pr.sex == 'm'
+            team_rosters[pr.team]['m'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
           else
-            team_rosters[pr.team]['F'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
+            team_rosters[pr.team]['f'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
           end
         else
-          team_rosters[pr.team] = {'M' => [], 'F' => []}
-          if pr.sex == 'M'
-            team_rosters[pr.team]['M'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
+          team_rosters[pr.team] = {'m' => [], 'f' => []}
+          if pr.sex == 'm'
+            team_rosters[pr.team]['m'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
           else
-            team_rosters[pr.team]['F'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
+            team_rosters[pr.team]['f'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
           end
         end
       end
@@ -127,17 +127,17 @@ class RacesController < ApplicationController
       female_team_scores = []
 
       team_rosters.each do |team, runners|
-        runners['M'].sort_by!{ |r| r[:net_time_in_seconds] }
-        if runners['M'].count > 5
-          total_time_in_seconds = runners['M'].take(5).inject(0) { |total_time, runner| total_time + runner[:net_time_in_seconds] }
+        runners['m'].sort_by!{ |r| r[:net_time_in_seconds] }
+        if runners['m'].count > 5
+          total_time_in_seconds = runners['m'].take(5).inject(0) { |total_time, runner| total_time + runner[:net_time_in_seconds] }
           total_time = "#{sprintf "%02d",(total_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) % 60).round}"
-          male_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners['M'].take(10) }
+          male_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners['m'].take(10) }
         end
-        runners['F'].sort_by!{ |r| r[:net_time_in_seconds] }
-        if runners['F'].count > 5
-          total_time_in_seconds = runners['F'].take(5).inject(0) { |total_time, runner| total_time + runner[:net_time_in_seconds] }
+        runners['f'].sort_by!{ |r| r[:net_time_in_seconds] }
+        if runners['f'].count > 5
+          total_time_in_seconds = runners['f'].take(5).inject(0) { |total_time, runner| total_time + runner[:net_time_in_seconds] }
           total_time = "#{sprintf "%02d",(total_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) % 60).round}"
-          female_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners['F'].take(10) }
+          female_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners['f'].take(10) }
         end
       end
 
