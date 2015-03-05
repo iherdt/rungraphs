@@ -59,8 +59,8 @@ namespace :nyrr do
     puts "----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}----#{year}"
     race_links = get_race_links(yearly_results_page)
     race_dates = get_race_dates(yearly_results_page)
-    race_links = [race_links[59]]
-    race_dates = [race_dates[59]]
+    race_links = [race_links[37]]
+    race_dates = [race_dates[37]]
 
     # scrape from oldest to newest so the latest teams are set
     if type_of_result == "new"
@@ -126,9 +126,9 @@ namespace :nyrr do
   end
 
   def scrape_race_individual_page(race_results_page, race, type_of_result)
-    i = 13500
+    i = 20500
 
-    27.times do |i|
+    41.times do |i|
       next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
 
       race_results_page = $a.click(next_500_link)
