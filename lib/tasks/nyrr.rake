@@ -69,6 +69,12 @@ namespace :nyrr do
     race_links.count.times do |i|
       # only including club points races because of size limits
       # next if !CLUB_POINTS[year].include? i
+
+      # skip more fitness 2009 race since it's broken
+      if ( year == 2009 && (i == 44 || i == 45) )
+        puts "skipping More Fitness Half Marathon"
+      end
+
       scrape_individual_race_results(race_links[i], race_dates[i], year, type_of_result)
     end
   end
