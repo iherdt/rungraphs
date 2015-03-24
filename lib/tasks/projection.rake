@@ -66,6 +66,12 @@ namespace :projection do
 
       # add runner and projected time
       runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase, city: city)
+
+      # if a runner changes cities
+      if runners.empty?
+        runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase)
+      end
+      
       if !runners.empty? && !runners[0].results.empty?
         runner = runners[0]
 
