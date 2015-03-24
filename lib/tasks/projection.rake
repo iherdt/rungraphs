@@ -90,7 +90,18 @@ namespace :projection do
         puts counter
         puts runner.full_name
         p best_result
-        best_time = DateTime.parse(best_result.net_time)
+
+        # check type of result time
+        if best_result.net_time
+          best_time = DateTime.parse(best_result.net_time)
+        elsif best_result.finish_time
+          best_time = DateTime.parse(best_result.finish_time)
+        elsif best_result.gun_time
+          best_time = DateTime.parse(best_result.gun_time)
+        else
+          next
+        end
+
         puts "best_time #{best_time.hour}:#{(best_time.min)}:#{best_time.sec}"
         best_time_in_seconds = best_time.hour * 60 * 60 + best_time.min * 60 + best_time.sec
         puts "best_time_in_seconds #{best_time_in_seconds}"
