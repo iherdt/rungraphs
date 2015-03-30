@@ -103,7 +103,15 @@ class RacesController < ApplicationController
       team_rosters = {}
 
       projected_results.select{|pr| pr.team != '---' && !pr.team.blank?}.each do |pr|
-        net_time_date = DateTime.parse(pr.net_time)
+        if !pr.net_time.blank?
+          runner_time = pr.net_time
+        elsif !pr.finish_time.blank?
+          runner_time = pr.finish_time
+        else
+          runner_time = pr.gun_time
+        end
+
+        net_time_date = DateTime.parse(runner_time)
         net_time_in_seconds = net_time_date.hour * 60 * 60 + net_time_date.min * 60 + net_time_date.sec
         net_time = "#{sprintf "%02d",(net_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((net_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((net_time_in_seconds % 3600) % 60).round}"
 
