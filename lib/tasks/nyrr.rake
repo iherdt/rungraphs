@@ -149,11 +149,11 @@ namespace :nyrr do
         row.css('td').each_with_index do |field, index|
           property = RESULT_PROPERTIES[race_fields_array[index]]
           if property
-            if field.text
+            if !field.text.empty?
               result.update_attributes(property => field.text.downcase)
             end
           elsif race_fields_array[index] == "Sex/Age"
-            if field.text
+            if !field.text.empty?
               result.update_attributes("sex" => field.text[0].downcase)
               result.update_attributes("age" => field.text[1..2].to_i)
             end
