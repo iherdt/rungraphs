@@ -169,7 +169,12 @@ namespace :nyrr do
         end
 
         #create or find runner
-        birth_year = race.date.year - result.age
+        if result.age
+          birth_year = race.date.year - result.age
+        else
+          birth_year = ""
+        end
+        
         runners = Runner.where(first_name: result.first_name, last_name: result.last_name)
         if runners.empty?
           result_runner = Runner.create(
