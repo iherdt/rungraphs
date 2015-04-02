@@ -5,7 +5,7 @@ require 'open-uri'
 
 =begin
 
-rake projection:new['http://api.rtrt.me/events/NYH2015/profiles?max=30000&total=1&appid=4d7a9ceb0be65b3cc4948ee9&token=28fe740982943849db51a5b5fe046ef9&search=&callback=jcb5&func=na&parms=%7B%22browser%22%3Afalse%7D&settings=%7B%22setWait%22%3Afalse%7D&_=1425254321149',13.1,'NYC Half 2015','March 15th 2015 7:30am','03/15/15']
+rake projection:new['http://api.rtrt.me/events/NYRR-SCOTLAND10K-2015/profiles?max=10000&total=1&appid=4d7a9ceb0be65b3cc4948ee9&token=2c43724fa0ffce19037389c096c020c2&search=&callback=jcb4&func=na&parms=%7B%22browser%22%3Afalse%7D&settings=%7B%22setWait%22%3Afalse%7D&_=1427813843093',6.2,'Scotland 10k 2015','April 4th 2015 8:00am','04/04/15']
 
 ProjectedRace.first.projected_results.order("net_time").each_with_index {|r,i| puts "#{i+1}\t#{r.sex}\t#{r.team}\t#{r.net_time}\t#{r.full_name}"}
 
@@ -71,7 +71,7 @@ namespace :projection do
       if runners.empty?
         runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase)
       end
-      
+
       if !runners.empty? && !runners[0].results.empty?
         runner = runners[0]
 
