@@ -98,17 +98,17 @@ namespace :projection do
         p best_result
 
         # check type of result time
-        if best_result.net_time && !best_result.net_time.empty?
+        if best_result.net_time && !best_result.net_time.blank?
           if /^\d\d.\d\d$/ =~ best_result.net_time
             best_result.net_time = '00:' + best_result.net_time
           end
           best_time = DateTime.parse(best_result.net_time)
-        elsif best_result.finish_time && !best_result.finish_time.empty?
+        elsif best_result.finish_time && !best_result.finish_time.blank?
           if /^\d\d.\d\d$/ =~ best_result.finish_time
             best_result.finish_time = '00:' + best_result.finish_time
           end
           best_time = DateTime.parse(best_result.finish_time)
-        elsif best_result.gun_time && !best_result.gun_time.empty?
+        elsif best_result.gun_time && !best_result.gun_time.blank?
           if /^\d\d.\d\d$/ =~ best_result.gun_time
             best_result.gun_time = '00:' + best_result.gun_time
           end
