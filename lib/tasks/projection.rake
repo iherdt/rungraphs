@@ -88,7 +88,7 @@ namespace :projection do
 
         # if still no best time, find the most recent race
         if best_result.nil?
-          best_result = runner.results.order('date DESC')[0]
+          best_result = runner.results.where.not(distance: 0.2).order('date DESC')[0]
         end
 
         # calculate projected time
