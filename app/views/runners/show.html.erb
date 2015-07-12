@@ -31,13 +31,26 @@
     <thead>
         <tr>
             <th>Race</th>
+ 	    <th>
+		<select class="runner-header-select runner-select-distance race-select-distance">
+		  <option value="" select="selected">
+		    Distance
+		  </option>
+		</select>
+	    </th>
             <th>Date</th>
             <th>Overall</th>
             <th>Gender</th>
             <th>AG</th>
             <th>Age</th>
             <th>Bib</th>
-            <th>Team</th>
+	    <th>
+		<select class="runner-header-select runner-select-team race-select-team">
+	   	  <option value="" select="selected">
+		    Team
+		  </option>
+		</select>
+	    </th>
             <th>Time</th>
             <th>Pace</th>
             <th>AG Time</th>
@@ -54,7 +67,8 @@
                   </div>
                 </a>
               </td>
-              <td><%= result.race.date.strftime("%B %d, %Y") %></td>
+	      <td><%= result.distance %>
+              <td><%= result.race.date.strftime("%m/%d/%Y") %></td>
               <td><%= result.overall_place %></td>
               <td><%= result.gender_place %></td>
               <td><%= result.age_place %></td>
@@ -85,6 +99,68 @@
 </table>
 
 <script>
+
+   
+  var $resultsTable = $('.results-table').DataTable( {
+      "deferrender": true,
+      "aasorting": [],
+      "aocolumndefs": [
+        { "orderable": false, "targets": "_all" }
+      ],
+      "pagingtype": "simple_numbers",
+      "dom": "ip<bottom'results-table-header'pi>",
+      "lengthmenu": [ 20 ],
+      "blengthchange": false,
+      // "responsive": true,
+      "columns": [
+        {"orderable": false},
+	      null,
+        {"orderable": true},
+	      {"width": "70px", "orderable": true},
+        {"width": "70px", "orderable": true},
+        {"width": "70px", "orderable": true},
+        {"width": "70px", "orderable": true},
+        null,
+        {},
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": true },
+        { "orderable": true },
+      ]
+    });
+
+
+    // populate select distance
+    $resultsTable.column(1).data().unique().sort().each( function ( d, j ) {
+        if ($(d).children) {
+	  var choice = $(d).selector;
+          $('.race-select-distance').append( '<option value="'+choice+'">'+choice+'</option>' );
+        }
+    } );
+
+    // Distance Select
+    $( '.race-select-distance' ).change( function () {
+        $resultsTable
+            .column( 1 )
+            .search( "^" + this.value + "$", true, false )
+            .draw();
+    } );
+
+    // populate select team
+    $resultsTable.column(8).data().unique().sort().each( function ( d, j ) {
+        if ($(d).children) {
+          var choice = $(d).children().text().replace(/ |\n/g,'');
+          $('.race-select-team').append( '<option value="'+choice+'">'+choice+'</option>' );
+        }
+    } );
+
+    // Team Select
+    $( '.race-select-team' ).change( function () {
+        $resultsTable
+            .column( 8 )
+            .search( "^" + this.value + "$", true, false )
+            .draw();
+    } );
 
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

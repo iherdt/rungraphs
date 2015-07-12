@@ -10,7 +10,7 @@ class ProjectedRacesController < ApplicationController
   # GET /projected_races/1
   # GET /projected_races/1.json
   def show
-    @projected_results = @projected_race.projected_results.limit(3000).includes(:runner).order("net_time")
+    @projected_results = @projected_race.projected_results.includes(:runner).order("net_time")
     @projected_results.each_with_index do |pr, i|
       pr.overall_place = i + 1
     end
