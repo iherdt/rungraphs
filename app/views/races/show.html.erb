@@ -1,6 +1,7 @@
 <%- model_class = Race -%>
 <div class="results-page-header page-header">
   <h1><%= @race.name %></h1>
+  <%= get_race_results_race_url(@race.id) %>
   <dl>
     <% @race.attributes.each do |attribute, value| %>
       <% next if value.nil? %>
@@ -87,7 +88,7 @@
               </tr>
           </thead>
           <tbody>
-            <% @results.each do |result| %>
+<!--             <% @results.each do |result| %>
                 <tr>
                     <td><%= result.overall_place %></td>
                     <td><%= result.gender_place %></td>
@@ -121,7 +122,7 @@
                       <td></td>
                     <% end %>
                 </tr>
-              <% end %>
+              <% end %> -->
           </tbody>
       </table>
   </div>
@@ -199,23 +200,75 @@
 
   var $resultsTable = $('.results-table').DataTable( {
       "dom": "frtiS",
+      "ajax": "<%= get_race_results_url(@race.slug) %>",
       "deferRender": true,
       "scrollY": "500px",
       scrollCollapse: true,
       "columns": [
-        {"width": "70px", "orderable": true},
-        {"width": "70px", "orderable": true},
-        {"width": "65px", "orderable": true},
-        {"orderable": false},
-        {"orderable": false},
-        {"orderable": false},
-        {"orderable": false},
-        { "orderable": true },
-        { "orderable": true },
-        { "orderable": true },
-        { "orderable": true },
-        { "orderable": true }
-      ]
+        { "data": "overall_place", "width": "70px", "orderable": true},
+        { "data": "gender_place", "width": "70px", "orderable": true},
+        { "data": "age_place", "width": "65px", "orderable": true},
+        { "data": "runner.full_name", "orderable": false},
+        { "data": "team", "orderable": false},
+        { "data": "sex", "orderable": false},
+        { "data": "age", "orderable": false},
+        { "data": "bib",  "orderable": true },
+        { "data": null,  "orderable": true },
+        { "data": "pace_per_mile",  "orderable": true },
+        { "data": "ag_time",  "orderable": true },
+        { "data": "ag_percent",  "orderable": true }
+      ],
+      "createdRow": function ( row, data, index ) {
+        $('td:eq(3)', row)
+        .addClass('result-table-clickable-td')
+        .html('\
+                  <a href="<%= root_url %>' + 'runners/' + data.runner.slug + '">\
+                    <div class="result-table-clickable-field"> \
+                      ' + data.runner.full_name + ' \
+                    </div> \
+                  </a> '
+                );
+
+        if (data.team != 0 && data.team.replace(/\s/g, "").length != 0) {
+          var teamColHTML = '<a href="<%= root_url %>' + 'teams/' + data.team + '"> \
+              <div class="result-table-clickable-fieldn results-table-team"> \
+                ' + data.team + '\
+              </div> \
+            </a> \
+          ';
+        } else {
+          var teamColHTML = data.team;
+        }
+
+        $('td:eq(4)', row)
+          .addClass('result-table-clickable-td')
+          .html(teamColHTML);
+
+        if (data.net_time != null) {
+          var time = data.net_time
+        } else if (data.finish_time != null) {
+          var time = data.finish_time
+        } else {
+          var time = data.gun_time
+        } 
+        $('td:eq(8)', row)
+          .html(time);
+
+
+        return row;
+      },
+      "initComplete": function(settings, json) {
+        var teams = [];
+        $('.results-table-team').each(function(index, value) {
+          teams.push($(value).html());
+        })
+        var uniqueTeams = $.unique(teams).sort()
+
+        // populate select team
+        for (var i in uniqueTeams) {
+          $('.race-select-team').append( '<option value="'+uniqueTeams[i]+'">'+uniqueTeams[i]+'</option>' );
+        }
+      }
     });
 
     // Text Search
@@ -224,14 +277,6 @@
             .column( 3 )
             .search( this.value )
             .draw();
-    } );
-
-    // populate select team
-    $resultsTable.column(4).data().unique().sort().each( function ( d, j ) {
-        if ($(d).children) {
-          var choice = $(d).children().text().replace(/ |\n/g,'');
-          $('.race-select-team').append( '<option value="'+choice+'">'+choice+'</option>' );
-        }
     } );
 
     // Team Select

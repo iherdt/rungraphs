@@ -37,6 +37,23 @@ class ProjectedRacesController < ApplicationController
     end
   end
 
+  def get_projected_race_results
+    projected_race = ProjectedRace.friendly.find_by_slug!(params[:id])
+    projected_results = projected_race.projected_results.includes(:runner).where("projected_results.runner_id IS NOT NULL").order('net_time')
+
+    projected_results.each_with_index do |pr, i|
+      pr.overall_place = i + 1
+    end
+    projected_results.select{|pr| pr.sex == 'M'}.each_with_index do |pr, i|
+      pr.gender_place = i + 1
+    end
+    projected_results.select{|pr| pr.sex == 'F'}.each_with_index do |pr, i|
+      pr.gender_place = i + 1
+    end
+
+    render json: { data: projected_results.as_json(include: :runner) }
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_projected_race

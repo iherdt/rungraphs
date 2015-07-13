@@ -78,6 +78,13 @@ class RacesController < ApplicationController
     end
   end
 
+  def get_race_results
+    race = Race.friendly.find_by_slug!(params[:id])
+    results = race.results.order('overall_place').as_json(include: :runner)
+
+    render json: { data: results}
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_race

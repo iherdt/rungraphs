@@ -19,9 +19,18 @@ Rails.application.routes.draw do
 
   # Example resource route with options:
   resources :runners
-  resources :races
+  resources :races do
+    member do
+      get 'get_race_results', :path => "api/race_results/:id"
+    end
+  end
+
+  get 'get_race_results', to: 'races#get_race_results', :path => "api/race_results/:id"
+
   resources :teams
   resources :projected_races, :path => 'projections'
+
+  get 'get_projected_race_results', to: 'projected_races#get_projected_race_results', :path => "api/projected_race_results/:id"
 
   get 'search_races', to: 'search#search_races'
   get 'search_runners', to: 'search#search_runners'
