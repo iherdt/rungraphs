@@ -11,7 +11,7 @@ class RacesController < ApplicationController
   # GET /races/1.json
   def show
     @race_time_array = get_race_time_title_and_type(@race)
-    @results = @race.results.limit(3000).includes(:runner).order('overall_place')
+    @results = @race.results.includes(:runner).order('overall_place')
 
     team_scores = get_projected_team_results(@results)
     @men_scores = team_scores[0]

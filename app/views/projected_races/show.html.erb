@@ -199,23 +199,19 @@
 <script>
 
   var $resultsTable = $('.results-table').DataTable( {
+      "dom": "frtiS",
       "deferRender": true,
-      "aaSorting": [],
-      "aoColumnDefs": [
-        { "orderable": false, "targets": "_all" }
-      ],
-      "pagingType": "simple_numbers",
-      "dom": "ip<bottom'results-table-header'pi>",
-      "lengthMenu": [ 20 ],
-      "bLengthChange": false,
-      // "responsive": true,
+      "scrollY": "500px",
+      scrollCollapse: true,
       "columns": [
         {"width": "70px", "orderable": true},
         {"width": "70px", "orderable": true},
+        {"width": "65px", "orderable": true},
         {},
         null,
         null,
         null,
+        { "orderable": true },
         { "orderable": true },
         { "orderable": true },
         { "orderable": true },

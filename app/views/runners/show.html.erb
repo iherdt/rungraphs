@@ -102,13 +102,13 @@
 
    
   var $resultsTable = $('.results-table').DataTable( {
-      "deferrender": true,
       "aasorting": [],
       "aocolumndefs": [
         { "orderable": false, "targets": "_all" }
       ],
       "pagingtype": "simple_numbers",
-      "dom": "ip<bottom'results-table-header'pi>",
+      "dom": "f<bottom'results-table-header'>",
+      "paging": false,
       "lengthmenu": [ 20 ],
       "blengthchange": false,
       // "responsive": true,
