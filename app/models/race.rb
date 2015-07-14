@@ -52,7 +52,7 @@ class Race < ActiveRecord::Base
     "#{self.name} #{self.date.year}"
   end
 
-  def set_projected_team_results
+  def set_team_results
   	projected_results = results
     team_rosters = {}
 
@@ -64,6 +64,8 @@ class Race < ActiveRecord::Base
       else
         runner_time = pr.gun_time
       end
+
+      return if runner_time.nil?
 
       net_time_date = DateTime.parse(runner_time)
       net_time_in_seconds = net_time_date.hour * 60 * 60 + net_time_date.min * 60 + net_time_date.sec
