@@ -53,6 +53,7 @@ class Race < ActiveRecord::Base
   end
 
   def set_team_results
+    puts name
   	projected_results = results
     team_rosters = {}
 
@@ -103,9 +104,6 @@ class Race < ActiveRecord::Base
         runners['m'].take(10).each_with_index do |value, index|
         	runners_hash[index.to_s] = value
         end
-
-        puts "runners_hash"
-        puts runners_hash
 
         male_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners_hash }
       end
