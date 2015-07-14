@@ -33,7 +33,7 @@
 
 <div class="race-page-content">
   <div class="race-results-table">
-      <table class="results-table table table-hover">
+      <table class="results-table table table-hover" id="resultTable">
           <thead>
               <tr>
                   <th class="race-header-title">Overall</th>
@@ -197,6 +197,8 @@
 </div>
 
 <script>
+$( document ).ready(function() {
+  var allowFilter = ['resultTable'];
 
   var $resultsTable = $('.results-table').DataTable( {
       "dom": "frtiS",
@@ -285,6 +287,14 @@
     /* Custom filtering function which will search data in column four between two values */
     $.fn.dataTable.ext.search.push(
         function( settings, data, dataIndex ) {
+
+            // check if current table is part of the allow list
+            if ( $.inArray( settings.nTable.getAttribute('id'), allowFilter ) == -1 )
+            {
+               // if not table should be ignored
+               return true;
+            }
+
             var min = parseInt( $( '.race-select-age' ).val().substring(0, 2), 10 );
             var max = parseInt( $( '.race-select-age' ).val().substring(3, 5), 10 );
             var age = parseFloat( data[5] ) || 0; // use data for the age column
@@ -315,5 +325,5 @@
 
     ga('create', 'UA-60193441-1', 'auto');
     ga('send', 'pageview');
-
+});
 </script>

@@ -27,7 +27,7 @@
   <dd><%= "#{@runner.country}" %></dd>
 </dl>
 
-<table class="results-table table table-hover">
+<table class="race-table table table-hover">
     <thead>
         <tr>
             <th>Race</th>
@@ -99,9 +99,8 @@
 </table>
 
 <script>
-
-   
-  var $resultsTable = $('.results-table').DataTable( {
+$( document ).ready(function() { 
+  var $raceTable = $('.race-table').DataTable( {
       "aasorting": [],
       "aocolumndefs": [
         { "orderable": false, "targets": "_all" }
@@ -131,7 +130,7 @@
 
 
     // populate select distance
-    $resultsTable.column(1).data().unique().sort().each( function ( d, j ) {
+    $raceTable.column(1).data().unique().sort().each( function ( d, j ) {
         if ($(d).children) {
 	  var choice = $(d).selector;
           $('.race-select-distance').append( '<option value="'+choice+'">'+choice+'</option>' );
@@ -141,12 +140,12 @@
     // Distance Select
     $( '.race-select-distance' ).change( function () {
         if (this.value.length == 0) {
-          $resultsTable
+          $raceTable
             .column( 1 )
             .search( this.value )
             .draw();
         } else {
-          $resultsTable
+          $raceTable
               .column( 1 )
               .search( "^" + this.value + "$", true, false )
               .draw();
@@ -154,7 +153,7 @@
     } );
 
     // populate select team
-    $resultsTable.column(8).data().unique().sort().each( function ( d, j ) {
+    $raceTable.column(8).data().unique().sort().each( function ( d, j ) {
         if ($(d).children) {
           var choice = $(d).children().text().replace(/ |\n/g,'');
           $('.race-select-team').append( '<option value="'+choice+'">'+choice+'</option>' );
@@ -163,7 +162,7 @@
 
     // Team Select
     $( '.race-select-team' ).change( function () {
-        $resultsTable
+        $raceTable
             .column( 8 )
             .search( this.value )
             .draw();
@@ -176,5 +175,5 @@
 
   ga('create', 'UA-60193441-1', 'auto');
   ga('send', 'pageview');
-
+});
 </script>
