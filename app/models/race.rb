@@ -65,6 +65,7 @@ class Race < ActiveRecord::Base
         runner_time = pr.gun_time
       end
 
+      puts runner_time
       return if runner_time.nil?
 
       net_time_date = DateTime.parse(runner_time)
