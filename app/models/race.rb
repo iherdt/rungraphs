@@ -65,8 +65,9 @@ class Race < ActiveRecord::Base
         runner_time = pr.gun_time
       end
 
-      puts runner_time
-      return if runner_time.nil?
+      if runner_time =~ /^\d\d:\d\d$/
+        runner_time = "0:" + runner_time
+      end
 
       net_time_date = DateTime.parse(runner_time)
       net_time_in_seconds = net_time_date.hour * 60 * 60 + net_time_date.min * 60 + net_time_date.sec
