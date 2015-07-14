@@ -11,19 +11,17 @@ class RacesController < ApplicationController
   # GET /races/1.json
   def show
     @race_time_array = get_race_time_title_and_type(@race)
-    @results = @race.results.includes(:runner).order('overall_place')
 
-    team_scores = get_projected_team_results(@results)
-    @men_scores = team_scores[0]
-    @women_scores = team_scores[1]
+    @men_results = @race.men_results
+    @women_results = @race.women_results
 
-    if @men_scores.count < 20
-      @men_teams_to_display = @men_scores.count
+    if @men_results.count < 20
+      @men_teams_to_display = @men_results.count
     else
       @men_teams_to_display = 20
     end
-    if @women_scores.count < 20
-      @women_teams_to_display = @women_scores.count
+    if @women_results.count < 20
+      @women_teams_to_display = @women_results.count
     else
       @women_teams_to_display = 20
     end
@@ -88,7 +86,7 @@ class RacesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_race
-        @race = Race.includes(:results).friendly.find_by_slug!(params[:id])
+        @race = Race.friendly.find_by_slug!(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -106,59 +104,5 @@ class RacesController < ApplicationController
       end
     end
 
-    def get_projected_team_results(projected_results)
-      team_rosters = {}
 
-      projected_results.select{|pr| pr.team != '---' && !pr.team.blank?}.each do |pr|
-        if !pr.net_time.blank?
-          runner_time = pr.net_time
-        elsif !pr.finish_time.blank?
-          runner_time = pr.finish_time
-        else
-          runner_time = pr.gun_time
-        end
-
-        net_time_date = DateTime.parse(runner_time)
-        net_time_in_seconds = net_time_date.hour * 60 * 60 + net_time_date.min * 60 + net_time_date.sec
-        net_time = "#{sprintf "%02d",(net_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((net_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((net_time_in_seconds % 3600) % 60).round}"
-
-        if team_rosters.include? pr.team
-          if pr.sex == 'm'
-            team_rosters[pr.team]['m'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
-          else
-            team_rosters[pr.team]['f'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
-          end
-        else
-          team_rosters[pr.team] = {'m' => [], 'f' => []}
-          if pr.sex == 'm'
-            team_rosters[pr.team]['m'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
-          else
-            team_rosters[pr.team]['f'] << {name: pr.full_name, net_time_in_seconds: net_time_in_seconds, net_time: net_time }
-          end
-        end
-      end
-
-      male_team_scores = []
-      female_team_scores = []
-
-      team_rosters.each do |team, runners|
-        runners['m'].sort_by!{ |r| r[:net_time_in_seconds] }
-        if runners['m'].count > 5
-          total_time_in_seconds = runners['m'].take(5).inject(0) { |total_time, runner| total_time + runner[:net_time_in_seconds] }
-          total_time = "#{sprintf "%02d",(total_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) % 60).round}"
-          male_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners['m'].take(10) }
-        end
-        runners['f'].sort_by!{ |r| r[:net_time_in_seconds] }
-        if runners['f'].count > 5
-          total_time_in_seconds = runners['f'].take(5).inject(0) { |total_time, runner| total_time + runner[:net_time_in_seconds] }
-          total_time = "#{sprintf "%02d",(total_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) % 60).round}"
-          female_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners['f'].take(10) }
-        end
-      end
-
-      male_team_scores.sort_by!{ |team| team[:total_time_in_seconds] }
-      female_team_scores.sort_by!{ |team| team[:total_time_in_seconds] }
-
-      [male_team_scores, female_team_scores]
-    end
 end

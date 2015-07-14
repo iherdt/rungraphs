@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150224030251) do
+ActiveRecord::Schema.define(version: 20150714203906) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "friendly_id_slugs", force: true do |t|
     t.string   "slug",                      null: false
@@ -89,6 +90,8 @@ ActiveRecord::Schema.define(version: 20150224030251) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "slug"
+    t.hstore   "men_results",                   array: true
+    t.hstore   "women_results",                 array: true
   end
 
   add_index "races", ["slug"], name: "index_races_on_slug", unique: true, using: :btree

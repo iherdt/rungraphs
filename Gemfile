@@ -90,3 +90,5 @@ gem 'spinjs-rails'
 gem 'heroku-forward'
 gem 'foreman'
 gem 'thin'
+
+gem 'nested-hstore'

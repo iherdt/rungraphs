@@ -164,6 +164,9 @@ GEM
     minitest (5.5.1)
     multi_json (1.10.1)
     multipart-post (2.0.0)
+    nested-hstore (0.1.2)
+      activerecord
+      activesupport
     net-http-digest_auth (1.4)
     net-http-persistent (2.9.4)
     newrelic_rpm (3.9.9.275)
@@ -314,6 +317,7 @@ DEPENDENCIES
   launchy
   less-rails
   mechanize
+  nested-hstore
   newrelic_rpm
   nokogiri (~> 1.6.3.1)
   pg
