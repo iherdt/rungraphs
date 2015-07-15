@@ -130,6 +130,8 @@ class Race < ActiveRecord::Base
 
     self.men_results = male_team_scores
     self.women_results = female_team_scores
+
+    self.save!
   end
 
 end
