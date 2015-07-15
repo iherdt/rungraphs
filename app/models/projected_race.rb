@@ -14,20 +14,8 @@ class ProjectedRace < ActiveRecord::Base
     team_rosters = {}
 
     projected_results.select{|pr| pr.team != '---' && !pr.team.blank?}.each do |pr|
-      if !pr.net_time.blank?
-        runner_time = pr.net_time
-      elsif !pr.finish_time.blank?
-        runner_time = pr.finish_time
-      else
-        runner_time = pr.gun_time
-      end
-
-      if runner_time =~ /^\d\d:\d\d$/
-        runner_time = "0:" + runner_time
-      end
-
-      next if (runner_time =~ /^(\d+:)?\d+:\d+$/).nil?
-
+      next if pr.net_time.blank?
+      runner_time = pr.net_time
       puts runner_time
       net_time_date = DateTime.parse(runner_time)
       net_time_in_seconds = net_time_date.hour * 60 * 60 + net_time_date.min * 60 + net_time_date.sec
