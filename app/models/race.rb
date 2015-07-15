@@ -70,6 +70,8 @@ class Race < ActiveRecord::Base
         runner_time = "0:" + runner_time
       end
 
+      next if (runner_time =~ /^(\d+:)?\d+:\d+$/).nil?
+
       puts runner_time
       net_time_date = DateTime.parse(runner_time)
       net_time_in_seconds = net_time_date.hour * 60 * 60 + net_time_date.min * 60 + net_time_date.sec
