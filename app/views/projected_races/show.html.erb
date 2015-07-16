@@ -69,12 +69,15 @@
                       <option value="" select="selected">
                         Age
                       </option>
-                      <option value="0-19">
+                      <option value="00-19">
                         &#60; 19
                       </option>
                       <% (2..9).each do |i| %>
-                        <option value="<%=i%>0-<%=i%>9">
-                          <%=i%>0 - <%=i%>9
+                        <option value="<%=i%>0-<%=i%>4">
+                          <%=i%>0 - <%=i%>4
+                        </option>
+                        <option value="<%=i%>4-<%=i%>9">
+                          <%=i%>4 - <%=i%>9
                         </option>
                       <% end %>
                     </select>
@@ -164,30 +167,34 @@ $( document ).ready(function() {
   var allowFilter = ['resultTable'];
 
   var $resultsTable = $('.results-table').DataTable( {
-      "dom": "frtiS",
-      "ajax": "<%= get_projected_race_results_url(@projected_race.slug) %>",
-      "deferRender": true,
-      "scrollY": "500px",
-      scrollCollapse: true,
+      "dom": "<bottom'results-table-header'pi>",
+      "processing": true,
+      "serverSide": true,
+      "ajax": {
+        "url": "<%= get_projected_race_results_url(@projected_race.slug) %>",
+        "data": function(d) {
+          d.age_range = $( '.race-select-age' ).val()
+        }
+      },
       "columns": [
-        { "data": "overall_place", "width": "70px", "orderable": true},
-        { "data": "gender_place", "width": "70px", "orderable": true},
-        { "data": "runner.full_name", "orderable": false},
+        { "data": "overall_place", "width": "70px", "orderable": true, "searchable": false},
+        { "data": "gender_place", "width": "70px", "orderable": true, "searchable": false},
+        { "data": "full_name", "orderable": false},
         { "data": "team", "orderable": false},
         { "data": "sex", "orderable": false},
-        { "data": "age", "orderable": false},
-        { "data": "bib",  "orderable": true },
-        { "data": "net_time",  "orderable": true },
-        { "data": "pace_per_mile",  "orderable": true },
-        { "data": "ag_percent",  "orderable": true }
+        { "data": "age", "orderable": false, "searchable": false},
+        { "data": "bib",  "orderable": true, "searchable": false },
+        { "data": "net_time",  "orderable": true, "searchable": false },
+        { "data": "pace_per_mile",  "orderable": true, "searchable": false },
+        { "data": "ag_percent",  "orderable": true, "searchable": false }
       ],
       "createdRow": function ( row, data, index ) {
         $('td:eq(2)', row)
         .addClass('result-table-clickable-td')
         .html('\
-                  <a href="<%= root_url %>' + 'runners/' + data.runner.slug + '">\
+                  <a href="<%= root_url %>' + 'runners/' + data.slug + '">\
                     <div class="result-table-clickable-field"> \
-                      ' + data.runner.full_name + ' \
+                      ' + data.full_name + ' \
                     </div> \
                   </a> '
                 );
@@ -208,20 +215,16 @@ $( document ).ready(function() {
           .html(teamColHTML);
 
         return row;
-      },
-      "initComplete": function(settings, json) {
-        var teams = [];
-        $('.results-table-team').each(function(index, value) {
-          teams.push($(value).html());
-        })
-        var uniqueTeams = $.unique(teams).sort()
-
-        // populate select team
-        for (var i in uniqueTeams) {
-          $('.race-select-team').append( '<option value="'+uniqueTeams[i]+'">'+uniqueTeams[i]+'</option>' );
-        }
       }
     });
+
+    // get team selection
+    $.get("<%= get_projected_teams_url(@projected_race.slug) %>", function(data) {
+      console.log(data);
+      $(data).each(function(index, team) {
+        $('.race-select-team').append( '<option value="'+team+'">'+team+'</option>' );
+      })
+    })
 
     // Text Search
     $( '.runner-text-input' ).on( 'keyup change', function () {
@@ -247,38 +250,9 @@ $( document ).ready(function() {
             .draw();
     } );
 
-    /* Custom filtering function which will search data in column four between two values */
-    $.fn.dataTable.ext.search.push(
-        function( settings, data, dataIndex ) {
-
-            // check if current table is part of the allow list
-            if ( $.inArray( settings.nTable.getAttribute('id'), allowFilter ) == -1 )
-            {
-               // if not table should be ignored
-               return true;
-            }
-
-            var min = parseInt( $( '.race-select-age' ).val().substring(0, 2), 10 );
-            var max = parseInt( $( '.race-select-age' ).val().substring(3, 5), 10 );
-            var age = parseFloat( data[5] ) || 0; // use data for the age column
-
-            if ( ( isNaN( min ) && isNaN( max ) ) ||
-                 ( isNaN( min ) && age <= max ) ||
-                 ( min <= age   && isNaN( max ) ) ||
-                 ( min <= age   && age <= max ) )
-            {
-                return true;
-            }
-            return false;
-        }
-    );
-
     // Age group select
     $( '.race-select-age' ).change( function () {
-        var min = $( '.race-select-age' ).val().substring(0, 2);
-        var max = $( '.race-select-age' ).val().substring(3, 5);
-        $resultsTable
-            .draw();
+        $resultsTable.draw();
     } );
 
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

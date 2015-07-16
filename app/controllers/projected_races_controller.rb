@@ -26,9 +26,73 @@ class ProjectedRacesController < ApplicationController
   end
 
   def get_projected_race_results
-    projected_race = ProjectedRace.friendly.find_by_slug!(params[:id])
-    projected_results = projected_race.projected_results.includes(:runner).where("projected_results.runner_id IS NOT NULL").order('net_time')
+    draw = params[:draw]
+    race_slug = params[:id]
+    limit = params[:length]
+    offset = params[:start]
+    columns = params[:columns]
+    asc_or_desc = columns[params[:order]["0"][:dir]]
+    order_by_column = columns[params[:order]["0"][:column]][:data]
+    searches = {
+      "team" => "",
+      "sex" => "",
+      "full_name" => "",
+      "age_range" => params[:age_range]
+    }
 
+    columns.each do |col|
+      if !col[1][:search][:value].empty?
+        searches[col[1][:data]] = col[1][:search][:value].strip.downcase
+      end
+    end
+
+    sql_results = " SELECT results.*, runner.slug, runner.full_name"
+    sql_filtered_count = " SELECT COUNT(results)"
+    sql_search =
+      "
+        FROM projected_results as results
+        LEFT JOIN runners as runner
+        ON results.runner_id = runner.id
+        WHERE results.projected_race_id = (
+          SELECT id
+          FROM projected_races
+          WHERE projected_races.slug = '#{race_slug}'
+        )
+      "
+    if !searches["full_name"].blank?
+      sql_search += "AND results.first_name || ' ' || results.last_name LIKE '%#{searches["full_name"]}%'"
+    end
+
+    if !searches["team"].blank?
+      sql_search += "AND results.team LIKE '#{searches["team"]}'"
+    end
+
+    if !searches["sex"].blank?
+      sql_search += "AND results.sex LIKE '#{searches["sex"]}'"
+    end
+
+    if !searches["sex"].blank?
+      sql_search += "AND results.sex LIKE '#{searches["sex"]}'"
+    end
+
+    if !searches["age_range"].blank?
+      min_age = searches["age_range"][0..1]
+      max_age = searches["age_range"][3..4]
+      sql_search += "AND results.age BETWEEN #{min_age} AND #{max_age}"
+    end
+
+    sql_filtered_count += sql_search
+
+    sql_search +=
+    " 
+      ORDER BY results.#{order_by_column} #{asc_or_desc}
+        LIMIT #{limit}
+        OFFSET #{offset};
+    "
+
+    sql_results += sql_search
+
+    projected_results = Result.find_by_sql(sql_results)
     projected_results.each_with_index do |pr, i|
       pr.overall_place = i + 1
     end
@@ -39,7 +103,22 @@ class ProjectedRacesController < ApplicationController
       pr.gender_place = i + 1
     end
 
-    render json: { data: projected_results.as_json(include: :runner) }
+    filtered_results_count = ActiveRecord::Base.connection.execute(sql_filtered_count)[0]["count"]
+
+    response = {
+      draw: draw,
+      recordsTotal: ProjectedRace.find_by_slug(params[:id]).projected_results.count,
+      recordsFiltered: filtered_results_count,
+      data: projected_results.as_json
+    }
+
+    render json: response
+  end
+
+  def get_projected_teams
+    teams = ProjectedRace.find_by_slug(params[:id]).projected_results.pluck(:team).uniq.sort
+
+    render json: teams.as_json
   end
 
   private

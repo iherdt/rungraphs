@@ -26,11 +26,13 @@ Rails.application.routes.draw do
   end
 
   get 'get_race_results', to: 'races#get_race_results', :path => "api/race_results/:id"
+  get 'get_teams', to: 'races#get_teams', :path => "api/get_teams/:id"
 
   resources :teams
   resources :projected_races, :path => 'projections'
 
   get 'get_projected_race_results', to: 'projected_races#get_projected_race_results', :path => "api/projected_race_results/:id"
+  get 'get_projected_teams', to: 'projected_races#get_projected_teams', :path => "api/get_projected_teams/:id"
 
   get 'search_races', to: 'search#search_races'
   get 'search_runners', to: 'search#search_runners'

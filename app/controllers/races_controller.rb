@@ -77,10 +77,89 @@ class RacesController < ApplicationController
   end
 
   def get_race_results
-    race = Race.friendly.find_by_slug!(params[:id])
-    results = race.results.order('overall_place').as_json(include: :runner)
+    draw = params[:draw]
+    race_slug = params[:id]
+    limit = params[:length]
+    offset = params[:start]
+    columns = params[:columns]
+    asc_or_desc = columns[params[:order]["0"][:dir]]
+    order_by_column = columns[params[:order]["0"][:column]][:data]
+    searches = {
+      "team" => "",
+      "sex" => "",
+      "full_name" => "",
+      "age_range" => params[:age_range]
+    }
 
-    render json: { data: results}
+    columns.each do |col|
+      if !col[1][:search][:value].empty?
+        searches[col[1][:data]] = col[1][:search][:value].strip.downcase
+      end
+    end
+
+    sql_results = " SELECT results.*, runner.slug, runner.full_name"
+    sql_filtered_count = " SELECT COUNT(results)"
+    sql_search =
+      "
+        FROM results
+        LEFT JOIN runners as runner
+        ON results.runner_id = runner.id
+        WHERE results.race_id = (
+          SELECT id
+          FROM races
+          WHERE races.slug = '#{race_slug}'
+        )
+      "
+    if !searches["full_name"].blank?
+      sql_search += "AND results.first_name || ' ' || results.last_name LIKE '%#{searches["full_name"]}%'"
+    end
+
+    if !searches["team"].blank?
+      sql_search += "AND results.team LIKE '#{searches["team"]}'"
+    end
+
+    if !searches["sex"].blank?
+      sql_search += "AND results.sex LIKE '#{searches["sex"]}'"
+    end
+
+    if !searches["sex"].blank?
+      sql_search += "AND results.sex LIKE '#{searches["sex"]}'"
+    end
+
+    if !searches["age_range"].blank?
+      min_age = searches["age_range"][0..1]
+      max_age = searches["age_range"][3..4]
+      sql_search += "AND results.age BETWEEN #{min_age} AND #{max_age}"
+    end
+
+    sql_filtered_count += sql_search
+
+    sql_search +=
+    " 
+      ORDER BY results.#{order_by_column} #{asc_or_desc}
+        LIMIT #{limit}
+        OFFSET #{offset};
+    "
+
+    sql_results += sql_search
+
+    results = Result.find_by_sql(sql_results)
+    filtered_results_count = ActiveRecord::Base.connection.execute(sql_filtered_count)[0]["count"]
+
+    response = {
+      draw: draw,
+      recordsTotal: Race.find_by_slug(params[:id]).results.count,
+      recordsFiltered: filtered_results_count,
+      data: results.as_json
+    }
+
+    render json: response
+  end
+
+  def get_teams
+    teams = Race.find_by_slug(params[:id]).results.pluck(:team).uniq.sort
+
+    render json: teams.as_json
   end
 
   private
@@ -103,6 +182,4 @@ class RacesController < ApplicationController
         ["Gun Time", "gun_time"]
       end
     end
-
-
 end
