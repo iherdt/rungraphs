@@ -31,7 +31,7 @@ class ProjectedRacesController < ApplicationController
     limit = params[:length]
     offset = params[:start]
     columns = params[:columns]
-    asc_or_desc = columns[params[:order]["0"][:dir]]
+    asc_or_desc = params[:order]["0"][:dir]
     order_by_column = columns[params[:order]["0"][:column]][:data]
     searches = {
       "team" => "",
