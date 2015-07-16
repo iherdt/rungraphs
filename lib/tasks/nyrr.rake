@@ -60,8 +60,8 @@ namespace :nyrr do
     race_links = get_race_links(yearly_results_page)
     race_dates = get_race_dates(yearly_results_page)
 
-    race_links = race_links[8]
-    race_dates = race_dates[8]
+    race_links = [race_links[8]]
+    race_dates = [race_dates[8]]
 
     # scrape from oldest to newest so the latest teams are set
     if type_of_result == "new"
