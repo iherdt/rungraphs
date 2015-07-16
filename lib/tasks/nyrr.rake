@@ -116,6 +116,7 @@ namespace :nyrr do
 
     # scrape_race_info(race_results_page, race)
     # race.save!
+    race = Race.last
 
     scrape_race_individual_page(race_results_page, race, type_of_result)
     race.set_team_results
