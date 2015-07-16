@@ -4,7 +4,18 @@ class RacesController < ApplicationController
   # GET /races
   # GET /races.json
   def index
-    @races = Race.all.order(:date => :desc)
+    if params[:year]
+      year = params[:year]
+    else
+      year = Time.now.year
+    end
+
+    @races = Race.where('extract(year from date) = ?', year)
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => {:success => true, :html => (render_to_string "races/_race_list", :formats => [:html], :layout => false, :locals => { races: @races } ) } }
+    end
   end
 
   # GET /races/1

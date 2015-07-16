@@ -1,45 +1,28 @@
 <div class="races-container">
-	<ul>
-	  <% @races.each do |race| %>
-	  	<a href="<%=race_url(race.slug)%>">
-	  	<li class="race-container">
-	  		<h2 class="race-name">
-	  			<%=race.name%>
-	  		</h2>
-	  		<div class="race-details">
-				  <dl>
-				    <% race.attributes.each do |attribute, value| %>
-				      <% next if value.nil? %>
-				      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity", "name", "slug", "men_results", "women_results"].include? attribute %>
-				      <dt class="race-attribute">
-				        <strong>
-				          <% if attribute == "date_and_time" %>
-				            date / time:
-				          <% else %>
-				            <%= attribute %>:
-				          <% end %>
-				        </strong>
-				      </dt>
-				      <dd class="race-attribute-value">
-				        <%= value %>
-				        <% case attribute %>
-				        <% when "distance" %>
-				          <% if value == 1.0 %>
-				            mile
-				          <% else %>
-				            miles
-				          <% end %>
-				        <% end %>
-				      </dd>
-				    <% end %>
-				  </dl>
-	  		</div>
-		</li>
+	<select class="year-select">
+		<% Time.now.year.downto(1986) do |year| %>
+		  <option value=<%="#{year}"%>><%="#{year}"%></option>
 	  <% end %>
-	</ul>
+	</select>
+	<div class="races-list-container">
+		<%= render 'race_list', races: @races %>
+	</div>
 </div>
 
 <script>
+
+	$( '.year-select' ).change( function () {
+		var year = $( '.year-select' ).val();
+
+    $.ajax({
+		  url: "<%= races_url %>",
+		  data: {"year": year},
+		  dataType: 'json',
+		  success: function(data) {
+		  	$('.races-list-container').html(data.html);
+		  }
+		});
+   });
 
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
