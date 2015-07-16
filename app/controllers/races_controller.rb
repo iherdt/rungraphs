@@ -10,7 +10,7 @@ class RacesController < ApplicationController
       year = Time.now.year
     end
 
-    @races = Race.where('extract(year from date) = ?', year)
+    @races = Race.where('extract(year from date) = ?', year).order(:date => :desc)
 
     respond_to do |format|
       format.html
