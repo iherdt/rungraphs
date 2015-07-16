@@ -168,7 +168,7 @@ $( document ).ready(function() {
   var allowFilter = ['resultTable'];
 
   var $resultsTable = $('.results-table').DataTable( {
-      "dom": "<bottom'results-table-header'pi>",
+      "dom": "ip<bottom'results-table-header'pi>",
       "processing": true,
       "serverSide": true,
       "ajax": {
@@ -234,7 +234,6 @@ $( document ).ready(function() {
   
     // get team selection
     $.get("<%= get_teams_url(@race.slug) %>", function(data) {
-      console.log(data);
       $(data).each(function(index, team) {
         $('.race-select-team').append( '<option value="'+team+'">'+team+'</option>' );
       })
