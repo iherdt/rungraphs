@@ -10,6 +10,21 @@ class ProjectedRace < ActiveRecord::Base
    end
 
    def set_team_results
+    puts 'assigning place values'
+
+    projected_results.each_with_index do |pr, i|
+      pr.overall_place = i + 1
+      pr.save!
+    end
+    projected_results.select{|pr| pr.sex == 'M'}.each_with_index do |pr, i|
+      pr.gender_place = i + 1
+      pr.save!
+    end
+    projected_results.select{|pr| pr.sex == 'F'}.each_with_index do |pr, i|
+      pr.gender_place = i + 1
+      pr.save!
+    end
+
     puts 'setting_team_results'
     team_rosters = {}
 

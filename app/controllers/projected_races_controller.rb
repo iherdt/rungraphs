@@ -95,15 +95,6 @@ class ProjectedRacesController < ApplicationController
     sql_results += sql_search
 
     projected_results = Result.find_by_sql(sql_results)
-    projected_results.each_with_index do |pr, i|
-      pr.overall_place = i + 1
-    end
-    projected_results.select{|pr| pr.sex == 'M'}.each_with_index do |pr, i|
-      pr.gender_place = i + 1
-    end
-    projected_results.select{|pr| pr.sex == 'F'}.each_with_index do |pr, i|
-      pr.gender_place = i + 1
-    end
 
     filtered_results_count = ActiveRecord::Base.connection.execute(sql_filtered_count)[0]["count"]
 
