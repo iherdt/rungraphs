@@ -1,4 +1,7 @@
 <div class="races-container">
+	<div class="sub-title-container">
+		race projections
+	</div>
 	<ul>
 	  <% @projected_races.each do |projected_race| %>
 	  	<a href="<%=projected_race_url(projected_race.slug)%>">

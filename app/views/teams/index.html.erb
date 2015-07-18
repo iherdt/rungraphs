@@ -1,4 +1,7 @@
 <div class="teams-container">
+	<div class="sub-title-container">
+		team records
+	</div>
 	<ul>
 		<% @teams.each do |team| %>
 			<% next if team.name == "0" || team.name.blank?%>
