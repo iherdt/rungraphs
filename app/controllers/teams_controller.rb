@@ -32,10 +32,11 @@ class TeamsController < ApplicationController
 
     if limit_one
       sql_results = "WITH summary AS (SELECT results.*, runner.slug, runner.full_name, race.name as race_name, race.slug as race_slug, ROW_NUMBER() OVER(PARTITION BY results.runner_id ORDER BY results.net_time ASC) as rk"
+      sql_filtered_count = sql_results
     else
       sql_results = " SELECT results.*, runner.slug, runner.full_name, race.name as race_name, race.slug as race_slug"
+      sql_filtered_count = " SELECT COUNT(results)"
     end
-    sql_filtered_count = " SELECT COUNT(results)"
     sql_total_results_count = " SELECT COUNT(results)"
 
     
@@ -70,9 +71,14 @@ class TeamsController < ApplicationController
       sql_search += "AND results.age BETWEEN #{min_age} AND #{max_age}"
     end
 
-    sql_filtered_count += sql_search
-
     if limit_one
+      sql_filtered_count += sql_search +
+        "
+          )
+            SELECT COUNT(results)
+            FROM summary results
+            WHERE results.rk = 1
+        "
       sql_search +=
         "
         )
@@ -80,6 +86,9 @@ class TeamsController < ApplicationController
           FROM summary results
           WHERE results.rk = 1
         "
+
+    else
+      sql_filtered_count += sql_search
     end
 
     sql_search +=
@@ -88,6 +97,8 @@ class TeamsController < ApplicationController
           LIMIT #{limit}
           OFFSET #{offset};
       "
+
+
 
 
     sql_results += sql_search
