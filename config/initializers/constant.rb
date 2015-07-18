@@ -173,7 +173,7 @@
         "ws" => "Warren Street S&AC",
         "wsx" => "West Side Runners",
         # "wsy" => "",
-        "wtc" => "Westchester TC"
+        "wtc" => "Westchester TC",
         # "y130" => "",
         "ztrn" => "Zero Training"
       }
