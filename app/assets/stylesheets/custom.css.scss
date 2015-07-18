@@ -212,3 +212,66 @@ td.dataTables_empty {
   font-weight: 100;
   padding: 10px 0;
 }
+
+.team-records-container {
+  margin-bottom: 25px;
+}
+
+.projected-races-container {
+  margin-bottom: 25px;
+}
+
+.team-alphabet-character {
+  float: left;
+  padding: 0px 10px;
+  &:active {
+    background-color: #c7c7c7;
+  };
+  &:hover {
+    cursor: pointer;
+    background-color: #d9e0e2;
+  };
+}
+
+.team-alphabet-container {
+  position: fixed;
+  width: 1170px;
+  top: 115px;
+  left: 300px;
+}
+
+.index-page-table {
+  th, td {
+    padding: 10px;
+  }
+  .header-column {
+    th {
+      text-align: left;
+    }
+    border-bottom: 1px solid rgb(229, 229, 229);
+  }
+  .race-name {
+    width: 670px;
+  }
+  .race-distance {
+    width: 250px;
+  }
+  .race-date {
+    width: 250px;
+  }
+  .index-page-link {
+    &:active {
+      background-color: #c7c7c7;
+    };
+    &:hover {
+      background-color: #d9e0e2;
+      cursor: pointer;
+    };
+  }
+
+  .team-name {
+    width: 1170px;
+  }
+
+  tr:nth-child(even) {background: rgba(0,0,0,0.02)};
+}

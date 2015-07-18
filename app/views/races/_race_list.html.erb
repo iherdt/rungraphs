@@ -1,4 +1,4 @@
-<table class="races-table">
+<table class="index-page-table">
 	<thead>
 		<tr class="header-column">
 			<th class="race-name">Race</th>
@@ -8,7 +8,7 @@
 	</thead>
 	<tbody class="race-table-body">
 		<% races.each do |race| %>
-	  	<tr class="race-link js-race-link" data-href="<%=race_url(race.slug)%>">
+	  	<tr class="index-page-link js-index-page-link" data-href="<%=race_url(race.slug)%>">
   			<td class="race-name">
   					<%=race.name%>
   			</td>
@@ -26,7 +26,7 @@
 </table>
 
 <script>
-	$(".js-race-link").click(function() {
+	$(".js-index-page-link").click(function() {
         window.document.location = $(this).data("href");
     });
 </script>
