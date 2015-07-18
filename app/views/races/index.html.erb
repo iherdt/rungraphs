@@ -1,4 +1,5 @@
 <div class="races-container">
+	Select year:
 	<select class="select-box js-year-select">
 		<% Time.now.year.downto(1986) do |year| %>
 		  <option value=<%="#{year}"%>><%="#{year}"%></option>

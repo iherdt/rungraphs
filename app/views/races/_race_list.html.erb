@@ -1,38 +1,32 @@
-<ul>
-  <% races.each do |race| %>
-  	<a href="<%=race_url(race.slug)%>">
-  	<li class="race-container">
-  		<h2 class="race-name">
-  			<%=race.name%>
-  		</h2>
-  		<div class="race-details">
-			  <dl>
-			    <% race.attributes.each do |attribute, value| %>
-			      <% next if value.nil? %>
-			      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity", "name", "slug", "men_results", "women_results"].include? attribute %>
-			      <dt class="race-attribute">
-			        <strong>
-			          <% if attribute == "date_and_time" %>
-			            date / time:
-			          <% else %>
-			            <%= attribute %>:
-			          <% end %>
-			        </strong>
-			      </dt>
-			      <dd class="race-attribute-value">
-			        <%= value %>
-			        <% case attribute %>
-			        <% when "distance" %>
-			          <% if value == 1.0 %>
-			            mile
-			          <% else %>
-			            miles
-			          <% end %>
-			        <% end %>
-			      </dd>
-			    <% end %>
-			  </dl>
-  		</div>
-	</li>
-  <% end %>
-</ul>
+<table class="races-table">
+	<thead>
+		<tr class="header-column">
+			<th class="race-name">Race</th>
+			<th class="race-distance">Distance</th>
+			<th class="race-date">Date</th>
+		</tr>
+	</thead>
+	<tbody class="race-table-body">
+		<% races.each do |race| %>
+	  	<tr class="race-link js-race-link" data-href="<%=race_url(race.slug)%>">
+  			<td class="race-name">
+  					<%=race.name%>
+  			</td>
+  			<td class='race-distance'><%=race.distance%>
+	  			<% if race.distance == 1.0 %>
+	      	  mile
+	       	<% else %>
+	          miles
+	        <% end %>
+	     	</td>
+  			<td class='race-date'><%=race.date.strftime("%m/%d/%Y")%></td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+<script>
+	$(".js-race-link").click(function() {
+        window.document.location = $(this).data("href");
+    });
+</script>

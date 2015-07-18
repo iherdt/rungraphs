@@ -114,12 +114,7 @@ tfoot input {
     width: 358px;
     height: 250px;
     background-color: #f8f8f8;
-    &:active {
-      background-color: #c7c7c7;
-    };
-    &:hover {
-      background-color: #d9e0e2;
-    };
+
 
     .race-attribute {
       float: left;
@@ -130,5 +125,40 @@ tfoot input {
       float: right;
       width: 200px;
     }
+
+  }
+  .races-table {
+    th, td {
+      padding: 10px;
+    }
+    .header-column {
+      th {
+        text-align: left;
+      }
+      border-bottom: 1px solid rgb(229, 229, 229);
+    }
+    .race-name {
+      width: 500px;
+    }
+    .race-distance {
+      width: 250px;
+    }
+    .race-date {
+      width: 220px;
+    }
+    .race-link {
+      &:hover {
+        cursor: pointer;
+      }
+      &:active {
+        background-color: #c7c7c7;
+      };
+      &:hover {
+        background-color: #d9e0e2;
+      };
+    }
+
+
+    tr:nth-child(even) {background: rgba(0,0,0,0.02)};
   }
 }

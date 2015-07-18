@@ -54,7 +54,7 @@ padding-left: 14px;
 .team-runners-container {
   padding-top: 5px;
   padding-bottom: 25px;
-  .runner-container:nth-child(even) {background: #CCC};
+  .runner-container:nth-child(even) {background: rgba(0,0,0,0.02)};
   .runner-container:nth-child(odd) {background: #FFF};
   .runner-container:nth-child(6) div {color: #999};
   .runner-container:nth-child(7) div {color: #999};
