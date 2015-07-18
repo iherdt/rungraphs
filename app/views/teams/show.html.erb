@@ -1,4 +1,7 @@
 <div class="page-header">
+	<div class="team-records-label">
+  	team records
+  </div>
   <h1>
   	<% if !TEAMS[@team.name].nil? %>
     	<%= TEAMS[@team.name] %>
@@ -6,9 +9,6 @@
     	<%= @team.name.upcase %>
     <% end %>
   </h1>
-  <div class="team-records-label">
-  	team records
-  </div>
 </div>
 
 <div class="team-page-content">
