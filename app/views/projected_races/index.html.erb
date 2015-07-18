@@ -32,6 +32,7 @@
 </div>
 
 <script>
+$(document).ready(function(){
 	$(".js-index-page-link").click(function() {
 	    window.document.location = $(this).data("href");
 	});
@@ -43,5 +44,5 @@
 
 	ga('create', 'UA-60193441-1', 'auto');
 	ga('send', 'pageview');
-
+});
 </script>

@@ -14,7 +14,7 @@
 </div>
 
 <script>
-
+$(document).ready(function(){
 	$( '.js-year-select' ).change( function () {
 		$('.races-list-container').html(spinner.el);
 		var year = $( '.js-year-select' ).val();
@@ -36,5 +36,5 @@
 
 	ga('create', 'UA-60193441-1', 'auto');
 	ga('send', 'pageview');
-
+});
 </script>
