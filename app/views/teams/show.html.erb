@@ -91,14 +91,7 @@ $( document ).ready(function() {
         { "data": "ag_time",  "orderable": true, "searchable": false },
         { "data": "ag_percent",  "orderable": true, "searchable": false }
       ],
-      "fields": [{
-        label: "Date:",
-        name: "date",
-        type: "date",
-        def:  function () { return new Date(); },
-        dateFormat: 'mm/dd/yy'
-      }],
-      "order": [[4, "asc" ]],
+      "order": [[5, "asc" ]],
       "createdRow": function ( row, data, index ) {
         $('td:eq(1)', row)
         .addClass('result-table-clickable-td')
