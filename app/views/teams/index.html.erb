@@ -23,6 +23,9 @@
 			  		<% if team.name[0].upcase == letter %>
 			  			<td class="team-name" id="<%= letter %>">
 			  			<% letter.next! %>
+			  		<% elsif team.name[0].upcase == letter.next %>
+			  			<td class="team-name" id="<%= letter.next! %>">
+			  			<% letter.next! %>
 			  		<% else %>
 			  			<td class="team-name">
 			  		<% end %>
@@ -45,7 +48,7 @@
 
 	$(".js-team-alphabet-jumper").on("click", function( e ) {
       $("body, html").animate({ 
-          scrollTop: $( $(this).attr('href') ).offset().top - 140
+          scrollTop: $( $(this).attr('href') ).offset().top
       }, 600);
 
   });
