@@ -1,4 +1,5 @@
 class Result < ActiveRecord::Base
+	attr_accessor :overall_rank, :gender_rank
 
   belongs_to :runner, inverse_of: :results
   belongs_to :race, inverse_of: :results

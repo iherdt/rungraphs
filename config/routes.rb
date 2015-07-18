@@ -29,6 +29,8 @@ Rails.application.routes.draw do
   get 'get_teams', to: 'races#get_teams', :path => "api/get_teams/:id"
 
   resources :teams
+  get 'get_team_results', to: 'teams#get_team_results', :path => "api/team_results/:id"
+
   resources :projected_races, :path => 'projections'
 
   get 'get_projected_race_results', to: 'projected_races#get_projected_race_results', :path => "api/projected_race_results/:id"

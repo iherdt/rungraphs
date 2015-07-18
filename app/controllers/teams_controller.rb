@@ -6,7 +6,124 @@ class TeamsController < ApplicationController
   end
 
   def show
-    @runners = Runner.where(team: @team.name)
+  end
+
+  def get_team_results
+    draw = params[:draw]
+    team_slug = params[:id]
+    limit = params[:length]
+    offset = params[:start]
+    columns = params[:columns]
+    asc_or_desc = params[:order]["0"][:dir]
+    limit_one = params[:limit_one] == "true" ? true : false
+    order_by_column = columns[params[:order]["0"][:column]][:data]
+    searches = {
+      "sex" => params[:sex],
+      "full_name" => "",
+      "age_range" => params[:age_range],
+      "distance" => params[:distance]
+    }
+
+    columns.each do |col|
+      if !col[1][:search][:value].empty?
+        searches[col[1][:data]] = col[1][:search][:value].strip.downcase
+      end
+    end
+
+    if limit_one
+      sql_results = "WITH summary AS (SELECT results.*, runner.slug, runner.full_name, race.name as race_name, race.slug as race_slug, ROW_NUMBER() OVER(PARTITION BY results.runner_id ORDER BY results.net_time ASC) as rk"
+    else
+      sql_results = " SELECT results.*, runner.slug, runner.full_name, race.name as race_name, race.slug as race_slug"
+    end
+    sql_filtered_count = " SELECT COUNT(results)"
+    sql_total_results_count = " SELECT COUNT(results)"
+
+    
+
+    sql_search =
+      "
+        FROM results
+        LEFT JOIN runners as runner
+        ON results.runner_id = runner.id
+        LEFT JOIN races as race
+        ON results.race_id = race.id
+        WHERE runner.team = '#{team_slug}'
+      "
+
+    sql_total_results_count += sql_search
+
+    if !searches["full_name"].blank?
+      searches["full_name"].split(' ').each do |search_term|
+        sql_search += "AND results.first_name || results.last_name LIKE '%#{search_term}%'"
+      end
+    end
+
+    if searches["sex"] != "all"
+      sql_search += "AND results.sex LIKE '#{searches["sex"]}'"
+    end
+
+    sql_search += "AND results.distance = '#{searches["distance"]}'"
+
+    if searches["age_range"] != 'all'
+      min_age = 40
+      max_age = 100
+      sql_search += "AND results.age BETWEEN #{min_age} AND #{max_age}"
+    end
+
+    sql_filtered_count += sql_search
+
+    if limit_one
+      sql_search +=
+        "
+        )
+          SELECT results.*
+          FROM summary results
+          WHERE results.rk = 1
+        "
+    end
+
+    sql_search +=
+      " 
+        ORDER BY results.#{order_by_column} #{asc_or_desc}
+          LIMIT #{limit}
+          OFFSET #{offset};
+      "
+
+
+    sql_results += sql_search
+
+    results = Result.find_by_sql(sql_results)
+
+    json_results = results.as_json
+
+    filtered_results_count = ActiveRecord::Base.connection.execute(sql_filtered_count)[0]["count"]
+    sql_total_results_count = ActiveRecord::Base.connection.execute(sql_total_results_count)[0]["count"]
+
+    puts "asc_or_desc"
+    puts asc_or_desc
+    if asc_or_desc == "asc"
+      overall_rank = 1 + offset.to_i
+      json_results.each do |result|  
+        result['overall_rank'] = overall_rank
+        overall_rank += 1
+      end
+    else
+      puts 'in else'
+      overall_rank = filtered_results_count.to_i - offset.to_i
+      json_results.each do |result|
+        result['overall_rank'] = overall_rank
+        overall_rank -= 1
+      end
+    end
+    
+    response = {
+      draw: draw,
+      recordsTotal: sql_total_results_count,
+      recordsFiltered: filtered_results_count,
+      data: json_results
+    }
+
+    render json: response
   end
 
     private

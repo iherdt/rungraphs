@@ -6,32 +6,144 @@
     	<%= @team.name.upcase %>
     <% end %>
   </h1>
+  <div class="team-records-label">
+  	team records
+  </div>
 </div>
 
-<div class="team-roster-container">
-	<ul>
-	  <% @runners.each do |runner| %>
-	  	<a href="<%=runner_url(runner.slug)%>">
-	  	<li class="runner-container">
-	  		<h2 class="runner-name">
-	  			<%= "#{runner.first_name.split.map(&:capitalize).join(' ')} #{runner.last_name.split.map(&:capitalize).join(' ')}" %>
-	  		</h2>
-	  		<div class="runner-details">
-			  <dl>
-				  <dt class="runner-attribute"><strong>Sex:</strong></dt>
-				  <dd class="runner-value"><%= runner.sex %></dd>
-				  <dt class="runner-attribute"><strong> Hometown:</strong></dt>
-				  <dd class="runner-value"><%= "#{runner.city}, #{runner.state}" %></dd>
-          <dt class="runner-attribute"><strong> Country:</strong></dt>
-				  <dd class="runner-value"><%= "#{runner.country}" %></dd>
-			  </dl>
-	  		</div>
-		</li>
-	  <% end %>
-	</ul>
+<div class="team-page-content">
+	<div class='team-options-container'>
+		Distance:
+		<select class="select-box js-select-distance">
+			  <option select value="13.1">13.1</option>
+			  <option select value="3.1">3.1</option>
+			  <option select value="4.0">4.0</option>
+			  <option select value="5.0">5.0</option>
+			  <option select value="6.2">6.2</option>
+			  <option select value="18.0">18.0</option>
+		</select>
+		All / Masters:
+		<select class="select-box js-select-age">
+			  <option select value="all">All</option>
+			  <option value="masters">Masters</option>
+		</select>
+		Sex:
+		<select class="select-box js-select-sex">
+			  <option select value="all">Both</option>
+			  <option value="m">Men</option>
+			  <option value="f">Women</option>
+		</select>
+		One Record Per Runner:
+		<input type="checkbox" id="limit-one-runner-checkbox" checked>
+	</div>
+
+
+  <div class="race-results-table">
+      <table class="results-table table table-hover" id="teamResultTable">
+          <thead>
+              <tr>
+                  <th class="race-header-title">Rank</th>
+                  <th class="race-header-title">Runner</th>
+                  <th class="race-header-title">Age</th>
+                  <th class="race-header-title">Race</th>
+                  <th class="race-header-title">Time</th>
+                  <th class="race-header-title">Pace</th>
+                  <th class="race-header-title">AG Time</th>
+                  <th class="race-header-title">AG%</th>
+              </tr>
+          </thead>
+          <tbody>
+          </tbody>
+      </table>
+  </div>
 </div>
 
 <script>
+$( document ).ready(function() {
+	var allowFilter = ['resultTable'];
+
+  var $resultsTable = $('.results-table').DataTable( {
+      "dom": "ip<bottom'results-table-header'pi>",
+      "processing": true,
+      "serverSide": true,
+      "ajax": {
+        "url": "<%= get_team_results_url(@team.slug) %>",
+        "data": function(d) {
+        	if(document.getElementById('limit-one-runner-checkbox').checked) {
+				    d.limit_one = true;
+					} else {
+					  d.limit_one = false;
+					}
+          d.age_range = $( '.js-select-age' ).val(),
+          d.sex = $( '.js-select-sex' ).val(),
+          d.distance = $( '.js-select-distance' ).val()
+        }
+      },
+      "columns": [
+        { "data": "overall_rank", "width": "70px", "orderable": false, "searchable": false},
+        { "data": "full_name", "orderable": false, "searchable": false},
+        { "data": "age", "orderable": false, "searchable": false},
+        { "data": "race_name",  "orderable": false, "searchable": true },
+        { "data": "net_time",  "orderable": true, "searchable": false },
+        { "data": "pace_per_mile",  "orderable": false, "searchable": false },
+        { "data": "ag_time",  "orderable": true, "searchable": false },
+        { "data": "ag_percent",  "orderable": true, "searchable": false }
+      ],
+      "order": [[4, "asc" ]],
+      "createdRow": function ( row, data, index ) {
+        $('td:eq(1)', row)
+        .addClass('result-table-clickable-td')
+        .html('\
+                  <a href="<%= root_url %>' + 'runners/' + data.slug + '">\
+                    <div class="result-table-clickable-field"> \
+                      ' + data.full_name + ' \
+                    </div> \
+                  </a> '
+                );
+
+        $('td:eq(3)', row)
+        .addClass('result-table-clickable-td')
+        .html('\
+                  <a href="<%= root_url %>' + 'races/' + data.race_slug + '">\
+                    <div class="result-table-clickable-field"> \
+                      ' + data.race_name + ' \
+                    </div> \
+                  </a> '
+                );
+
+        if (data.net_time != null) {
+          var time = data.net_time;
+        } else if (data.finish_time != null) {
+          var time = data.finish_time;
+          data.net_time = data.finish_time;
+        } else {
+          var time = data.gun_time;
+          data.net_time = data.gun_time;
+        } 
+        $('td:eq(4)', row)
+          .html(time);
+        return row;
+      }
+    });
+
+    // Select Options
+
+    $( '.js-select-distance' ).change( function () {
+        $resultsTable.draw();
+    } );
+
+    $( '.js-select-sex' ).change( function () {
+        $resultsTable.draw();
+    } );
+
+    // Age group select
+    $( '.js-select-age' ).change( function () {
+        $resultsTable.draw();
+    } );
+
+    $('#limit-one-runner-checkbox').click(function () {
+		    $resultsTable.draw();
+		});
 
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -41,4 +153,5 @@
   ga('create', 'UA-60193441-1', 'auto');
   ga('send', 'pageview');
 
+});
 </script>

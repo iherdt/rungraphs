@@ -31,26 +31,26 @@
     <thead>
         <tr>
             <th>Race</th>
- 	    <th>
-		<select class="runner-header-select runner-select-distance race-select-distance">
-		  <option value="" select="selected">
-		    Distance
-		  </option>
-		</select>
-	    </th>
+       	    <th>
+          		<select class="runner-header-select runner-select-distance race-select-distance">
+          		  <option value="" select="selected">
+          		    Distance
+          		  </option>
+          		</select>
+      	    </th>
             <th>Date</th>
             <th>Overall</th>
             <th>Gender</th>
             <th>AG</th>
             <th>Age</th>
             <th>Bib</th>
-	    <th>
-		<select class="runner-header-select runner-select-team race-select-team">
-	   	  <option value="" select="selected">
-		    Team
-		  </option>
-		</select>
-	    </th>
+	          <th>
+          		<select class="runner-header-select runner-select-team race-select-team">
+          	   	  <option value="" select="selected">
+          		    Team
+          		  </option>
+          		</select>
+      	    </th>
             <th>Time</th>
             <th>Pace</th>
             <th>AG Time</th>
@@ -67,7 +67,7 @@
                   </div>
                 </a>
               </td>
-	      <td><%= result.distance %>
+	            <td><%= result.distance %>
               <td><%= result.race.date.strftime("%m/%d/%Y") %></td>
               <td><%= result.overall_place %></td>
               <td><%= result.gender_place %></td>

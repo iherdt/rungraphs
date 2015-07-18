@@ -4,23 +4,15 @@
 
 /* INDEX PAGE */
 
-.team-container {
-    float: left;
-    border: 1px solid #c7c7c7;
-    margin: 15px 15px;
-    padding: 15px 40px;
-    width: 170px;
-    height: 170px;
-    background-color: #f8f8f8;
-    text-align: center;
-    &:active {
-      background-color: #c7c7c7;
-    };
-    &:hover {
-      background-color: #d9e0e2;
-    };
+.team-page-content {
+  position: relative;
+}
 
-
+.team-records-label {
+  font-size: 42px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: 100;
+  padding: 10px 0;
 }
 
 /* SHOW PAGE */
