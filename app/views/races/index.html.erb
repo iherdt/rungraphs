@@ -1,5 +1,5 @@
 <div class="races-container">
-	<select class="select-box">
+	<select class="select-box js-year-select">
 		<% Time.now.year.downto(1986) do |year| %>
 		  <option value=<%="#{year}"%>><%="#{year}"%></option>
 	  <% end %>
@@ -11,8 +11,9 @@
 
 <script>
 
-	$( '.year-select' ).change( function () {
-		var year = $( '.year-select' ).val();
+	$( '.js-year-select' ).change( function () {
+		$('.races-list-container').html(spinner.el);
+		var year = $( '.js-year-select' ).val();
 
     $.ajax({
 		  url: "<%= races_url %>",
