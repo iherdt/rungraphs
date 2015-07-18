@@ -98,9 +98,6 @@ class TeamsController < ApplicationController
           OFFSET #{offset};
       "
 
-
-
-
     sql_results += sql_search
 
     results = Result.find_by_sql(sql_results)
@@ -110,8 +107,6 @@ class TeamsController < ApplicationController
     filtered_results_count = ActiveRecord::Base.connection.execute(sql_filtered_count)[0]["count"]
     sql_total_results_count = ActiveRecord::Base.connection.execute(sql_total_results_count)[0]["count"]
 
-    puts "asc_or_desc"
-    puts asc_or_desc
     if asc_or_desc == "asc"
       overall_rank = 1 + offset.to_i
       json_results.each do |result|  
@@ -119,7 +114,6 @@ class TeamsController < ApplicationController
         overall_rank += 1
       end
     else
-      puts 'in else'
       overall_rank = filtered_results_count.to_i - offset.to_i
       json_results.each do |result|
         result['overall_rank'] = overall_rank

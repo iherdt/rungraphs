@@ -45,6 +45,7 @@
                   <th class="race-header-title">Rank</th>
                   <th class="race-header-title">Runner</th>
                   <th class="race-header-title">Age</th>
+                  <th class="race-header-title">Date</th>
                   <th class="race-header-title">Race</th>
                   <th class="race-header-title">Time</th>
                   <th class="race-header-title">Pace</th>
@@ -83,12 +84,20 @@ $( document ).ready(function() {
         { "data": "overall_rank", "width": "70px", "orderable": false, "searchable": false},
         { "data": "full_name", "orderable": false, "searchable": false},
         { "data": "age", "orderable": false, "searchable": false},
+        { "data": "date", "orderable": false, "searchable": false},
         { "data": "race_name",  "orderable": false, "searchable": true },
         { "data": "net_time",  "orderable": true, "searchable": false },
         { "data": "pace_per_mile",  "orderable": false, "searchable": false },
         { "data": "ag_time",  "orderable": true, "searchable": false },
         { "data": "ag_percent",  "orderable": true, "searchable": false }
       ],
+      "fields": [{
+        label: "Date:",
+        name: "date",
+        type: "date",
+        def:  function () { return new Date(); },
+        dateFormat: 'mm/dd/yy'
+      }],
       "order": [[4, "asc" ]],
       "createdRow": function ( row, data, index ) {
         $('td:eq(1)', row)
@@ -101,7 +110,11 @@ $( document ).ready(function() {
                   </a> '
                 );
 
+        var date = new Date(data.date).toLocaleDateString();
         $('td:eq(3)', row)
+          .html(date);
+
+        $('td:eq(4)', row)
         .addClass('result-table-clickable-td')
         .html('\
                   <a href="<%= root_url %>' + 'races/' + data.race_slug + '">\
@@ -119,8 +132,9 @@ $( document ).ready(function() {
         } else {
           var time = data.gun_time;
           data.net_time = data.gun_time;
-        } 
-        $('td:eq(4)', row)
+        }
+
+        $('td:eq(5)', row)
           .html(time);
         return row;
       }
