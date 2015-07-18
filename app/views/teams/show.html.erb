@@ -106,9 +106,9 @@ $( document ).ready(function() {
                   </a> '
                 );
 
-        var date = new Date(data.date).toLocaleDateString();
+        var date = new Date(data.date);
         $('td:eq(3)', row)
-          .html(date);
+          .html((date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear());
 
         $('td:eq(4)', row)
         .addClass('result-table-clickable-td')
