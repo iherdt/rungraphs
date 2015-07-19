@@ -60,8 +60,8 @@ namespace :nyrr do
     race_links = get_race_links(yearly_results_page)
     race_dates = get_race_dates(yearly_results_page)
 
-    # race_links = [race_links[51]]
-    # race_dates = [race_dates[51]]
+    race_links = [race_links[24]]
+    race_dates = [race_dates[24]]
 
     # scrape from oldest to newest so the latest teams are set
     if type_of_result == "new"
@@ -91,7 +91,12 @@ namespace :nyrr do
     end
 
     # click on individual race result page
-    race_results_cover_page = $a.click(link)
+    begin
+      race_results_cover_page = $a.click(link)
+    rescue
+      puts "Error clicking #{date} #{link.text}"
+      return
+    end
     puts "---------Scraping Race #{date} #{link.text}---------"
 
     if race_results_cover_page.form.nil? || race_results_cover_page.form.radiobutton_with(:value => /500/).nil?
