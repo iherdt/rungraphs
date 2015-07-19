@@ -31,10 +31,32 @@ class TeamsController < ApplicationController
     end
 
     if limit_one
-      sql_results = "WITH summary AS (SELECT results.*, runner.slug, runner.full_name, race.name as race_name, race.slug as race_slug, ROW_NUMBER() OVER(PARTITION BY results.runner_id ORDER BY results.net_time ASC) as rk"
+      sql_results = "WITH summary AS (SELECT results.*, COALESCE(results.net_time,
+                                                                    CASE 
+                                                                      WHEN LENGTH(results.finish_time) = 5 THEN CONCAT('0:',results.finish_time)
+                                                                      ELSE results.finish_time
+                                                                      END,
+                                                                    CASE 
+                                                                      WHEN LENGTH(results.gun_time) = 5 THEN CONCAT('0:',results.gun_time)
+                                                                      ELSE results.gun_time
+                                                                      END,
+                                                                    '0')
+                                                                  as time, 
+        runner.slug, runner.full_name, race.name as race_name, race.slug as race_slug, ROW_NUMBER() OVER(PARTITION BY results.runner_id ORDER BY results.net_time ASC) as rk"
       sql_filtered_count = sql_results
     else
-      sql_results = " SELECT results.*, runner.slug, runner.full_name, race.name as race_name, race.slug as race_slug"
+      sql_results = "SELECT results.*, COALESCE(results.net_time,
+                                                    CASE 
+                                                      WHEN LENGTH(results.finish_time) = 5 THEN CONCAT('00:',results.finish_time)
+                                                      ELSE results.finish_time
+                                                      END,
+                                                    CASE 
+                                                      WHEN LENGTH(results.gun_time) = 5 THEN CONCAT('00:',results.gun_time)
+                                                      ELSE results.gun_time
+                                                      END,
+                                                    '0')
+                                                  as time, 
+        runner.slug, runner.full_name, race.name as race_name, race.slug as race_slug"
       sql_filtered_count = " SELECT COUNT(results)"
     end
     sql_total_results_count = " SELECT COUNT(results)"
@@ -90,13 +112,26 @@ class TeamsController < ApplicationController
     else
       sql_filtered_count += sql_search
     end
+    puts "order_by_column"
+    puts order_by_column
+    if order_by_column = "time"
+      sql_search +=
+        " 
+          ORDER BY time
+        "
+    else
+      sql_search +=
+        " 
+          ORDER BY results.#{order_by_column}
+        "
+    end
 
     sql_search +=
-      " 
-        ORDER BY results.#{order_by_column} #{asc_or_desc}
-          LIMIT #{limit}
-          OFFSET #{offset};
-      "
+     "
+      #{asc_or_desc}
+      LIMIT #{limit}
+      OFFSET #{offset};
+     "
 
     sql_results += sql_search
 

@@ -89,7 +89,7 @@ $( document ).ready(function() {
         { "data": "age", "orderable": false, "searchable": false},
         { "data": "date", "orderable": false, "searchable": false},
         { "data": "race_name",  "orderable": false, "searchable": true },
-        { "data": "net_time",  "orderable": true, "searchable": false },
+        { "data": "time",  "orderable": true, "searchable": false },
         { "data": "pace_per_mile",  "orderable": false, "searchable": false },
         { "data": "ag_time",  "orderable": true, "searchable": false },
         { "data": "ag_percent",  "orderable": true, "searchable": false }
@@ -120,18 +120,6 @@ $( document ).ready(function() {
                   </a> '
                 );
 
-        if (data.net_time != null) {
-          var time = data.net_time;
-        } else if (data.finish_time != null) {
-          var time = data.finish_time;
-          data.net_time = data.finish_time;
-        } else {
-          var time = data.gun_time;
-          data.net_time = data.gun_time;
-        }
-
-        $('td:eq(5)', row)
-          .html(time);
         return row;
       }
     });
