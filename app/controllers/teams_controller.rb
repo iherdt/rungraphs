@@ -108,12 +108,10 @@ class TeamsController < ApplicationController
           FROM summary results
           WHERE results.rk = 1
         "
-
     else
       sql_filtered_count += sql_search
     end
-    puts "order_by_column"
-    puts order_by_column
+
     if order_by_column == "time"
       sql_search +=
         " 
