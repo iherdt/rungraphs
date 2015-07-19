@@ -236,6 +236,9 @@ namespace :nyrr do
             # change runner team to latest if scraping new results
             if type_of_result == "new"
               result_runner.update_attributes("team" => result.team)
+              result_runner.update_attributes("city" => result.city)
+              result_runner.update_attributes("state" => result.state)
+              result_runner.update_attributes("country" => result.country)
             end
           end
         end
