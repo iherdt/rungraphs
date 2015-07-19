@@ -48,9 +48,18 @@ $(document).ready(function(){
 	});
 
 	$(".js-team-alphabet-jumper").on("click", function( e ) {
-      $("body, html").animate({ 
-          scrollTop: $( $(this).attr('href') ).offset().top - $('.team-alphabet-container').height()
-      }, 600);
+		console.log($(window).scrollTop());
+		var extraOffset = 0;		
+		if ($(window).scrollTop() < 133) {
+			if ($(window).width() < 768) {
+				extraOffset = $('.team-alphabet-container').height() * 2;
+			} else {
+				extraOffset = $('.team-alphabet-container').height();
+			}
+		}
+    $("body, html").animate({ 
+        scrollTop: $( $(this).attr('href') ).offset().top - $('.team-alphabet-container').height() - extraOffset
+    }, 600);
   });
   $(window).scroll(function(){
     if ($(this).scrollTop() > 133) {
