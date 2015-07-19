@@ -114,7 +114,7 @@ class TeamsController < ApplicationController
     end
     puts "order_by_column"
     puts order_by_column
-    if order_by_column = "time"
+    if order_by_column == "time"
       sql_search +=
         " 
           ORDER BY time
