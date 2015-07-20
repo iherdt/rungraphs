@@ -60,8 +60,8 @@ namespace :nyrr do
     race_links = get_race_links(yearly_results_page)
     race_dates = get_race_dates(yearly_results_page)
 
-    # race_links = [race_links[24]]
-    # race_dates = [race_dates[24]]
+    race_links = [race_links[46]]
+    race_dates = [race_dates[46]]
 
     # scrape from oldest to newest so the latest teams are set
     if type_of_result == "new"
@@ -85,10 +85,10 @@ namespace :nyrr do
 
   def scrape_individual_race_results(link, date, year, type_of_result)
     # skip if race with same name and date exists
-    if !Race.where(name: link.text, date: format_date(date)).empty?
-      puts "Skipping #{date} #{link.text}"
-      return
-    end
+    # if !Race.where(name: link.text, date: format_date(date)).empty?
+    #   puts "Skipping #{date} #{link.text}"
+    #   return
+    # end
 
     # click on individual race result page
     begin
@@ -115,13 +115,13 @@ namespace :nyrr do
       return
     end
 
-    race = Race.new
-    race.name = link.text
-    race.date = format_date(date)
+    # race = Race.new
+    # race.name = link.text
+    # race.date = format_date(date)
 
-    scrape_race_info(race_results_page, race)
-    race.save!
-    # race = Race.last
+    # scrape_race_info(race_results_page, race)
+    # race.save!
+    race = Race.last
 
     scrape_race_individual_page(race_results_page, race, type_of_result)
     race.set_team_results
@@ -143,12 +143,12 @@ namespace :nyrr do
   def scrape_race_individual_page(race_results_page, race, type_of_result)
     i = 0
 
-    # 38.times do
-    #   i += 1
-    #   next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
+    7.times do
+      i += 1
+      next_500_link = race_results_page.parser.xpath("//a[text()='NEXT 500']")[0]
 
-    #   race_results_page = $a.click(next_500_link)
-    # end
+      race_results_page = $a.click(next_500_link)
+    end
 
     loop do
       i += 1
