@@ -58,6 +58,8 @@ class Race < ActiveRecord::Base
     team_rosters = {}
 
     projected_results.select{|pr| pr.team != '---' && !pr.team.blank?}.each do |pr|
+      next if pr.team.blank? || pr.team == "0"
+
       if !pr.net_time.blank?
         runner_time = pr.net_time
       elsif !pr.finish_time.blank?

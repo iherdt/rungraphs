@@ -28,6 +28,9 @@ class ProjectedRace < ActiveRecord::Base
     puts 'setting_team_results'
     team_rosters = {}
 
+
+    next if pr.team.blank? || pr.team == "0"
+    
     projected_results.select{|pr| pr.team != '---' && !pr.team.blank?}.each do |pr|
       next if pr.net_time.blank?
       runner_time = pr.net_time
