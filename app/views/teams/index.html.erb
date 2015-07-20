@@ -30,7 +30,7 @@
 			  			<td class="team-name">
 			  		<% end %>
 							<% if !TEAMS[team.name].nil? %>
-				        <%= TEAMS[team.name] %>
+				        <%= team.name.upcase %> - <%= TEAMS[team.name] %>
 				      <% else %>
 				        <%= team.name.upcase %>
 				      <% end %>
