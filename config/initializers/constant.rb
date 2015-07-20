@@ -25,7 +25,7 @@
         "asag" => "Asics Aggies",
         "asha" => "Asha Runners Club",
         "asic" => "Asics",
-        "asle" => "47 American Sign Language English HS — ASLE",
+        "asle" => "47 American Sign Language English HS",
         "atc" => "Achilles TC",
         "atla" => "Atlanta TC",
         "awrt" => "Angry Wade's Running Team",
