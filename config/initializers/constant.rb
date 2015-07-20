@@ -73,7 +73,7 @@
         "csw" => "Cardio Speed Wagon",
         "cumc" => "Columbia University Medical Center",
         "dacs" => "DetermiNation-American Cancer Society",
-        "dims" => "You Run Sum & Then Dim Sum"
+        "dims" => "You Run Sum & Then Dim Sum",
         "dnh" => "De Novo Harriers",
         "dnt" => "Downtown New York Running Club",
         "dork" => "Don's Overweight Runners Klub",
@@ -128,7 +128,7 @@
         "jack" => "Jackrabbit Sports",
         "jgss" => "Jersey Girls SS",
         "jkor" => "J.K.O. Running",
-        "joba" => "Penn State Alumni Runners"
+        "joba" => "Penn State Alumni Runners",
         "jrun" => "Jrunners",
         "jpm" => "JP Morgan Chase",
         "jsrc" => "Jersey Shore RC",
@@ -297,7 +297,7 @@
         "tp4s" => "Team P4S",
         "trd" => "The Reservoir Dogs",
         # "trli" => "",
-        "trp" => "The Resolution Project"
+        "trp" => "The Resolution Project",
         "trr" => "Taconic Road Runners Club",
         "trwb" => "Team Red White & Blue",
         # "ttig" => "",
