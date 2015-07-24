@@ -21,7 +21,8 @@ namespace :nyrr do
   "AGTime" => "ag_time",
   "AGGenderPlace" => "ag_gender_place",
   "AG %" => "ag_percent",
-  "NetTime" => "net_time"
+  "NetTime" => "net_time",
+  "GunTime" => "gun_time"
   }
 
   CLUB_POINTS = {
@@ -165,17 +166,24 @@ namespace :nyrr do
       rows.each do |row|
         result = Result.new(distance: race.distance, date: race.date)
         data_array = []
-        row.css('td').each_with_index do |field, index|
           property = RESULT_PROPERTIES[race_fields_array[index]]
-          if property
-            if !field.text.empty?
-              result.update_attributes(property => field.text.downcase)
-            end
-          elsif race_fields_array[index] == "Sex/Age"
+          if race_fields_array[index] == "Sex/Age"
             if !field.text.empty?
               result.update_attributes("sex" => field.text[0].downcase)
               result.update_attributes("age" => field.text[1..2].to_i)
             end
+          # if time field is missing a leading zero, add it here so sorting will work
+          elsif ["net_time", "finish_time", "gun_time"].include? property
+            if field.text =~ /^\d\d:\d\d$/
+              result.update_attributes(property => "0:" + field.text)
+            else
+              result.update_attributes(property => field.text)
+            end
+          elsif property
+            if !field.text.empty?
+              result.update_attributes(property => field.text.downcase)
+            end
+          
           end
         end
 

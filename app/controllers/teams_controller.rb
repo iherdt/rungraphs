@@ -31,30 +31,12 @@ class TeamsController < ApplicationController
     end
 
     if limit_one
-      sql_results = "WITH summary AS (SELECT results.*, COALESCE(results.net_time,
-                                                                    CASE 
-                                                                      WHEN LENGTH(results.finish_time) = 5 THEN CONCAT('0:',results.finish_time)
-                                                                      ELSE results.finish_time
-                                                                      END,
-                                                                    CASE 
-                                                                      WHEN LENGTH(results.gun_time) = 5 THEN CONCAT('0:',results.gun_time)
-                                                                      ELSE results.gun_time
-                                                                      END,
-                                                                    '0')
+      sql_results = "WITH summary AS (SELECT results.*, COALESCE(results.net_time, results.finish_time, results.gun_time)
                                                                   as time, 
         runner.slug, runner.full_name, race.name as race_name, race.slug as race_slug, ROW_NUMBER() OVER(PARTITION BY results.runner_id ORDER BY results.net_time ASC) as rk"
       sql_filtered_count = sql_results
     else
-      sql_results = "SELECT results.*, COALESCE(results.net_time,
-                                                    CASE 
-                                                      WHEN LENGTH(results.finish_time) = 5 THEN CONCAT('00:',results.finish_time)
-                                                      ELSE results.finish_time
-                                                      END,
-                                                    CASE 
-                                                      WHEN LENGTH(results.gun_time) = 5 THEN CONCAT('00:',results.gun_time)
-                                                      ELSE results.gun_time
-                                                      END,
-                                                    '0')
+      sql_results = "SELECT results.*, COALESCE(results.net_time, results.finish_time, results.gun_time)
                                                   as time, 
         runner.slug, runner.full_name, race.name as race_name, race.slug as race_slug"
       sql_filtered_count = " SELECT COUNT(results)"
