@@ -126,7 +126,6 @@ namespace :nyrr do
 
     scrape_race_individual_page(race_results_page, race, type_of_result)
     race.set_team_results
-    race.save!
   end
 
   def get_race_links(yearly_results_page)

@@ -21,9 +21,8 @@ namespace :projection do
 
     projected_race = ProjectedRace.create(name: name, date_and_time: date_and_time, distance: distance, date: date)
     create_new_result_projections(projected_race, roster_link)
-    # add_overall_places_to_projected_runners(projected_race)
-    # add_gender_places_to_projected_runners()
-    # add_age_group_places_to_projected_runners()
+    
+    projected_race.set_team_results
   end
 
   def create_new_result_projections(projected_race, roster_link)
@@ -139,21 +138,6 @@ namespace :projection do
 
       projected_result.save!
     end
-  end
-
-  def add_overall_places_to_projected_runners(projected_race)
-    projected_race.projected_results.order('net_time').each_with_index do |result, i|
-      result.overall_place = i + 1
-      result.save!
-    end
-  end
-
-  def add_gender_places_to_projected_runners()
-
-  end
-
-
-  def add_age_group_places_to_projected_runners()
   end
 
   def format_date(date_str)
