@@ -22,6 +22,9 @@ Race results were displayed using Datatables.js with customizations to filter an
 ####Runner Stats
 The runner *show* page displays a runner's info as well as a runner's races.
 
+####Predicted Races
+Predictions for future races are made by *projection.rake* by retrieving data from NYRR's <a href="http://liveresults.nyrr.org/" target=_blank>race tracker api</a> More details are here: <a href="https://github.com/loganyu/nyrr_scrape_race_roster " target=_blank>https://github.com/loganyu/nyrr_scrape_race_roster </a>. The runner names are compared with those in the database and using a runner's most recent team and races, a prediction is made for team performance.
+
 ####Team Records
 The teams index page lists all teams within New York Road Runners. The show page for each team displays the teams best performances for each distance. SQL searches are used to find the best times for each distance.
 
