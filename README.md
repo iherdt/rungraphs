@@ -7,7 +7,7 @@ This website makes searching for race results and runner times easy. Unlike sear
 The home page currently has links with commonly visited resources for runners. Posts with upcoming information and analytics will be added.
 
 ####Data
-Race results were obtained from <a href="http://web2.nyrrc.org/cgi-bin/start.cgi/aes-programs/results/resultsarchive.htm" target=_blank>New York Road Runners</a> using Mechanize. (see *lib/tasks/nyrr.rake*). Because of storage limits on Herkou, the rake script currently uses the top 120 results from each of the NYRR Club Points races since 2009.
+Race results were obtained from <a href="http://web2.nyrrc.org/cgi-bin/start.cgi/aes-programs/results/resultsarchive.htm" target=_blank>New York Road Runners</a> using Mechanize. (see *lib/tasks/nyrr.rake*).
 
 As results are pulled, three types of objects are created: races, runners, and results. The models are structured so that it is easy to find all of a runner's results and races, find a race's results and runners, and find the race and runner a result belongs to.
 
@@ -17,7 +17,7 @@ The Team table was created in the console by finding all the teams from the *tea
 The Race and Runner models are searchable through Elasticsearch. See the models for the specific searches. The results are then combined and ranked for the user to choose.
 
 ####Race Results
-Race results were displayed using Datatables.js with customizations to filter and sort. See *show.html.erb* for races.
+Race results were displayed using Datatables.js with customizations to filter and sort. Asynchonrous requests are made by the datatable to only load the data currently being displayed on the table. See *show.html.erb* for races.
 
 ####Runner Stats
 The runner *show* page displays a runner's info as well as a runner's races.
