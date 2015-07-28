@@ -22,7 +22,12 @@ Race results were displayed using Datatables.js with customizations to filter an
 ####Runner Stats
 The runner *show* page displays a runner's info as well as a runner's races.
 
-####Upcoming features
+####Team Records
+The teams index page lists all teams within New York Road Runners. The show page for each team displays the teams best performances for each distance. SQL searches are used to find the best times for each distance.
+
+####Todo
+-	Use frontend JS framework
+-	Refactor repeated code between races and projected_races
 -   Runner stats pages will also display a runner's best performances in different distances
 -   Race result pages will include stats and analysis. Such as course records, number of men and women, avg finish time, data visualizations showing mean and standard deviation by age and sex, yearly participation of specific races, yearly differences in weather, team particiation in races
 -   A **Versus** tab to search for two runners and compare best times across various distances
