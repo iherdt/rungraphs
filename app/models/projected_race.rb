@@ -12,15 +12,15 @@ class ProjectedRace < ActiveRecord::Base
    def set_team_results
     puts 'assigning place values'
 
-    projected_results.each_with_index do |pr, i|
+    projected_results.order(:net_time).each_with_index do |pr, i|
       pr.overall_place = i + 1
       pr.save!
     end
-    projected_results.select{|pr| pr.sex == 'M'}.each_with_index do |pr, i|
+    projected_results.where(sex: 'M').order(:net_time).each_with_index do |pr, i|
       pr.gender_place = i + 1
       pr.save!
     end
-    projected_results.select{|pr| pr.sex == 'F'}.each_with_index do |pr, i|
+    projected_results.where(sex: 'F').order(:net_time).each_with_index do |pr, i|
       pr.gender_place = i + 1
       pr.save!
     end
