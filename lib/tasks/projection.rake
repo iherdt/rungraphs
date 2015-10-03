@@ -5,7 +5,7 @@ require 'open-uri'
 
 =begin
 
-rake projection:new['http://api.rtrt.me/events/NYRR-RUN5K-2015/profiles?max=10000&total=1&appid=4d7a9ceb0be65b3cc4948ee9&token=769302ce52fa1e8fe58e625f6c013990&search=&callback=jcb8&func=na&parms=%7B%22browser%22%3Afalse%7D&settings=%7B%22setWait%22%3Afalse%7D&_=1438787836759',3.1,'R-U-N 5k 2015','August 6th 2015 7:00pm','08/06/15']
+rake projection:new['http://api.rtrt.me/events/NYRR-GRETES-2015/profiles?max=10000&total=1&appid=4d7a9ceb0be65b3cc4948ee9&token=f16b596d12890968c718b0968a9f4694&search=&callback=jcb5&func=na&parms=%7B%22browser%22%3Afalse%7D&settings=%7B%22setWait%22%3Afalse%7D&_=1443889744467',13.1,'Gretes Great Gallop 2015','October 4th 2015 8:00am','10/04/15']
 
 ProjectedRace.first.projected_results.order("net_time").each_with_index {|r,i| puts "#{i+1}\t#{r.sex}\t#{r.team}\t#{r.net_time}\t#{r.full_name}"}
 
@@ -76,11 +76,11 @@ namespace :projection do
 
         projected_result.update_attributes("runner_id" => runner.id, "team" => runner.team, "state" => runner.state, "age" => Time.now.year - runner.birth_year)
 
-        # TODO, limit best to races within the last year
+        # TODO, limit best to races within the last 3 months
         # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
         best_result = runner.results.where.not(ag_percent: nil, distance: 1.0).where("date > ?", 3.months.ago).order('ag_percent DESC')[0]
 
-        # if runner has results in last year, find all time best result
+        # if runner has results in last 3 months, find all time best result
         if best_result.nil?
           best_result = runner.results.where.not(ag_percent: nil, distance: 1.0).where("date > ?", 3.months.ago).order('ag_percent DESC')[0]
         end
@@ -95,6 +95,8 @@ namespace :projection do
         puts counter
         puts runner.full_name
         p best_result
+
+        next if best_result.nil?
 
         # check type of result time
         if best_result.net_time && !best_result.net_time.blank?
