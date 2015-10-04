@@ -61,7 +61,7 @@ class ProjectedRacesController < ApplicationController
       "
     if !searches["full_name"].blank?
       searches["full_name"].split(' ').each do |search_term|
-        sql_search += "AND results.first_name || results.last_name LIKE '%#{search_term}%'"
+        sql_search += "AND runner.first_name || runner.last_name LIKE '%#{search_term}%'"
       end
     end
 
