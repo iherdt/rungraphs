@@ -44,6 +44,9 @@ gem 'elasticsearch-rails'
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'database_cleaner'
   gem 'factory_girl_rails'
 end
 
@@ -57,9 +60,7 @@ end
 
 group :test do
   gem 'faker'
-  gem 'capybara'
   gem 'guard-rspec'
-  gem 'launchy'
 end
 
 group :production do
