@@ -1,32 +1,41 @@
 # require 'rubygems'
 # require 'mechanize'
-require 'open-uri'
+# require 'open-uri'
 # require 'json'
 
 =begin
 
-rake projection:new['http://api.rtrt.me/events/NYRR-GRETES-2015/profiles?max=10000&total=1&appid=4d7a9ceb0be65b3cc4948ee9&token=f16b596d12890968c718b0968a9f4694&search=&callback=jcb5&func=na&parms=%7B%22browser%22%3Afalse%7D&settings=%7B%22setWait%22%3Afalse%7D&_=1443889744467',13.1,'Gretes Great Gallop 2015','October 4th 2015 8:00am','10/04/15']
-
-ProjectedRace.first.projected_results.order("net_time").each_with_index {|r,i| puts "#{i+1}\t#{r.sex}\t#{r.team}\t#{r.net_time}\t#{r.full_name}"}
+rake projection:new["http://api.rtrt.me/events/NYRR-GRIDIRON4M-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","4.0","Gridiron 4M","February 7th 2016 9:00am","02/07/16"]
 
 =end
 namespace :projection do
 
-  task :new, [:roster_link, :distance, :name,:date_and_time, :date] => :environment do |t, arg|
-    roster_link = arg[:roster_link]
+  task :new, [:url, :apiid, :token, :distance, :name, :date_and_time, :date] => :environment do |t, arg|
     distance = arg[:distance]
     name = arg[:name]
     date_and_time = arg[:date_and_time]
-    date = format_date( arg[:date])
+    date = format_date(arg[:date])
 
     projected_race = ProjectedRace.create(name: name, date_and_time: date_and_time, distance: distance, date: date)
-    create_new_result_projections(projected_race, roster_link)
-    
+    create_new_result_projections(projected_race, arg[:url], arg[:apiid], arg[:token])
+    projected_race.save
     projected_race.set_team_results
   end
 
-  def create_new_result_projections(projected_race, roster_link)
-    roster_data = open(roster_link).read
+  def create_new_result_projections(projected_race, url, apiid, token)
+    url = url
+    params = {
+      max: "100000",
+      total: "1",
+      failonmax: "1",
+      appid: apiid,
+      token: token,
+      search: "",
+      source: "webtracker"
+    }
+
+    roster_data = RestClient.post url, params, :content_type => :json, :accept => :json
+
     json_roster_data = /{.+}/.match(roster_data)[0]
     roster_data_hash = JSON.parse(json_roster_data)
     counter = 0

@@ -93,3 +93,5 @@ gem 'foreman'
 gem 'thin'
 
 gem 'nested-hstore'
+
+gem 'rest-client'
