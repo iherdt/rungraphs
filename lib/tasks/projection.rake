@@ -5,7 +5,7 @@
 
 =begin
 
-rake projection:new["http://api.rtrt.me/events/NYRR-GRIDIRON4M-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","4.0","Gridiron 4M","February 7th 2016 9:00am","02/07/16"]
+rake projection:new["http://api.rtrt.me/events/NYRR-ALGORDON4M-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","4.0","Al Gordon 4M","February 20th 2016 8:00am","02/20/16"]
 
 =end
 namespace :projection do
@@ -18,7 +18,8 @@ namespace :projection do
 
     projected_race = ProjectedRace.create(name: name, date_and_time: date_and_time, distance: distance, date: date)
     create_new_result_projections(projected_race, arg[:url], arg[:apiid], arg[:token])
-    projected_race.save
+    projected_race.save!
+    projected_race.reload
     projected_race.set_team_results
   end
 
@@ -75,9 +76,9 @@ namespace :projection do
       # add runner and projected time
       runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase, city: city)
 
-      # if a runner changes cities
+      # if a runner changes cities or if runner with same name without city
       if runners.empty?
-        runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase)
+        runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase).where.not(city: city)
       end
 
       if !runners.empty? && !runners[0].results.empty?
