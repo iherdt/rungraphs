@@ -109,7 +109,7 @@ $( document ).ready(function() {
 
         var date = new Date(data.date);
         $('td:eq(3)', row)
-          .html((date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear());
+          .html((date.getMonth() + 1) + '/' + (date.getDate() 1) + '/' + date.getFullYear());
 
         $('td:eq(4)', row)
         .addClass('result-table-clickable-td')
