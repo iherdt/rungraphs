@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150715011902) do
+ActiveRecord::Schema.define(version: 20160301201408) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,12 +40,18 @@ ActiveRecord::Schema.define(version: 20150715011902) do
     t.string   "location"
     t.string   "weather"
     t.string   "sponsor"
-    t.boolean  "club_points",   default: false
+    t.boolean  "club_points",      default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "slug"
-    t.hstore   "men_results",                   array: true
-    t.hstore   "women_results",                 array: true
+    t.hstore   "men_results",                      array: true
+    t.hstore   "women_results",                    array: true
+    t.hstore   "men_40_results",                   array: true
+    t.hstore   "women_40_results",                 array: true
+    t.hstore   "men_50_results",                   array: true
+    t.hstore   "women_50_results",                 array: true
+    t.hstore   "men_60_results",                   array: true
+    t.hstore   "women_60_results",                 array: true
   end
 
   add_index "projected_races", ["slug"], name: "index_projected_races_on_slug", unique: true, using: :btree
@@ -88,12 +94,18 @@ ActiveRecord::Schema.define(version: 20150715011902) do
     t.string   "location"
     t.string   "weather"
     t.string   "sponsor"
-    t.boolean  "club_points",   default: false
+    t.boolean  "club_points",      default: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "slug"
-    t.hstore   "men_results",                   array: true
-    t.hstore   "women_results",                 array: true
+    t.hstore   "men_results",                      array: true
+    t.hstore   "women_results",                    array: true
+    t.hstore   "men_40_results",                   array: true
+    t.hstore   "women_40_results",                 array: true
+    t.hstore   "men_50_results",                   array: true
+    t.hstore   "women_50_results",                 array: true
+    t.hstore   "men_60_results",                   array: true
+    t.hstore   "women_60_results",                 array: true
   end
 
   add_index "races", ["slug"], name: "index_races_on_slug", unique: true, using: :btree

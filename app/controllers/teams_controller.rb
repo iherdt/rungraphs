@@ -52,7 +52,7 @@ class TeamsController < ApplicationController
         ON results.runner_id = runner.id
         LEFT JOIN races as race
         ON results.race_id = race.id
-        WHERE runner.team = '#{team_slug}'
+        WHERE results.team = '#{team_slug}'
       "
 
     sql_total_results_count += sql_search

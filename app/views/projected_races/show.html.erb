@@ -1,11 +1,11 @@
 <%- model_class = ProjectedRace -%>
 <div class="results-page-header page-header">
-  <h1>Projection: <%= @projected_race.name %></h1>
+  <h1>Prediction: <%= @projected_race.name %></h1>
 
   <dl>
     <% @projected_race.attributes.each do |attribute, value| %>
       <% next if value.nil? %>
-      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity", "name", "slug", "men_results", "women_results"].include? attribute %>
+      <% next if ["club_points", "id", "created_at", "updated_at", "date", "temperature", "humidity", "name", "slug", "men_results", "women_results", "men_40_results", "women_40_results", "men_50_results", "women_50_results", "men_60_results", "women_60_results"].include? attribute %>
       <dt class="race-attribute">
         <strong>
           <% if attribute == "date_and_time" %>
@@ -94,73 +94,75 @@
   </div>
 </div>
 
-<div class="team-results-main-container">
-  <div class="team-results-title">
-    <h2> Team Results </h2>
-  </div>
-  <div class="mens-results-container team-results-column">
-    <h3 class="team-gender-results-title"> Men's Results </h3>
-    <% @men_teams_to_display.times do |i| %>
-      <div class="team-results-container">
-        <div class="team-title-container group">
-          <div class="team-title">
-            <%= i + 1  %>
-            :
-            <% if !TEAMS[@men_results[i]["team"]].nil? %>
-              <%= TEAMS[@men_results[i]["team"]] %>
-            <% else %>
-              <%= @men_results[i]["team"].upcase %>
+<% @results.each do |result| %>
+  <div class="team-results-main-container">
+    <div class="team-results-title">
+      <h2> <%= result[:title] %> </h2>
+    </div>
+    <div class="mens-results-container team-results-column">
+      <h3 class="team-gender-results-title"> Men's Results </h3>
+      <% result[:men_teams].times do |i| %>
+        <div class="team-results-container">
+          <div class="team-title-container group">
+            <div class="team-title">
+              <%= i + 1  %>
+              :
+              <% if !TEAMS[result[:men][i]["team"]].nil? %>
+                <%= TEAMS[result[:men][i]["team"]] %>
+              <% else %>
+                <%= result[:men]["team"].upcase %>
+              <% end %>
+            </div>
+            <div class="team-time"><%= result[:men][i]["total_time"].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %></div>
+          </div>
+          <div class="team-runners-container">
+            <% JSON.parse(result[:men][i]["runners"].gsub('\"', '"').gsub('=>',':')).collect{|k,v| v}.each_with_index do |runner, team_spot| %>
+              <div class="runner-container">
+                <div class="runner-name-container <%= 'non-scoring-runner' if team_spot > result[:score_count] - 1 %>">
+                  <%= runner["name"] %>
+                </div>
+                <div class="runner-time-container <%= 'non-scoring-runner' if team_spot > result[:score_count] - 1 %>">
+                  <%= runner["net_time"].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %>
+                </div>
+              </div>
             <% end %>
           </div>
-          <div class="team-time"><%= @men_results[i]["total_time"].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %></div>
         </div>
-        <div class="team-runners-container">
-          <% JSON.parse(@men_results[i]["runners"].gsub('\"', '"').gsub('=>',':')).collect{|k,v| v}.each do |runner| %>
-            <div class="runner-container">
-              <div class="runner-name-container">
-                <%= runner["name"] %>
-              </div>
-              <div class="runner-time-container">
-                <%= runner["net_time"].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %>
-              </div>
+      <% end %>
+    </div>
+    <div class="womens-results-container team-results-column">
+      <h3 class="team-gender-results-title"> Women's Results </h3>
+      <% result[:women_teams].times do |i| %>
+        <div class="team-results-container">
+          <div class="team-title-container group">
+            <div class="team-title">
+              <%= i + 1  %>
+              :
+              <% if !TEAMS[result[:women][i]["team"]].nil? %>
+                <%= TEAMS[result[:women][i]["team"]] %>
+              <% else %>
+                <%= result[:women][i]["team"].upcase %>
+              <% end %>
             </div>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
-  </div>
-  <div class="womens-results-container team-results-column">
-    <h3 class="team-gender-results-title"> Women's Results </h3>
-    <% @women_teams_to_display.times do |i| %>
-      <div class="team-results-container">
-        <div class="team-title-container group">
-          <div class="team-title">
-            <%= i + 1  %>
-            :
-            <% if !TEAMS[@women_results[i]["team"]].nil? %>
-              <%= TEAMS[@women_results[i]["team"]] %>
-            <% else %>
-              <%= @women_results[i]["team"].upcase %>
+            <div class="team-time"><%= result[:women][i]["total_time"].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %></div>
+          </div>
+          <div class="team-runners-container">
+            <% JSON.parse(result[:women][i]["runners"].gsub('\"', '"').gsub('=>',':')).collect{|k,v| v}.each_with_index do |runner, team_spot| %>
+              <div class="runner-container">
+                <div class="runner-name-container <%= 'non-scoring-runner' if team_spot > result[:score_count] - 1 %>">
+                  <%= runner["name"] %>
+                </div>
+                <div class="runner-time-container <%= 'non-scoring-runner' if team_spot > result[:score_count] - 1 %>">
+                  <%= runner["net_time"].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %>
+                </div>
+              </div>
             <% end %>
           </div>
-          <div class="team-time"><%= @women_results[i]["total_time"].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %></div>
         </div>
-        <div class="team-runners-container">
-          <% JSON.parse(@women_results[i]["runners"].gsub('\"', '"').gsub('=>',':')).collect{|k,v| v}.each do |runner| %>
-            <div class="runner-container">
-              <div class="runner-name-container">
-                <%= runner["name"] %>
-              </div>
-              <div class="runner-time-container">
-                <%= runner["net_time"].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %>
-              </div>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
-</div>
+<% end %>
 
 <script>
 $( document ).ready(function() {

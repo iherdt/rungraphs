@@ -23,18 +23,79 @@ class RacesController < ApplicationController
   def show
     @race_time_array = get_race_time_title_and_type(@race)
 
-    @men_results = @race.men_results
-    @women_results = @race.women_results
+    @results = []
+    if @race.men_results && @race.women_results
+      @men_results = @race.men_results
+      @women_results = @race.women_results
 
-    if @men_results.count < 20
-      @men_teams_to_display = @men_results.count
-    else
-      @men_teams_to_display = 20
+      if @men_results.count < 10
+        @men_teams_to_display = @men_results.count
+      else
+        @men_teams_to_display = 10
+      end
+      if @women_results.count < 10
+        @women_teams_to_display = @women_results.count
+      else
+        @women_teams_to_display = 10
+      end
+
+      @results << {:men => @men_results, :women => @women_results, :men_teams => @men_teams_to_display, :women_teams => @women_teams_to_display, :title => "Team Results", :score_count => 5}
     end
-    if @women_results.count < 20
-      @women_teams_to_display = @women_results.count
-    else
-      @women_teams_to_display = 20
+
+    if @race.men_40_results && @race.women_40_results
+
+      @men_40_results = @race.men_40_results
+      @women_40_results = @race.women_40_results
+
+      if @men_results.count < 5
+        @men_40_teams_to_display = @men_40_results.count
+      else
+        @men_40_teams_to_display = 5
+      end
+      if @women_40_results.count < 5
+        @women_40_teams_to_display = @women_40_results.count
+      else
+        @women_40_teams_to_display = 5
+      end
+
+      @results << {:men => @men_40_results, :women => @women_40_results, :men_teams => @men_40_teams_to_display, :women_teams => @women_40_teams_to_display, :title => "Masters 40+ Team Results", :score_count => 3}
+    end
+
+    if @race.men_50_results && @race.women_50_results
+
+      @men_50_results = @race.men_50_results
+      @women_50_results = @race.women_50_results
+
+      if @men_50_results.count < 5
+        @men_50_teams_to_display = @men_50_results.count
+      else
+        @men_50_teams_to_display = 5
+      end
+      if @women_50_results.count < 5
+        @women_50_teams_to_display = @women_50_results.count
+      else
+        @women_50_teams_to_display = 5
+      end
+
+      @results << {:men => @men_50_results, :women => @women_50_results, :men_teams => @men_50_teams_to_display, :women_teams => @women_50_teams_to_display, :title => "Masters 50+ Team Results", :score_count => 3}
+    end
+
+    if @race.men_60_results && @race.women_60_results
+      @men_60_results = @race.men_60_results
+      @women_60_results = @race.women_60_results
+
+      if @men_60_results.count < 5
+        @men_60_teams_to_display = @men_60_results.count
+      else
+        @men_60_teams_to_display = 5
+      end
+      if @women_60_results.count < 5
+        @women_60_teams_to_display = @women_60_results.count
+      else
+        @women_60_teams_to_display = 5
+      end
+
+      @results <<{:men => @men_60_results, :women => @women_60_results, :men_teams => @men_60_teams_to_display, :women_teams => @women_60_teams_to_display, :title => "Masters 60+ Team Results", :score_count => 3}
     end
   end
 
@@ -129,10 +190,6 @@ class RacesController < ApplicationController
 
     if !searches["team"].blank?
       sql_search += "AND results.team LIKE '#{searches["team"]}'"
-    end
-
-    if !searches["sex"].blank?
-      sql_search += "AND results.sex LIKE '#{searches["sex"]}'"
     end
 
     if !searches["sex"].blank?

@@ -56,9 +56,8 @@ padding-left: 14px;
   padding-bottom: 25px;
   .runner-container:nth-child(even) {background: rgba(0,0,0,0.02)};
   .runner-container:nth-child(odd) {background: #FFF};
-  .runner-container:nth-child(6) div {color: #999};
-  .runner-container:nth-child(7) div {color: #999};
-  .runner-container:nth-child(8) div {color: #999};
-  .runner-container:nth-child(9) div {color: #999};
-  .runner-container:nth-child(10) div {color: #999};
+}
+
+.non-scoring-runner {
+  color: #999;
 }
