@@ -49,9 +49,9 @@ class ProjectedRace < ActiveRecord::Base
 
         if team_rosters.include? pr.team
           if pr.sex == 'M'
-            team_rosters[pr.team]['m'] << {"name" => pr.full_name, "net_time_in_seconds" => net_time_in_seconds, "net_time" => net_time }
+            team_rosters[pr.team]['m'] << {"name" => pr.full_name, "net_time_in_seconds" => net_time_in_seconds, "net_time" => net_time, "slug" => pr.runner.slug }
           else
-            team_rosters[pr.team]['f'] << {"name" => pr.full_name, "net_time_in_seconds" => net_time_in_seconds, "net_time" => net_time }
+            team_rosters[pr.team]['f'] << {"name" => pr.full_name, "net_time_in_seconds" => net_time_in_seconds, "net_time" => net_time, "slug" => pr.runner.slug }
           end
         else
           team_rosters[pr.team] = {'m' => [], 'f' => []}

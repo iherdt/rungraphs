@@ -109,7 +109,7 @@
               <%= i + 1  %>
               :
               <% if !TEAMS[result[:men][i]["team"]].nil? %>
-                <%= TEAMS[result[:men][i]["team"]] %>
+                <a href="<%=team_url(result[:men][i]["team"])%>"> <%= TEAMS[result[:men][i]["team"]] %> </a>
               <% else %>
                 <%= result[:men][i]["team"].upcase %>
               <% end %>
@@ -120,7 +120,7 @@
             <% JSON.parse(result[:men][i]["runners"].gsub('\"', '"').gsub('=>',':')).collect{|k,v| v}.each_with_index do |runner, team_spot| %>
               <div class="runner-container">
                 <div class="runner-name-container <%= 'non-scoring-runner' if team_spot > result[:score_count] - 1 %>">
-                  <%= runner["name"] %>
+                   <a href="<%=runner_url runner["slug"]%>"> <%= runner["name"] %></a>
                 </div>
                 <div class="runner-time-container <%= 'non-scoring-runner' if team_spot > result[:score_count] - 1 %>">
                   <%= runner["net_time"].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %>
@@ -140,7 +140,7 @@
               <%= i + 1  %>
               :
               <% if !TEAMS[result[:women][i]["team"]].nil? %>
-                <%= TEAMS[result[:women][i]["team"]] %>
+                <a href="<%=team_url(result[:women][i]["team"])%>"> <%= TEAMS[result[:women][i]["team"]] %> </a>
               <% else %>
                 <%= result[:women][i]["team"].upcase %>
               <% end %>
@@ -151,7 +151,7 @@
             <% JSON.parse(result[:women][i]["runners"].gsub('\"', '"').gsub('=>',':')).collect{|k,v| v}.each_with_index do |runner, team_spot| %>
               <div class="runner-container">
                 <div class="runner-name-container <%= 'non-scoring-runner' if team_spot > result[:score_count] - 1 %>">
-                  <%= runner["name"] %>
+                  <a href="<%=runner_url runner["slug"]%>"> <%= runner["name"] %></a>
                 </div>
                 <div class="runner-time-container <%= 'non-scoring-runner' if team_spot > result[:score_count] - 1 %>">
                   <%= runner["net_time"].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %>
