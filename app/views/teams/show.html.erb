@@ -106,10 +106,9 @@ $( document ).ready(function() {
                     </div> \
                   </a> '
                 );
-
-        var date = new Date(data.date);
+        dateArray = data.date.split("-")
         $('td:eq(3)', row)
-          .html((date.getMonth() + 1) + '/' + (date.getDate() + 1) + '/' + date.getFullYear());
+          .html(dateArray[1] + '/' + dateArray[2] + '/' + dateArray[0]);
 
         $('td:eq(4)', row)
         .addClass('result-table-clickable-td')
