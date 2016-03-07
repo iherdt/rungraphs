@@ -65,7 +65,6 @@ group :test do
 end
 
 group :production do
-	gem 'bonsai-elasticsearch-rails'
 	gem 'rails_12factor'
 end
 
