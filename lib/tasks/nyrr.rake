@@ -126,9 +126,6 @@ namespace :nyrr do
 
     scrape_race_individual_page(race_results_page, race, type_of_result)
     race.set_team_results
-    race.set_team_results(masters = true, 40)
-    race.set_team_results(masters = true, 50)
-    race.set_team_results(masters = true, 60)
   end
 
   def get_race_links(yearly_results_page)

@@ -37,4 +37,6 @@ Rails.application.configure do
 
   #  Rails logger output on STDOUT with custom beat heroku 60 second timeout
   config.middleware.use Rails::Rack::LogTailer
+
+  Elasticsearch::Model.client = Elasticsearch::Client.new host: 'localhost:9200'
 end
