@@ -139,7 +139,7 @@ class Race < ActiveRecord::Base
       male_team_scores.sort_by!{ |team| team[:total_time_in_seconds] }
       female_team_scores.sort_by!{ |team| team[:total_time_in_seconds] }
 
-      case age
+      case category
       when "40"
         self.men_40_results = male_team_scores
         self.women_40_results = female_team_scores
