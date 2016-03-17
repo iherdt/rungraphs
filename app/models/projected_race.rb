@@ -34,7 +34,7 @@ class ProjectedRace < ActiveRecord::Base
         scoring_results = projected_results
         scoring_count = 5 
       else
-        scoring_results = projected_resrults.includes(:runner).where("age >= ?", category)
+        scoring_results = projected_results.includes(:runner).where("age >= ?", category)
         scoring_count = 3
       end
 
