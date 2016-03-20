@@ -5,7 +5,7 @@
 
 =begin
 
-bundle exec rake projection:new["http://api.rtrt.me/events/NYH2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","13.1","NYC Half 2016","March 20th 2016 8:00am","03/20/16"]
+bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-SCOTLAND10K-2015/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","6.2","Scotland Run 10k 2016","April 2nd 2016 8:00am","04/02/16"]
 
 =end
 namespace :projection do
@@ -41,6 +41,7 @@ namespace :projection do
     roster_data_hash = JSON.parse(json_roster_data)
     counter = 0
 
+    puts "total results: #{roster_data_hash['list'].count}"
     roster_data_hash['list'].each do |runner_info|
       if projected_race.projected_results.any? do |projected_result|
         projected_result.first_name == runner_info['fname'] &&
@@ -67,11 +68,16 @@ namespace :projection do
           projected_race_id: projected_race.id
         )
 
-        if runner_info['city']
-          city = runner_info['city'].downcase
-        else
-          city = nil
-        end
+      if runner_info['city']
+        city = runner_info['city'].downcase
+      else
+        city = nil
+      end
+
+      if runner_info['fname'].nil? || runner_info['flname'].nil?
+        puts "missing name for #{runner_info.inspect}"
+        next
+      end
 
       # add runner and projected time
       runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase, city: city)
@@ -106,7 +112,9 @@ namespace :projection do
         puts runner.full_name
         p best_result
 
-        next if best_result.nil?
+        if best_result.nil?
+          puts "No best result: #{runner_info['name']} "
+        end
 
         # check type of result time
         if best_result.net_time && !best_result.net_time.blank?
