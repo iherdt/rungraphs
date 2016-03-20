@@ -74,7 +74,7 @@ namespace :projection do
         city = nil
       end
 
-      if runner_info['fname'].nil? || runner_info['flname'].nil?
+      if runner_info['fname'].nil? || runner_info['lname'].nil?
         puts "missing name for #{runner_info.inspect}"
         next
       end
