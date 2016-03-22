@@ -39,6 +39,9 @@
                   <th class="race-header-title">Gender</th>
                   <th class="race-header-title">AG</th>
                   <th class="race-header-title">
+                    <input type="text" placeholder="City" class="city-text-input"/>
+                  </th>
+                  <th class="race-header-title">
                     <input type="text" placeholder="Runner" class="runner-text-input"/>
                   </th>
                   <th>
@@ -183,6 +186,7 @@ $( document ).ready(function() {
         { "data": "overall_place", "width": "70px", "orderable": true, "searchable": false},
         { "data": "gender_place", "width": "70px", "orderable": true, "searchable": false},
         { "data": "age_place", "width": "65px", "orderable": true, "searchable": false},
+        { "data": "city", "orderable": false},
         { "data": "full_name", "orderable": false},
         { "data": "team", "orderable": false},
         { "data": "sex", "orderable": false},
@@ -194,7 +198,7 @@ $( document ).ready(function() {
         { "data": "ag_percent",  "orderable": true, "searchable": false }
       ],
       "createdRow": function ( row, data, index ) {
-        $('td:eq(3)', row)
+        $('td:eq(4)', row)
         .addClass('result-table-clickable-td')
         .html('\
                   <a href="<%= root_url %>' + 'runners/' + data.slug + '">\
@@ -215,7 +219,7 @@ $( document ).ready(function() {
           var teamColHTML = data.team;
         }
 
-        $('td:eq(4)', row)
+        $('td:eq(5)', row)
           .addClass('result-table-clickable-td')
           .html(teamColHTML);
 
@@ -226,7 +230,7 @@ $( document ).ready(function() {
         } else {
           var time = data.gun_time
         } 
-        $('td:eq(8)', row)
+        $('td:eq(9)', row)
           .html(time);
 
 
@@ -241,10 +245,18 @@ $( document ).ready(function() {
       })
     })
 
+    // City Search
+    $( '.city-text-input' ).on( 'keyup change', function () {
+        $resultsTable
+            .column( 3 )
+            .search( this.value )
+            .draw();
+    } );
+
     // Text Search
     $( '.runner-text-input' ).on( 'keyup change', function () {
         $resultsTable
-            .column( 3 )
+            .column( 4 )
             .search( this.value )
             .draw();
     } );
@@ -252,7 +264,7 @@ $( document ).ready(function() {
     // Team Select
     $( '.race-select-team' ).change( function () {
         $resultsTable
-            .column( 4 )
+            .column( 5 )
             .search( this.value )
             .draw();
     } );
@@ -260,7 +272,7 @@ $( document ).ready(function() {
     // Gender Select
     $( '.race-select-sex' ).change( function () {
         $resultsTable
-            .column( 5 )
+            .column( 6 )
             .search( this.value, true, false )
             .draw();
     } );

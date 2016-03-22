@@ -160,7 +160,8 @@ class RacesController < ApplicationController
       "team" => "",
       "sex" => "",
       "full_name" => "",
-      "age_range" => params[:age_range]
+      "age_range" => params[:age_range],
+      "city" => ""
     }
 
     columns.each do |col|
@@ -182,6 +183,11 @@ class RacesController < ApplicationController
           WHERE races.slug = '#{race_slug}'
         )
       "
+
+    if !searches["city"].blank?
+      sql_search += "AND results.city LIKE '%#{searches["city"]}%'"
+    end
+
     if !searches["full_name"].blank?
       searches["full_name"].split(' ').each do |search_term|
         sql_search += "AND runner.first_name || runner.last_name LIKE '%#{search_term}%'"
