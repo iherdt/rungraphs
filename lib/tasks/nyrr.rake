@@ -188,6 +188,10 @@ namespace :nyrr do
 
         next if !race.results.where(overall_place: result.overall_place).empty?
 
+        if result.team.blank?
+          result.team = 0
+        end
+
         # find or create team
         team = Team.where(name: result.team)
         if team.empty?
@@ -202,6 +206,7 @@ namespace :nyrr do
         end
         
         runners = Runner.where(first_name: result.first_name, last_name: result.last_name)
+
         if runners.empty?
           result_runner = Runner.create(
             first_name: result.first_name,
