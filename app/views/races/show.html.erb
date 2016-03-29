@@ -208,7 +208,7 @@ $( document ).ready(function() {
                   </a> '
                 );
 
-        if (data.team != 0 && data.team.replace(/\s/g, "").length != 0) {
+        if (data.team != null && data.team != 0 && data.team.replace(/\s/g, "").length != 0) {
           var teamColHTML = '<a href="<%= root_url %>' + 'teams/' + data.team + '"> \
               <div class="result-table-clickable-field results-table-team"> \
                 ' + data.team + '\
