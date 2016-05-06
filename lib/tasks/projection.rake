@@ -25,24 +25,43 @@ namespace :projection do
 
   def create_new_result_projections(projected_race, url, apiid, token)
     url = url
+    start = 1
     params = {
-      max: "100000",
+      max: "1000",
       total: "1",
       failonmax: "0",
       appid: apiid,
       token: token,
       search: "",
-      source: "webtracker"
+      source: "webtracker",
+      start: start
     }
 
-    roster_data = RestClient.post url, params, :content_type => :json, :accept => :json
+    puts "requesting runners from #{start} to #{start + 1000}"
+    response = RestClient.post url, params, :content_type => :json, :accept => :json
+    json_roster_data = /{.+}/.match(response)[0]
+    json_data_hash = JSON.parse(json_roster_data)
+    roster_data = json_data_hash["list"]
 
-    json_roster_data = /{.+}/.match(roster_data)[0]
-    roster_data_hash = JSON.parse(json_roster_data)
+    total = json_data_hash["info"]["total"].to_i
+    puts "total runners: #{total}"
+
+    loop do
+      start += 1000
+      break if start > total
+
+      puts "requesting runners from #{start} to #{start + 1000}"
+      params[:start] = start
+      response = RestClient.post url, params, :content_type => :json, :accept => :json
+      json_roster_data = /{.+}/.match(response)[0]
+      json_data_hash = JSON.parse(json_roster_data)
+      roster_data.concat(json_data_hash["list"])
+    end
+
     counter = 0
 
-    puts "total results: #{roster_data_hash['list'].count}"
-    roster_data_hash['list'].each do |runner_info|
+    puts "total results: #{roster_data.count}"
+    roster_data.each do |runner_info|
       if projected_race.projected_results.any? do |projected_result|
         projected_result.first_name == runner_info['fname'] &&
         projected_result.last_name == runner_info['lname'] &&
