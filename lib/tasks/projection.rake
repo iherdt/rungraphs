@@ -5,7 +5,7 @@
 
 =begin
 
-bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-SCOTLAND10K-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","6.2","Scotland 10k 2016","April 2nd 2016 9:00am","04/02/16"]
+bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-JAPANRUN-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","4.0","Japan Run 4M 2016","May 8th 2016 8:00am","05/08/16"]
 
 =end
 namespace :projection do
@@ -28,7 +28,7 @@ namespace :projection do
     params = {
       max: "100000",
       total: "1",
-      failonmax: "1",
+      failonmax: "0",
       appid: apiid,
       token: token,
       search: "",
