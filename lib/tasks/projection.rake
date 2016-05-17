@@ -5,7 +5,7 @@
 
 =begin
 
-bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-JAPANRUN-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","4.0","Japan Run 4M 2016","May 8th 2016 8:00am","05/08/16"]
+bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-BROOKLYN-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","13.1","Brooklyn Half Marathon 2016","May 21st 2016 7:00am","05/21/16"]
 
 =end
 namespace :projection do
@@ -37,7 +37,7 @@ namespace :projection do
       start: start
     }
 
-    puts "requesting runners from #{start} to #{start + 1000}"
+    puts "requesting runners from #{start} to #{start + 999}"
     response = RestClient.post url, params, :content_type => :json, :accept => :json
     json_roster_data = /{.+}/.match(response)[0]
     json_data_hash = JSON.parse(json_roster_data)
@@ -133,6 +133,7 @@ namespace :projection do
 
         if best_result.nil?
           puts "No best result: #{runner_info['name']} "
+          next
         end
 
         # check type of result time
