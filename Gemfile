@@ -95,3 +95,9 @@ gem 'thin'
 gem 'nested-hstore'
 
 gem 'rest-client'
+
+gem 'strava-api-v3'
+
+gem 'actionmailer'
+
+gem 'dotenv-rails', :groups => [:development, :test]

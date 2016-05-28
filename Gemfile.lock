@@ -68,6 +68,10 @@ GEM
     diff-lcs (1.2.5)
     domain_name (0.5.20160310)
       unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.1.1)
+    dotenv-rails (2.1.1)
+      dotenv (= 2.1.1)
+      railties (>= 4.0, < 5.1)
     elasticsearch (1.0.15)
       elasticsearch-api (= 1.0.15)
       elasticsearch-transport (= 1.0.15)
@@ -126,6 +130,9 @@ GEM
     hike (1.2.3)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
+    httparty (0.13.7)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
     i18n (0.7.0)
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
@@ -173,6 +180,7 @@ GEM
     mini_portile (0.6.0)
     minitest (5.8.4)
     multi_json (1.11.2)
+    multi_xml (0.5.5)
     multipart-post (2.0.0)
     nenv (0.3.0)
     nested-hstore (0.1.2)
@@ -287,6 +295,9 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
+    strava-api-v3 (0.1.0)
+      httparty
+      multi_json
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
@@ -320,12 +331,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionmailer
   better_errors
   binding_of_caller
   byebug
   capybara
   coffee-rails (~> 4.0.0)
   database_cleaner
+  dotenv-rails
   elasticsearch-model
   elasticsearch-rails
   factory_girl_rails
@@ -357,6 +370,7 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   spinjs-rails
   spring
+  strava-api-v3
   therubyracer
   thin
   turbolinks

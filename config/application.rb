@@ -30,5 +30,7 @@ module Rungraphs
         :request_specs => true
       g.fixture_replacement :factory_girl, :dir => "spec/factories"
     end
+
+    config.autoload_paths << Rails.root.join('lib')
   end
 end
