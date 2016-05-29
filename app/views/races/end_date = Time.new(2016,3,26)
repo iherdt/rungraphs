@@ -1,0 +1,30 @@
+end_date = Time.new(2016,3,26)
+start_date = end_date - 7.days
+
+races = []
+Race.where(:date => start_date..end_date).each do |race|
+  lc_results = race.results.where(:ag_percent => 70..100, :team => 0)
+  if lc_results.length == 0
+    next
+  end
+  race_info = {
+    :name => race.name
+    :race_slug => race.slug
+  }
+  lc_results.map do |result|
+    {
+      :name => "#{result.first_name} #{result.last_name}",
+      :gender => result.sex,
+      :age => result.age,
+      :ag_percent => result.ag_percent,
+      :net_time => result.net_time,
+      :pace => result.pace_per_mile,
+      :runner_slug => Runner.find(result.runner_id).slug,
+      :city => result.city,
+      :state => result.state,
+      :country => result.country
+    }
+  end
+
+  races << [race_info, lc_results]
+end
