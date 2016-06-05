@@ -5,7 +5,7 @@
 
 =begin
 
-bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-BROOKLYN-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","13.1","Brooklyn Half Marathon 2016","May 21st 2016 7:00am","05/21/16"]
+bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-RETRO4MILER-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","4.0","Retro 4 Miler 2016","June 5th 2016 8:00am","06/05/16"]
 
 =end
 namespace :projection do
@@ -125,8 +125,6 @@ namespace :projection do
           best_result = runner.results.where.not(distance: 1.0, distance: 0.2).order('date DESC')[0]
         end
 
-        # calculate projected time
-        # T2 = T1 x (D2/D1)1.06
         puts counter
         puts runner.full_name
         p best_result
@@ -161,7 +159,14 @@ namespace :projection do
         puts "best_time_in_seconds #{best_time_in_seconds}"
         puts "projected_race.distance #{projected_race.distance}"
         puts "best_result.distance #{best_result.distance}"
-        projected_time_in_seconds = best_time_in_seconds * ((projected_race.distance / best_result.distance )**1.06)
+        # calculate projected time with Riegel formula
+        # T2 = T1 x (D2/D1)1.06
+        # http://www.runningforfitness.org/faq/rp
+        if projected_race.distance > best_result.distance
+          projected_time_in_seconds = best_time_in_seconds * ((projected_race.distance / best_result.distance )**1.06)
+        else
+          projected_time_in_seconds = best_time_in_seconds % ((projected_race.distance / best_result.distance )**1.06)
+        end
         puts "projected_time_in_seconds #{projected_time_in_seconds}"
         projected_time = "#{sprintf "%02d",(projected_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) % 60).round}"
         puts "projected_time #{projected_time}"
