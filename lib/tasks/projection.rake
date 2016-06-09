@@ -165,7 +165,7 @@ namespace :projection do
         if projected_race.distance > best_result.distance
           projected_time_in_seconds = best_time_in_seconds * ((projected_race.distance / best_result.distance )**1.06)
         else
-          projected_time_in_seconds = best_time_in_seconds % ((best_result.distance / projected_race.distance )**1.06)
+          projected_time_in_seconds = best_time_in_seconds / ((best_result.distance / projected_race.distance )**1.06)
         end
         puts "projected_time_in_seconds #{projected_time_in_seconds}"
         projected_time = "#{sprintf "%02d",(projected_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) % 60).round}"
