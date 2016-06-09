@@ -5,7 +5,7 @@
 
 =begin
 
-bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-RETRO4MILER-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","4.0","Retro 4 Miler 2016","June 5th 2016 8:00am","06/05/16"]
+bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-RETRO4MILER-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","6.2","NYRR-NYMINI10K-2016","June 11th 2016 8:00am","06/11/16"]
 
 =end
 namespace :projection do
@@ -165,7 +165,7 @@ namespace :projection do
         if projected_race.distance > best_result.distance
           projected_time_in_seconds = best_time_in_seconds * ((projected_race.distance / best_result.distance )**1.06)
         else
-          projected_time_in_seconds = best_time_in_seconds % ((projected_race.distance / best_result.distance )**1.06)
+          projected_time_in_seconds = best_time_in_seconds % ((best_result.distance / projected_race.distance )**1.06)
         end
         puts "projected_time_in_seconds #{projected_time_in_seconds}"
         projected_time = "#{sprintf "%02d",(projected_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) % 60).round}"
