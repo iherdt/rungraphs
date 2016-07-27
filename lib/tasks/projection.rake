@@ -5,7 +5,7 @@
 
 =begin
 
-bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-RETRO4MILER-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","6.2","NYRR-NYMINI10K-2016","June 11th 2016 8:00am","06/11/16"]
+bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-TEAMCHAMPIONSHIPS-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","5.0","Team Championships 2016","July 30th 2016 7:30am","06/25/16"]
 
 =end
 namespace :projection do
@@ -160,11 +160,12 @@ namespace :projection do
         puts "projected_race.distance #{projected_race.distance}"
         puts "best_result.distance #{best_result.distance}"
         # calculate projected time with Riegel formula
-        # T2 = T1 x (D2/D1)1.06
         # http://www.runningforfitness.org/faq/rp
+        # T2 = T1 x (D2/D1)1.06
         if projected_race.distance > best_result.distance
           projected_time_in_seconds = best_time_in_seconds * ((projected_race.distance / best_result.distance )**1.06)
         else
+          # T1 = T2 / (D2/D1)1.06
           projected_time_in_seconds = best_time_in_seconds / ((best_result.distance / projected_race.distance )**1.06)
         end
         puts "projected_time_in_seconds #{projected_time_in_seconds}"

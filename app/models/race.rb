@@ -52,17 +52,25 @@ class Race < ActiveRecord::Base
     "#{self.name} #{self.date.year}"
   end
 
-  def set_team_results
+  def set_team_results(team_champs = false)
     puts 'setting_team_results'
     categories = ["open", "40", "50", "60"]
 
     categories.each do |category|
       if category == "open"
         scoring_results = results
-        scoring_count = 5
+        if team_champs
+          scoring_count = 5
+        else
+          scoring_count = 5
+        end
       else
         scoring_results = results.includes(:runner).where("age >= ?", category)
-        scoring_count = 3
+        if team_champs
+          scoring_count = 5
+        else         
+          scoring_count = 3
+        end
       end
 
       team_rosters = {}

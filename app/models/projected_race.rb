@@ -9,7 +9,7 @@ class ProjectedRace < ActiveRecord::Base
      self.name
    end
 
-   def set_team_results
+   def set_team_results(team_champs = false)
     puts 'assigning place values'
 
     projected_results.order(:net_time).each_with_index do |pr, i|
@@ -32,10 +32,18 @@ class ProjectedRace < ActiveRecord::Base
 
       if category == "open"
         scoring_results = projected_results
-        scoring_count = 5 
+        if team team_champs
+          scoring_count = 10
+        else
+          scoring_count = 5
+        end
       else
         scoring_results = projected_results.includes(:runner).where("age >= ?", category)
-        scoring_count = 3
+        if team_champs
+          scoring_count = 5
+        else
+          scoring_count = 3
+        end
       end
 
       team_rosters = {}
