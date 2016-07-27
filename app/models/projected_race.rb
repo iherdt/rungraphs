@@ -32,7 +32,7 @@ class ProjectedRace < ActiveRecord::Base
 
       if category == "open"
         scoring_results = projected_results
-        if team team_champs
+        if team_champs
           scoring_count = 10
         else
           scoring_count = 5
