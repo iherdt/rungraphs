@@ -34,15 +34,19 @@ class ProjectedRace < ActiveRecord::Base
         scoring_results = projected_results
         if team_champs
           scoring_count = 10
+          display_count = 12
         else
           scoring_count = 5
+          display_count = 7
         end
       else
         scoring_results = projected_results.includes(:runner).where("age >= ?", category)
         if team_champs
           scoring_count = 5
+          display_count = 7
         else
           scoring_count = 3
+          display_count = 7
         end
       end
 
@@ -82,7 +86,7 @@ class ProjectedRace < ActiveRecord::Base
           
           runners_hash = {}
 
-          runners['m'].take(scoring_count*2).each_with_index do |value, index|
+          runners['m'].take(display_count).each_with_index do |value, index|
           	runners_hash[index.to_s] = value
           end
 
@@ -95,7 +99,7 @@ class ProjectedRace < ActiveRecord::Base
           
           runners_hash = {}
 
-          runners['f'].take(scoring_count*2).each_with_index do |value, index|
+          runners['f'].take(display_count).each_with_index do |value, index|
           	runners_hash[index.to_s] = value
           end
 
