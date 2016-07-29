@@ -12,4 +12,8 @@ namespace :nyrr do
       puts "bailing because it is not Monday"
     end
   end
+
+  task :mail_nbr_results => :environment do
+    NyrrRaceResultsMailer.nbr_results_report.deliver_now
+  end
 end

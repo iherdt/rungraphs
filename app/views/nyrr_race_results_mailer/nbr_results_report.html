@@ -1,0 +1,76 @@
+<h3 style="font-weight:bold;font-size:18px;color:#000000;text-align:center;">
+  NBR Team Results for the week of <%= Date.today.strftime("%m/%d/%y") %>
+</h3>
+
+<hr style="height:1px;color:#ccc;"/>
+<% @races.each do |race| %>
+  <% race_info = race[0] %>
+  <% results = race[1] %>
+  <% prs = race[2] %>
+  <% new_nbr_racers = race[3] %>
+
+  <p style="font-weight:bold;font-size:16px;"> <%= race_info[:name] %> - <%= race_info[:date].strftime("%m/%d/%y") %></p>
+  <h3>PRs (only by NYRR races)</h3>
+  <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>PR Time</th>
+      <th>Previous Best Time</th>
+      <th>Previous Best Race</th>
+      <th>Previous Best Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% prs.each do |pr| %>
+        <tr style="<%= cycle("background-color:#efefef", "") %>">
+          <td><%= pr[:name].split.map(&:capitalize).join(' ') %></td>
+          <td><%= pr[:pr_time] %></td>
+          <td><%= pr[:old_pr_time] %></td>
+          <td><%= pr[:old_pr_race] %></td>
+          <td><%= pr[:old_pr_date] %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <br>
+  <br>
+
+  <h3>First race with NBR!</h3>
+  <% new_nbr_racers.each do |racer| %>
+    <%= racer[:name].split.map(&:capitalize).join(' ') %><br>
+  <% end %>
+
+  <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Gender</th>
+      <th>Pace</th>
+      <th>Net Time</th>
+      <th>Age</th>
+      <th>AG Percent</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Country</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% results.each do |result| %>
+        <tr style="<%= cycle("background-color:#efefef", "") %>">
+          <td><%= result[:name].split.map(&:capitalize).join(' ') %></td>
+          <td><%= result[:gender] %></td>
+          <td><%= result[:pace] %></td>
+          <td><%= result[:net_time] %></td>
+          <td><%= result[:age] %></td>
+          <td><%= sprintf('%.2f', result[:ag_percent]) %></td>
+          <td><%= result[:city] %></td>
+          <td><%= result[:state] %></td>
+          <td><%= result[:country] %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <br>
+  <br>
+<% end %>
