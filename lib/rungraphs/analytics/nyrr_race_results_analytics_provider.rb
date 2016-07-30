@@ -3,9 +3,9 @@ module Rungraphs
     class NYRRRaceResultsAnalyticsProvider
       MIN_AG_PERCENTAGE = 70
 
-      def initialize
-        @end_date = Time.now.at_midnight
-        @start_date = @end_date - 1.week
+      def initialize(start_date, end_date)
+        @start_date = start_date
+        @end_date = end_date
       end
 
       def get_local_competitive_race_results
