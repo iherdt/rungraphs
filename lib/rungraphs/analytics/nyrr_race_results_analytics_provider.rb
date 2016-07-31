@@ -72,7 +72,7 @@ module Rungraphs
           team_results.each do |result|
             runner = Runner.find(result.runner_id)
             other_results_in_distance = runner.results.where(:distance => result.distance).where("date < ?", result.date)
-            if !other_results_in_distance.empty? && other_results_in_distance.all? {|other_result| other_result.net_time > result.net_time}
+            if !other_results_in_distance.empty? && other_results_in_distance.all? {|other_result| !other_result.net_time.nil? && other_result.net_time > result.net_time}
               previous_best_result = other_results_in_distance.sort_by(&:net_time).first
               previous_best_race = Race.find(previous_best_result.race_id)
               prs << {
