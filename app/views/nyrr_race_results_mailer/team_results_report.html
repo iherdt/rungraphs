@@ -10,66 +10,73 @@
   <% new_team_racers = race[3] %>
   <% ag_award_results = race[4] %>
 
-  <p style="font-weight:bold;font-size:16px;"> <%= race_info[:name] %> - <%= race_info[:date].strftime("%m/%d/%y") %></p>
-  <h3>PRs (only by NYRR races)</h3>
-  <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th>PR Time</th>
-      <th>Previous Best Time</th>
-      <th>Previous Best Race</th>
-      <th>Previous Best Date</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% prs.each do |pr| %>
-        <tr style="<%= cycle("background-color:#efefef", "") %>">
-          <td><%= pr[:name].split.map(&:capitalize).join(' ') %></td>
-          <td><%= pr[:pr_time] %></td>
-          <td><%= pr[:old_pr_time] %></td>
-          <td><%= pr[:old_pr_race] %></td>
-          <td><%= pr[:old_pr_date] %></td>
-        </tr>
-    <% end %>
-    </tbody>
-  </table>
-  <br>
-  <br>
-
-  <h3>Age Group Awards</h3>
-  <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th>Place</th>
-      <th>Time</th>
-      <th>Gender</th>
-      <th>Age</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% ag_award_results.each do |result| %>
-        <tr style="<%= cycle("background-color:#efefef", "") %>">
-          <td><%= result[:name].split.map(&:capitalize).join(' ') %></td>
-          <td><%= result[:ag_place] %></td>
-          <td><%= result[:time] %></td>
-          <td><%= result[:gender] %></td>
-          <td><%= result[:age] %></td>
-        </tr>
-    <% end %>
-    </tbody>
-  </table>
-  <br>
-  <br>
-
-  <h3>First race with <%= @team_code.upcase %>!</h3>
-  <% new_team_racers.each do |racer| %>
-    <%= racer[:name].split.map(&:capitalize).join(' ') %><br>
+  <% if !prs.empty? %>
+    <p style="font-weight:bold;font-size:16px;"> <%= race_info[:name] %> - <%= race_info[:date].strftime("%m/%d/%y") %></p>
+    <h3>PRs (only by NYRR races)</h3>
+    <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>PR Time</th>
+        <th>Previous Best Time</th>
+        <th>Previous Best Race</th>
+        <th>Previous Best Date</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% prs.each do |pr| %>
+          <tr style="<%= cycle("background-color:#efefef", "") %>">
+            <td><%= pr[:name].split.map(&:capitalize).join(' ') %></td>
+            <td><%= pr[:pr_time] %></td>
+            <td><%= pr[:old_pr_time] %></td>
+            <td><%= pr[:old_pr_race] %></td>
+            <td><%= pr[:old_pr_date] %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <br>
+    <br>
   <% end %>
-  <br>
-  <br>
 
+  <% if !ag_award_results.empty? %>
+    <h3>Age Group Awards</h3>
+    <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
+      <thead>
+      <tr>
+        <th>Name</th>
+        <th>Place</th>
+        <th>Time</th>
+        <th>Gender</th>
+        <th>Age</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% ag_award_results.each do |result| %>
+          <tr style="<%= cycle("background-color:#efefef", "") %>">
+            <td><%= result[:name].split.map(&:capitalize).join(' ') %></td>
+            <td><%= result[:ag_place] %></td>
+            <td><%= result[:time] %></td>
+            <td><%= result[:gender] %></td>
+            <td><%= result[:age] %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <br>
+    <br>
+  <% end %>
+
+  <% if !new_team_racers.empty? %>
+    <h3>First race with <%= @team_code.upcase %>!</h3>
+    <% new_team_racers.each do |racer| %>
+      <%= racer[:name].split.map(&:capitalize).join(' ') %><br>
+    <% end %>
+    <br>
+    <br>
+  <% end %>
+
+  <h3>Results</h3>
   <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
     <thead>
     <tr>

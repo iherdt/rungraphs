@@ -10,6 +10,6 @@ namespace :nyrr do
   end
 
   task :mail_nbr_results => :environment do
-    NyrrRaceResultsMailer.team_results_report.deliver_now('nbr')
+    NyrrRaceResultsMailer.team_results_report('nbr').deliver_now
   end
 end
