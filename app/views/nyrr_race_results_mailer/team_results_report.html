@@ -9,9 +9,33 @@
   <% prs = race[2] %>
   <% new_team_racers = race[3] %>
   <% ag_award_results = race[4] %>
+  <% team_results = race[5] %>
+
+  <% team_results.each do |type, team_result| %>
+    <% runners = JSON.parse(team_result[:runners].gsub('\"', '"').gsub('=>',':')) %>
+    <h3> <%= type %> </h3>
+    <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:30%;text-align:center">
+      <thead>
+      <tr>
+        <th>Place: <%= team_result[:team_place] %></th>
+        <th><%= team_result[:total_time] %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <% (0..(team_result[:number_of_scoring_runners] - 1)).each do |place| %>
+          <tr style="<%= cycle("background-color:#efefef", "") %>">
+            <td><%= runners[place.to_s]["name"].split.map(&:capitalize).join(' ') %></td>
+            <td><%= runners[place.to_s]["net_time"] %></td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+    <br>
+    <br>
+  <% end %>
 
   <% if !prs.empty? %>
-    <p style="font-weight:bold;font-size:16px;"> <%= race_info[:name] %> - <%= race_info[:date].strftime("%m/%d/%y") %></p>
+    <p style="font-weight:bold;font-size:16px;text-align:center;"> <%= race_info[:name] %> - <%= race_info[:date].strftime("%m/%d/%y") %></p>
     <h3>PRs (only by NYRR races)</h3>
     <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
       <thead>
@@ -41,24 +65,24 @@
 
   <% if !ag_award_results.empty? %>
     <h3>Age Group Awards</h3>
-    <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
+    <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:50%;text-align:center">
       <thead>
       <tr>
+        <th>Age Place</th>
         <th>Name</th>
-        <th>Place</th>
-        <th>Time</th>
-        <th>Gender</th>
         <th>Age</th>
+        <th>Gender</th>
+        <th>Time</th>
       </tr>
       </thead>
       <tbody>
       <% ag_award_results.each do |result| %>
           <tr style="<%= cycle("background-color:#efefef", "") %>">
+            <td><%= result[:age_place] %></td>
             <td><%= result[:name].split.map(&:capitalize).join(' ') %></td>
-            <td><%= result[:ag_place] %></td>
-            <td><%= result[:time] %></td>
-            <td><%= result[:gender] %></td>
             <td><%= result[:age] %></td>
+            <td><%= result[:gender] %></td>
+            <td><%= result[:time] %></td>
           </tr>
       <% end %>
       </tbody>
@@ -76,15 +100,19 @@
     <br>
   <% end %>
 
-  <h3>Results</h3>
+  <h3>Team Results</h3>
   <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
     <thead>
     <tr>
+      <th>Overall</th>
+      <th>Gender</th>
+      <th>Age</th>
       <th>Name</th>
       <th>Gender</th>
       <th>Pace</th>
       <th>Net Time</th>
       <th>Age</th>
+      <th>AG Gender</th>
       <th>AG Percent</th>
       <th>City</th>
       <th>State</th>
@@ -94,11 +122,15 @@
     <tbody>
     <% results.each do |result| %>
         <tr style="<%= cycle("background-color:#efefef", "") %>">
+          <td><%= result[:overall_place] %></td>
+          <td><%= result[:gender_place] %></td>
+          <td><%= result[:age_place] %></td>
           <td><%= result[:name].split.map(&:capitalize).join(' ') %></td>
           <td><%= result[:gender] %></td>
           <td><%= result[:pace] %></td>
           <td><%= result[:net_time] %></td>
           <td><%= result[:age] %></td>
+          <td><%= result[:ag_gender_place] %></td>
           <td><%= sprintf('%.2f', result[:ag_percent]) %></td>
           <td><%= result[:city] %></td>
           <td><%= result[:state] %></td>

@@ -63,17 +63,21 @@ module Rungraphs
               :runner_slug => Runner.find(result.runner_id).slug,
               :city => result.city,
               :state => result.state,
-              :country => result.country
+              :country => result.country,
+              :overall_place => result.overall_place,
+              :gender_place => result.gender_place,
+              :ag_gender_place => result.ag_gender_place,
+              :age_place => result.age_place
             }
           end
 
           ag_award_results = []
           team_results.each do |result|
-            if result.ag_gender_place <= 10
+            if result.age_place <= 10
               ag_award_results << {
                 :name => "#{result.first_name} #{result.last_name}",
                 :time => result.net_time,
-                :ag_place => result.ag_gender_place,
+                :age_place => result.age_place,
                 :age => result.age,
                 :gender => result.sex
               }
@@ -85,15 +89,39 @@ module Rungraphs
           team_results.each do |result|
             runner = Runner.find(result.runner_id)
             other_results_in_distance = runner.results.where(:distance => result.distance).where("date < ?", result.date)
-          if !other_results_in_distance.empty? && other_results_in_distance.all? {|other_result| !other_result.net_time.nil? && other_result.net_time > result.net_time}
-              previous_best_result = other_results_in_distance.sort_by(&:net_time).first
+            if !other_results_in_distance.empty? && other_results_in_distance.all? do |other_result|
+                if other_result.net_time? && other_result.net_time > result.net_time
+                  true
+                elsif other_result.finish_time? && other_result.finish_time > result.net_time
+                  true
+                elsif other_result.gun_time? && other_result.gun_time > result.net_time
+                  true
+                else
+                  false
+                end
+              end
+              other_results_by_time = {}
+              other_results_in_distance.each do |result|
+                if result.net_time
+                  other_results_by_time[result.net_time] = result
+                elsif result.finish_time
+                  other_results_by_time[result.finish_time] = result
+                elsif result.gun_time
+                  other_results_by_time[result.gun_time] = result
+                else
+                  next
+                end
+              end
+              previous_best_result_array = other_results_by_time.sort.first
+              previous_best_result = previous_best_result_array[1]
+              previous_best_time = previous_best_result_array[0]
               previous_best_race = Race.find(previous_best_result.race_id)
               prs << {
                 :name => "#{result.first_name} #{result.last_name}",
                 :pr_time => result.net_time,
                 :old_pr_race => previous_best_race.name,
                 :old_pr_date => previous_best_race.date,
-                :old_pr_time => previous_best_result.net_time
+                :old_pr_time => previous_best_time
               }
             end
 
@@ -104,8 +132,43 @@ module Rungraphs
               }
             end
           end
+          team_results = {}
+          team_result_types = {
+            "Open Men" => race.men_results,
+            "Open Women" => race.women_results,
+            "40+ Men" => race.men_40_results,
+            "40+ Women" => race.women_40_results,
+            "50+ Men" => race.men_50_results,
+            "50+ Women" => race.women_50_results,
+            "60+ Men" => race.men_60_results,
+            "60+ Women" => race.women_60_results
+          }
 
-          races << [race_info, results, prs, first_team_race, ag_award_results]
+          team_result_types.each do |type, results|         
+            if results
+              team_place = 1
+              results.each do |result|
+                if result["team"] == team_name
+                  if type == "Open Men" || type == "Open Women"
+                    number_of_scoring_runners = 5
+                  else
+                    number_of_scoring_runners = 3
+                  end
+
+                  team_results[type] = {
+                    :team_place => team_place,
+                    :runners => result["runners"],
+                    :total_time => result["total_time"],
+                    :number_of_scoring_runners => number_of_scoring_runners
+                  }
+                else
+                  team_place += 1
+                end
+              end
+            end
+          end
+
+          races << [race_info, results, prs, first_team_race, ag_award_results, team_results]
         end
 
         return races
