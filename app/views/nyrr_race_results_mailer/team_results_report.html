@@ -11,6 +11,8 @@
   <% ag_award_results = race[4] %>
   <% team_results = race[5] %>
 
+  <p style="font-weight:bold;font-size:16px;text-align:center;"> <%= race_info[:name] %> - <%= race_info[:date].strftime("%m/%d/%y") %></p>
+
   <% team_results.each do |type, team_result| %>
     <% runners = JSON.parse(team_result[:runners].gsub('\"', '"').gsub('=>',':')) %>
     <h3> <%= type %> </h3>
@@ -35,7 +37,6 @@
   <% end %>
 
   <% if !prs.empty? %>
-    <p style="font-weight:bold;font-size:16px;text-align:center;"> <%= race_info[:name] %> - <%= race_info[:date].strftime("%m/%d/%y") %></p>
     <h3>PRs (only by NYRR races)</h3>
     <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
       <thead>
