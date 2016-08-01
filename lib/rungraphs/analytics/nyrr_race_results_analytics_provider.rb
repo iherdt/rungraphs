@@ -40,7 +40,7 @@ module Rungraphs
         return races
       end
 
-      def get_team_race_results(team_name)
+      def get_team_race_results(team_name, team_champs = false)
         races = []
         Race.where(:date => @start_date..@end_date).order(:date => :desc).each do |race|
           team_results = race.results.where(:team => team_name).order(:net_time)
@@ -150,11 +150,17 @@ module Rungraphs
               results.each do |result|
                 if result["team"] == team_name
                   if type == "Open Men" || type == "Open Women"
-                    number_of_scoring_runners = 10
-                  elsif type == "40+ Men"
-                    number_of_scoring_runners = 5
+                    if team_champs
+                      number_of_scoring_runners = 10
+                    else
+                      number_of_scoring_runners = 5
+                    end
                   else
-                    number_of_scoring_runners = 3
+                    if team_champs && type == "40+ Men"
+                      number_of_scoring_runners = 5
+                    else
+                      number_of_scoring_runners = 3
+                    end
                   end
 
                   team_results[type] = {

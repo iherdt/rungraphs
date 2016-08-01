@@ -12,9 +12,9 @@ class NyrrRaceResultsMailer < ApplicationMailer
     end
   end
 
-  def team_results_report(team_code, report_email = REPORT_EMAIL, start_time = Time.now.at_midnight, end_time = Time.now.at_midnight)
+  def team_results_report(team_code, report_email = REPORT_EMAIL, start_time = Time.now.at_midnight, end_time = Time.now.at_midnight, team_champs = false)
     nyrr_race_results_provider = Rungraphs::Analytics::NYRRRaceResultsAnalyticsProvider.new(start_time, end_time)
-    @races = nyrr_race_results_provider.get_team_race_results(team_code)
+    @races = nyrr_race_results_provider.get_team_race_results(team_code, team_champs)
     @team_code = team_code
     if @races.length == 0
       puts "No results. Bailing on email."
