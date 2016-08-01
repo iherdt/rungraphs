@@ -32,7 +32,7 @@ module Rungraphs
           {
             :name => segment_name,
             :segment_id => segment_id,
-            :entries => @client.segment_leaderboards(segment_id, {:date_range => DATE_RANGE, :gender => gender})[ENTRY_FIELD_KEY]
+            :entries => @client.segment_leaderboards(3673193, {:date_range => "this_week", :gender => "M", :context_entries => 0})["entries"]
           }
         end
       end
