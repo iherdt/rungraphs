@@ -64,7 +64,7 @@ class Race < ActiveRecord::Base
           women_scoring_count = 10
           display_count = 12
         else
-          women_scoring_count = 10
+          men_scoring_count = 10
           women_scoring_count = 10
           display_count = 12
         end
