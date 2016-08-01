@@ -1,5 +1,5 @@
 <h3 style="font-weight:bold;font-size:18px;color:#000000;text-align:center;">
-  NYRR Unattached Brooklyn Runners Weekly Report for <%= Date.today.strftime("%m/%d/%y") %>
+  NYRR Unattached Brooklyn Runners Weekly Report for <%= Time.now.in_time_zone("Eastern Time (US & Canada)").to_date.strftime("%m/%d/%y") %>
 </h3>
 
 <hr style="height:1px;color:#ccc;"/>
