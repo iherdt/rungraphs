@@ -19,7 +19,7 @@
     <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:30%;text-align:center">
       <thead>
       <tr>
-        <th>Place: <%= team_result[:team_place] %></th>
+        <th><%= team_result[:team_place].ordinalize %> Place</th>
         <th><%= team_result[:total_time] %></th>
       </tr>
       </thead>
