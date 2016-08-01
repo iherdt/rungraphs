@@ -60,16 +60,30 @@ class Race < ActiveRecord::Base
       if category == "open"
         scoring_results = results
         if team_champs
-          scoring_count = 5
+          men_scoring_count = 10
+          women_scoring_count = 10
+          display_count = 12
         else
-          scoring_count = 5
+          women_scoring_count = 10
+          women_scoring_count = 10
+          display_count = 12
         end
       else
         scoring_results = results.includes(:runner).where("age >= ?", category)
         if team_champs
-          scoring_count = 5
-        else         
-          scoring_count = 3
+          if category == "40"
+            men_scoring_count = 5
+            display_count = 10
+          else
+            men_scoring_count = 3
+            display_count = 6
+          end
+          women_scoring_count = 3
+          display_count = 6
+        else
+          men_scoring_count = 3      
+          women_scoring_count = 3
+          display_count = 6
         end
       end
 
@@ -117,26 +131,26 @@ class Race < ActiveRecord::Base
 
       team_rosters.each do |team, runners|
         runners['m'].sort_by!{ |r| r["net_time_in_seconds"] }
-        if runners['m'].count > scoring_count
-          total_time_in_seconds = runners['m'].take(scoring_count).inject(0) { |total_time, runner| total_time + runner["net_time_in_seconds"] }
+        if runners['m'].count > men_scoring_count
+          total_time_in_seconds = runners['m'].take(men_scoring_count).inject(0) { |total_time, runner| total_time + runner["net_time_in_seconds"] }
           total_time = "#{sprintf "%02d",(total_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) % 60).round}"
           
           runners_hash = {}
 
-          runners['m'].take(scoring_count*2).each_with_index do |value, index|
+          runners['m'].take(display_count).each_with_index do |value, index|
           	runners_hash[index.to_s] = value
           end
 
           male_team_scores << { team: team, total_time_in_seconds: total_time_in_seconds, total_time: total_time, runners: runners_hash }
         end
         runners['f'].sort_by!{ |r| r["net_time_in_seconds"] }
-        if runners['f'].count > scoring_count
-          total_time_in_seconds = runners['f'].take(scoring_count).inject(0) { |total_time, runner| total_time + runner["net_time_in_seconds"] }
+        if runners['f'].count > women_scoring_count
+          total_time_in_seconds = runners['f'].take(women_scoring_count).inject(0) { |total_time, runner| total_time + runner["net_time_in_seconds"] }
           total_time = "#{sprintf "%02d",(total_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((total_time_in_seconds % 3600) % 60).round}"
           
           runners_hash = {}
 
-          runners['f'].take(scoring_count*2).each_with_index do |value, index|
+          runners['f'].take(display_count).each_with_index do |value, index|
           	runners_hash[index.to_s] = value
           end
 

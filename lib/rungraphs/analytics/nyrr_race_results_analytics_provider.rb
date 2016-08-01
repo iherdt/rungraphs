@@ -150,6 +150,8 @@ module Rungraphs
               results.each do |result|
                 if result["team"] == team_name
                   if type == "Open Men" || type == "Open Women"
+                    number_of_scoring_runners = 10
+                  elsif type == "40+ Men"
                     number_of_scoring_runners = 5
                   else
                     number_of_scoring_runners = 3
