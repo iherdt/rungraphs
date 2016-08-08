@@ -8,6 +8,6 @@ class StravaSegmentMailer < ApplicationMailer
       "Women's Leaderboards" => strava_segment_data_provider.get_segment_leaderboard_data("F")
     }
 
-    mail(:to => report_email, :subject => "Rungraphs Strava Segment Weekly Report #{Time.now.in_time_zone("Eastern Time (US & Canada)").to_date.strftime("%m/%d/%y")}")
+    mail(:to => report_email, :subject => "Rungraphs Strava Segment Weekly Report #{Time.now.in_time_zone('Eastern Time (US & Canada)').to_date.strftime('%m/%d/%y')}")
   end
 end
