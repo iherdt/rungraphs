@@ -48,6 +48,9 @@ namespace :nyrr do
     all_results_page = "http://web2.nyrrc.org/cgi-bin/start.cgi/aes-programs/results/resultsarchive.htm"
     yearly_results_page = get_yearly_results_page(all_results_page, year)
     scrape_yearly_results(yearly_results_page, year, "new")
+
+    # email NBR result report
+    NyrrRaceResultsMailer.team_results_report('nbr').deliver_now
   end
 
   def get_yearly_results_page(all_results_page, year)

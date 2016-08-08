@@ -8,8 +8,4 @@ namespace :nyrr do
       puts "bailing because it is not Monday"
     end
   end
-
-  task :mail_nbr_results => :environment do
-    NyrrRaceResultsMailer.team_results_report('nbr').deliver_now
-  end
 end
