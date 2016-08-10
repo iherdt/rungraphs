@@ -64,9 +64,9 @@ class Race < ActiveRecord::Base
           women_scoring_count = 10
           display_count = 12
         else
-          men_scoring_count = 10
-          women_scoring_count = 10
-          display_count = 12
+          men_scoring_count = 5
+          women_scoring_count = 5
+          display_count = 10
         end
       else
         scoring_results = results.includes(:runner).where("age >= ?", category)
