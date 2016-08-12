@@ -228,7 +228,7 @@ namespace :nyrr do
           # commented out to assume runner with same name is the same runner
 
           runners.each do |runner|
-            if runner.birth_year && runner.birth_year.between? birth_year - 1, birth_year + 1
+            if runner.birth_year && runner.birth_year.between?(birth_year - 1, birth_year + 1)
               result_runner = runner
               found = true
               break
