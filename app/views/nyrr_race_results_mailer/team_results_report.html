@@ -1,7 +1,3 @@
-<h3 style="font-weight:bold;font-size:18px;color:#000000;text-align:center;">
-  <%= @team_code.upcase %> Team Results for <%= Time.now.in_time_zone("Eastern Time (US & Canada)").to_date.strftime("%m/%d/%y") %>
-</h3>
-
 <hr style="height:1px;color:#ccc;"/>
 <% @races.each do |race| %>
   <% race_info = race[0] %>
@@ -11,7 +7,7 @@
   <% ag_award_results = race[4] %>
   <% team_results = race[5] %>
 
-  <p style="font-weight:bold;font-size:16px;text-align:center;"> <%= race_info[:name] %> - <%= race_info[:date].strftime("%m/%d/%y") %></p>
+  <h3 style="font-weight:bold;font-size:18px;text-align:center;"> <%= race_info[:name] %> - <%= race_info[:date].strftime("%m/%d/%y") %></h3>
 
   <% team_results.each do |type, team_result| %>
     <% runners = JSON.parse(team_result[:runners].gsub('\"', '"').gsub('=>',':')) %>
