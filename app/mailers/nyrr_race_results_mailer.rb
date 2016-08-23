@@ -20,7 +20,7 @@ class NyrrRaceResultsMailer < ApplicationMailer
       puts "No results. Bailing on email."
       return
     else
-      mail(:to => report_email, :subject => "#{team_code.upcase} #{@races.first.name} Race Results #{Time.now.in_time_zone('Eastern Time (US & Canada)').to_date.strftime('%m/%d/%y')}")
+      mail(:to => report_email, :subject => "#{team_code.upcase} Race Results #{Time.now.in_time_zone('Eastern Time (US & Canada)').to_date.strftime('%m/%d/%y')}")
     end
   end
 end
