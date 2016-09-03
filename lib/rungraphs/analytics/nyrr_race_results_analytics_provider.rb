@@ -18,7 +18,8 @@ module Rungraphs
           race_info = {
             :name => race.name,
             :race_slug => race.slug,
-            :date => race.date
+            :date => race.date,
+            :distance => race.distance
           }
           results = lc_results.map do |result|
             {
@@ -44,15 +45,37 @@ module Rungraphs
         races = []
         Race.where(:date => @start_date..@end_date).order(:date => :desc).each do |race|
           team_results = race.results.where(:team => team_name).order(:net_time)
-          if team_results.length == 0
+          male_team_results = race.results.where(:team => team_name, :sex => 'm').order(:net_time)
+          female_team_results = race.results.where(:team => team_name, :sex => 'f').order(:net_time)
+          if male_team_results.length == 0 && female_team_results == 0
             next
           end
           race_info = {
             :name => race.name,
             :race_slug => race.slug,
-            :date => race.date
+            :date => race.date,
+            :distance => race.distance
           }
-          results = team_results.map do |result|
+          male_results = male_team_results.map do |result|
+            {
+              :name => "#{result.first_name} #{result.last_name}",
+              :gender => result.sex,
+              :age => result.age,
+              :ag_percent => result.ag_percent,
+              :net_time => result.net_time,
+              :pace => result.pace_per_mile,
+              :runner_slug => Runner.find(result.runner_id).slug,
+              :city => result.city,
+              :state => result.state,
+              :country => result.country,
+              :overall_place => result.overall_place,
+              :gender_place => result.gender_place,
+              :ag_gender_place => result.ag_gender_place,
+              :age_place => result.age_place
+            }
+          end
+
+          female_results = female_team_results.map do |result|
             {
               :name => "#{result.first_name} #{result.last_name}",
               :gender => result.sex,
@@ -86,6 +109,7 @@ module Rungraphs
 
           prs = []
           first_team_race = []
+          first_race_in_distance = []
           team_results.each do |result|
             runner = Runner.find(result.runner_id)
             other_results_in_distance = runner.results.where(:distance => result.distance).where("date < ?", result.date)
@@ -128,6 +152,11 @@ module Rungraphs
             other_results_with_team = runner.results.where(:team => team_name).where("date < ?", result.date)
             if other_results_with_team.empty?
               first_team_race << {
+                :name => "#{result.first_name} #{result.last_name}"
+              }
+            end
+            if other_results_in_distance.empty?
+              first_race_in_distance <<  {
                 :name => "#{result.first_name} #{result.last_name}"
               }
             end
@@ -176,7 +205,7 @@ module Rungraphs
             end
           end
 
-          races << [race_info, results, prs, first_team_race, ag_award_results, team_results]
+          races << [race_info, male_results, female_results, prs, first_team_race, first_race_in_distance, ag_award_results, team_results]
         end
 
         return races
