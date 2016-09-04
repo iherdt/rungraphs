@@ -26,7 +26,10 @@
 <% end %>
 
 <% if !@race_data[:prs].empty? %>
-  <h3>PRs (only by NYRR races)</h3>
+  <h3 style="margin-bottom:0px">PRs (<%= @race_data[:prs].count %>)</h3>
+  <small> *by NYRR races only</small>
+  <br>
+  <br>
   <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
     <thead>
     <tr>
@@ -54,7 +57,7 @@
 <% end %>
 
 <% if !@race_data[:ag_award_results].empty? %>
-  <h3 style="margin-bottom:0px">Top 10 Age Group</h3>
+  <h3 style="margin-bottom:0px">Age Group Top Ten (<%= @race_data[:ag_award_results].count %>)</h3>
   <small> *actual AG places. NYRR sometimes removes elites and prize money winners from Age Group Awards. Check the NYRR results page for for claiming awards</small>
   <br>
   <br>
@@ -105,7 +108,7 @@
 <h3><%= @race_data[:male_results].count + @race_data[:female_results].count %> Total Finishers</h3>
 
 <% if @race_data[:female_results].count > 0 %>
-  <h3>Women: <%= @race_data[:female_results].count %> Finishers</h3>
+  <h3>Women (<%= @race_data[:female_results].count %>)</h3>
   <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
     <thead>
     <tr>
@@ -149,7 +152,7 @@
 <% end %>
 
 <% if @race_data[:male_results].count > 0 %>
-  <h3>Men: <%= @race_data[:male_results].count %> Finishers</h3>
+  <h3>Men (<%= @race_data[:male_results].count %>)</h3>
   <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
     <thead>
     <tr>
