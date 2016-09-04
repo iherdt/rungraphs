@@ -1,7 +1,7 @@
 class NyrrRaceResultsMailer < ApplicationMailer
   REPORT_EMAIL = "rungraphs-reports@googlegroups.com"
 
-  def unatached_brooklyn_runners_report(race_slug, report_email = REPORT_EMAIL)
+  def unattached_brooklyn_runners_report(race_slug, report_email = REPORT_EMAIL)
     nyrr_race_results_provider = Rungraphs::Analytics::NYRRRaceResultsAnalyticsProvider.new(race_slug)
     @race_data = nyrr_race_results_provider.get_local_competitive_race_results()
     if @race_data.nil?

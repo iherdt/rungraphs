@@ -129,7 +129,7 @@ namespace :nyrr do
     if type_of_result == "new"
       # email NBR result report
       NyrrRaceResultsMailer.team_results_report(race.slug, 'nbr').deliver_now
-      NyrrRaceResultsMailer.unatached_brooklyn_runners_report(race.slug).deliver_now
+      NyrrRaceResultsMailer.unattached_brooklyn_runners_report(race.slug).deliver_now
     end
   end
 
