@@ -100,7 +100,7 @@
   <% end %>
 
   <% if !first_race_in_distance.empty? %>
-    <h3>First <%= race_info[:distance] %>M Race</h3>
+    <h3>First NYRR <%= race_info[:distance] %>M Race</h3>
     <% first_race_in_distance.each do |racer| %>
       <%= racer[:name].split.map(&:capitalize).join(' ') %><br>
     <% end %>
