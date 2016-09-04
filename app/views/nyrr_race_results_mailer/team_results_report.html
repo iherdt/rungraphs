@@ -1,6 +1,6 @@
 <hr style="height:1px;color:#ccc;"/>
 
-<h3 style="font-weight:bold;font-size:18px;text-align:center;"> <%= @team_code.upcase %> Results <%= @race_data[:race_info][:name] %> - <%= @race_data[:race_info][:date].strftime("%m/%d/%y") %></h3>
+<h3 style="font-weight:bold;font-size:18px;text-align:center;"> <%= @team_code.upcase %> Results - <%= @race_data[:race_info][:name] %> - <%= @race_data[:race_info][:date].strftime("%m/%d/%y") %></h3>
 
 <% @race_data[:team_results].each do |type, team_result| %>
   <% runners = JSON.parse(team_result[:runners].gsub('\"', '"').gsub('=>',':')) %>
@@ -85,7 +85,7 @@
 <% end %>
 
 <% if !@race_data[:first_team_race].empty? %>
-  <h3>First race with <%= @team_code.upcase %>!</h3>
+  <h3>First race with <%= @team_code.upcase %>! (<%= @race_data[:first_team_race].count %>)</h3>
   <% @race_data[:first_team_race].each do |racer| %>
     <%= racer[:name].split.map(&:capitalize).join(' ') %><br>
   <% end %>
@@ -94,7 +94,7 @@
 <% end %>
 
 <% if !@race_data[:first_race_in_distance].empty? %>
-  <h3>First NYRR <%= @race_data[:race_info][:distance] %>M Race</h3>
+  <h3>First NYRR <%= @race_data[:race_info][:distance] %>M Race (<%= @race_data[:first_race_in_distance].count %>)</h3>
   <% @race_data[:first_race_in_distance].each do |racer| %>
     <%= racer[:name].split.map(&:capitalize).join(' ') %><br>
   <% end %>
