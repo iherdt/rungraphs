@@ -1,200 +1,193 @@
 <hr style="height:1px;color:#ccc;"/>
-<% @races.each do |race| %>
-  <% race_info = race[0] %>
-  <% male_results = race[1] %>
-  <% female_results = race[2] %>
-  <% prs = race[3] %>
-  <% first_team_race = race[4] %>
-  <% first_race_in_distance = race[5] %>
-  <% ag_award_results = race[6] %>
-  <% team_results = race[7] %>
 
-  <h3 style="font-weight:bold;font-size:18px;text-align:center;"> <%= @team_code.upcase %> Results <%= race_info[:name] %> - <%= race_info[:date].strftime("%m/%d/%y") %></h3>
+<h3 style="font-weight:bold;font-size:18px;text-align:center;"> <%= @team_code.upcase %> Results <%= @race_data[:race_info][:name] %> - <%= @race_data[:race_info][:date].strftime("%m/%d/%y") %></h3>
 
-  <% team_results.each do |type, team_result| %>
-    <% runners = JSON.parse(team_result[:runners].gsub('\"', '"').gsub('=>',':')) %>
-    <h3> <%= type %> </h3>
-    <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:30%;text-align:center">
-      <thead>
-      <tr>
-        <th><%= team_result[:team_place].ordinalize %> Place</th>
-        <th><%= team_result[:total_time] %></th>
-      </tr>
-      </thead>
-      <tbody>
-      <% (0..(team_result[:number_of_scoring_runners] - 1)).each do |place| %>
-          <tr style="<%= cycle("background-color:#efefef", "") %>">
-            <td><%= runners[place.to_s]["name"].split.map(&:capitalize).join(' ') %></td>
-            <td><%= runners[place.to_s]["net_time"] %></td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-    <br>
-    <br>
-  <% end %>
-
-  <% if !prs.empty? %>
-    <h3>PRs (only by NYRR races)</h3>
-    <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>PR Time</th>
-        <th>Previous Best Time</th>
-        <th>Previous Best Race</th>
-        <th>Previous Best Date</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% prs.each do |pr| %>
-          <tr style="<%= cycle("background-color:#efefef", "") %>">
-            <td><%= pr[:name].split.map(&:capitalize).join(' ') %></td>
-            <td><%= pr[:pr_time] %></td>
-            <td><%= pr[:old_pr_time] %></td>
-            <td><%= pr[:old_pr_race] %></td>
-            <td><%= pr[:old_pr_date] %></td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-    <br>
-    <br>
-  <% end %>
-
-  <% if !ag_award_results.empty? %>
-    <h3>Age Group Awards</h3>
-    <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:50%;text-align:center">
-      <thead>
-      <tr>
-        <th>Age Place</th>
-        <th>Name</th>
-        <th>Age</th>
-        <th>Gender</th>
-        <th>Time</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% ag_award_results.each do |result| %>
-          <tr style="<%= cycle("background-color:#efefef", "") %>">
-            <td><%= result[:age_place] %></td>
-            <td><%= result[:name].split.map(&:capitalize).join(' ') %></td>
-            <td><%= result[:age] %></td>
-            <td><%= result[:gender] %></td>
-            <td><%= result[:time] %></td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-    <br>
-    <br>
-  <% end %>
-
-  <% if !first_team_race.empty? %>
-    <h3>First race with <%= @team_code.upcase %>!</h3>
-    <% first_team_race.each do |racer| %>
-      <%= racer[:name].split.map(&:capitalize).join(' ') %><br>
+<% @race_data[:team_results].each do |type, team_result| %>
+  <% runners = JSON.parse(team_result[:runners].gsub('\"', '"').gsub('=>',':')) %>
+  <h3> <%= type %> </h3>
+  <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:30%;text-align:center">
+    <thead>
+    <tr>
+      <th><%= team_result[:team_place].ordinalize %> Place</th>
+      <th><%= team_result[:total_time] %></th>
+    </tr>
+    </thead>
+    <tbody>
+    <% (0..(team_result[:number_of_scoring_runners] - 1)).each do |place| %>
+        <tr style="<%= cycle("background-color:#efefef", "") %>">
+          <td><%= runners[place.to_s]["name"].split.map(&:capitalize).join(' ') %></td>
+          <td><%= runners[place.to_s]["net_time"] %></td>
+        </tr>
     <% end %>
-    <br>
-    <br>
-  <% end %>
+    </tbody>
+  </table>
+  <br>
+  <br>
+<% end %>
 
-  <% if !first_race_in_distance.empty? %>
-    <h3>First NYRR <%= race_info[:distance] %>M Race</h3>
-    <% first_race_in_distance.each do |racer| %>
-      <%= racer[:name].split.map(&:capitalize).join(' ') %><br>
+<% if !@race_data[:prs].empty? %>
+  <h3>PRs (only by NYRR races)</h3>
+  <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>PR Time</th>
+      <th>Previous Best Time</th>
+      <th>Previous Best Race</th>
+      <th>Previous Best Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @race_data[:prs].each do |pr| %>
+        <tr style="<%= cycle("background-color:#efefef", "") %>">
+          <td><%= pr[:name].split.map(&:capitalize).join(' ') %></td>
+          <td><%= pr[:pr_time] %></td>
+          <td><%= pr[:old_pr_time] %></td>
+          <td><%= pr[:old_pr_race] %></td>
+          <td><%= pr[:old_pr_date] %></td>
+        </tr>
     <% end %>
-    <br>
-    <br>
-  <% end %>
+    </tbody>
+  </table>
+  <br>
+  <br>
+<% end %>
 
-  <h3><%= male_results.count + female_results.count %> Total Finishers</h3>
+<% if !@race_data[:ag_award_results].empty? %>
+  <h3 style="margin-bottom:0px">Top 10 Age Group</h3>
+  <small> *actual AG places. NYRR sometimes removes elites and prize money winners from Age Group Awards. Check the NYRR results page for for claiming awards</small>
+  <br>
+  <br>
+  <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:50%;text-align:center">
+    <thead>
+    <tr>
+      <th>Age Place</th>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @race_data[:ag_award_results].each do |result| %>
+        <tr style="<%= cycle("background-color:#efefef", "") %>">
+          <td><%= result[:age_place] %></td>
+          <td><%= result[:name].split.map(&:capitalize).join(' ') %></td>
+          <td><%= result[:age] %></td>
+          <td><%= result[:gender] %></td>
+          <td><%= result[:time] %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <br>
+  <br>
+<% end %>
 
-  <% if female_results.count > 0 %>
-    <h3><%= female_results.count %> Women</h3>
-    <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
-      <thead>
-      <tr>
-        <th>Overall</th>
-        <th>Gender</th>
-        <th>Age</th>
-        <th>Name</th>
-        <th>Gender</th>
-        <th>Pace</th>
-        <th>Net Time</th>
-        <th>Age</th>
-        <th>AG Gender</th>
-        <th>AG Percent</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Country</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% female_results.each do |result| %>
-          <tr style="<%= cycle("background-color:#efefef", "") %>">
-            <td><%= result[:overall_place] %></td>
-            <td><%= result[:gender_place] %></td>
-            <td><%= result[:age_place] %></td>
-            <td><%= result[:name].split.map(&:capitalize).join(' ') %></td>
-            <td><%= result[:gender] %></td>
-            <td><%= result[:pace] %></td>
-            <td><%= result[:net_time] %></td>
-            <td><%= result[:age] %></td>
-            <td><%= result[:ag_gender_place] %></td>
-            <td><%= sprintf('%.2f', result[:ag_percent]) %></td>
-            <td><%= result[:city] %></td>
-            <td><%= result[:state] %></td>
-            <td><%= result[:country] %></td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-    <br>
-    <br>
+<% if !@race_data[:first_team_race].empty? %>
+  <h3>First race with <%= @team_code.upcase %>!</h3>
+  <% @race_data[:first_team_race].each do |racer| %>
+    <%= racer[:name].split.map(&:capitalize).join(' ') %><br>
   <% end %>
+  <br>
+  <br>
+<% end %>
 
-  <% if male_results.count > 0 %>
-    <h3><%= male_results.count %> Men</h3>
-    <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
-      <thead>
-      <tr>
-        <th>Overall</th>
-        <th>Gender</th>
-        <th>Age</th>
-        <th>Name</th>
-        <th>Gender</th>
-        <th>Pace</th>
-        <th>Net Time</th>
-        <th>Age</th>
-        <th>AG Gender</th>
-        <th>AG Percent</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Country</th>
-      </tr>
-      </thead>
-      <tbody>
-      <% male_results.each do |result| %>
-          <tr style="<%= cycle("background-color:#efefef", "") %>">
-            <td><%= result[:overall_place] %></td>
-            <td><%= result[:gender_place] %></td>
-            <td><%= result[:age_place] %></td>
-            <td><%= result[:name].split.map(&:capitalize).join(' ') %></td>
-            <td><%= result[:gender] %></td>
-            <td><%= result[:pace] %></td>
-            <td><%= result[:net_time] %></td>
-            <td><%= result[:age] %></td>
-            <td><%= result[:ag_gender_place] %></td>
-            <td><%= sprintf('%.2f', result[:ag_percent]) %></td>
-            <td><%= result[:city] %></td>
-            <td><%= result[:state] %></td>
-            <td><%= result[:country] %></td>
-          </tr>
-      <% end %>
-      </tbody>
-    </table>
-    <br>
-    <br>
+<% if !@race_data[:first_race_in_distance].empty? %>
+  <h3>First NYRR <%= @race_data[:race_info][:distance] %>M Race</h3>
+  <% @race_data[:first_race_in_distance].each do |racer| %>
+    <%= racer[:name].split.map(&:capitalize).join(' ') %><br>
   <% end %>
+  <br>
+  <br>
+<% end %>
+
+<h3><%= @race_data[:male_results].count + @race_data[:female_results].count %> Total Finishers</h3>
+
+<% if @race_data[:female_results].count > 0 %>
+  <h3>Women: <%= @race_data[:female_results].count %> Finishers</h3>
+  <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
+    <thead>
+    <tr>
+      <th>Overall</th>
+      <th>Gender</th>
+      <th>Age</th>
+      <th>Name</th>
+      <th>Gender</th>
+      <th>Pace</th>
+      <th>Net Time</th>
+      <th>Age</th>
+      <th>AG Gender</th>
+      <th>AG Percent</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Country</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @race_data[:female_results].each do |result| %>
+        <tr style="<%= cycle("background-color:#efefef", "") %>">
+          <td><%= result[:overall_place] %></td>
+          <td><%= result[:gender_place] %></td>
+          <td><%= result[:age_place] %></td>
+          <td><%= result[:name].split.map(&:capitalize).join(' ') %></td>
+          <td><%= result[:gender] %></td>
+          <td><%= result[:pace] %></td>
+          <td><%= result[:net_time] %></td>
+          <td><%= result[:age] %></td>
+          <td><%= result[:ag_gender_place] %></td>
+          <td><%= sprintf('%.2f', result[:ag_percent]) %></td>
+          <td><%= result[:city] %></td>
+          <td><%= result[:state] %></td>
+          <td><%= result[:country] %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <br>
+  <br>
+<% end %>
+
+<% if @race_data[:male_results].count > 0 %>
+  <h3>Men: <%= @race_data[:male_results].count %> Finishers</h3>
+  <table cellspacing="0" style="font-family:'lucida grande',arial,sans-serif;width:100%;text-align:center">
+    <thead>
+    <tr>
+      <th>Overall</th>
+      <th>Gender</th>
+      <th>Age</th>
+      <th>Name</th>
+      <th>Gender</th>
+      <th>Pace</th>
+      <th>Net Time</th>
+      <th>Age</th>
+      <th>AG Gender</th>
+      <th>AG Percent</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Country</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @race_data[:male_results].each do |result| %>
+        <tr style="<%= cycle("background-color:#efefef", "") %>">
+          <td><%= result[:overall_place] %></td>
+          <td><%= result[:gender_place] %></td>
+          <td><%= result[:age_place] %></td>
+          <td><%= result[:name].split.map(&:capitalize).join(' ') %></td>
+          <td><%= result[:gender] %></td>
+          <td><%= result[:pace] %></td>
+          <td><%= result[:net_time] %></td>
+          <td><%= result[:age] %></td>
+          <td><%= result[:ag_gender_place] %></td>
+          <td><%= sprintf('%.2f', result[:ag_percent]) %></td>
+          <td><%= result[:city] %></td>
+          <td><%= result[:state] %></td>
+          <td><%= result[:country] %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+  <br>
+  <br>
 <% end %>
