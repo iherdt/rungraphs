@@ -164,12 +164,12 @@ module Rungraphs
         team_result_types = {
           "Open Men" => @race.men_results,
           "Open Women" => @race.women_results,
-          "40+ Men" => @race.men_40_results,
-          "40+ Women" => @race.women_40_results,
-          "50+ Men" => @race.men_50_results,
-          "50+ Women" => @race.women_50_results,
-          "60+ Men" => @race.men_60_results,
-          "60+ Women" => @race.women_60_results
+          "Masters Men (40+)" => @race.men_40_results,
+          "Masters Women (40+)" => @race.women_40_results,
+          "Grand Masters Men (50+)" => @race.men_50_results,
+          "Grand Masters Women (50+)" => @race.women_50_results,
+          "Senior Grand Masters Men (60+)" => @race.men_60_results,
+          "Senior Grand Masters Women (60+)" => @race.women_60_results
         }
 
         team_result_types.each do |type, results|         
