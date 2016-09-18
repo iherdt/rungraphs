@@ -139,7 +139,7 @@
           <td><%= result[:net_time] %></td>
           <td><%= result[:age] %></td>
           <td><%= result[:ag_gender_place] %></td>
-          <td><%= sprintf('%.2f', result[:ag_percent]) %></td>
+          <td><%= result[:ag_percent] ? sprintf('%.2f', result[:ag_percent] : "") %></td>
           <td><%= result[:city] %></td>
           <td><%= result[:state] %></td>
           <td><%= result[:country] %></td>
