@@ -1,6 +1,15 @@
 <hr style="height:1px;color:#ccc;"/>
 
-<h3 style="font-weight:bold;font-size:18px;text-align:center;"> <%= @team_code.upcase %> Results - <%= @race_data[:race_info][:name] %> - <%= @race_data[:race_info][:date].strftime("%m/%d/%y") %></h3>
+<h3 style="font-weight:bold;font-size:18px;text-align:center;"> <%= @team_code.upcase %> Race Results for <%= @race_data[:race_info][:name] %></h3>
+<% if @race_data[:race_info][:date_and_time] %>
+  <div><strong>Date and Time:</strong> <%= @race_data[:race_info][:date_and_time] %></div>
+<% end %>
+<% if @race_data[:race_info][:location] %>
+  <div><strong>Location:</strong> <%= @race_data[:race_info][:location] %></div>
+<% end %>
+<% if @race_data[:race_info][:weather] %>
+  <div><strong>Weather:</strong> <%= @race_data[:race_info][:weather] %></div>
+<% end %>
 
 <% @race_data[:team_results].each do |type, team_result| %>
   <% runners = JSON.parse(team_result[:runners].gsub('\"', '"').gsub('=>',':')) %>

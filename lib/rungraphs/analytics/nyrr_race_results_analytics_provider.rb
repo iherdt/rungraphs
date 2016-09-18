@@ -15,7 +15,10 @@ module Rungraphs
         race_info = {
           :name => @race.name,
           :race_slug => @race.slug,
-          :date => @race.date
+          :date => @race.date,
+          :date_and_time => @race.date_and_time,
+          :location => @race.location,
+          :weather => @race.weather
         }
         results = lc_results.map do |result|
           {
@@ -53,7 +56,10 @@ module Rungraphs
           :name => @race.name,
           :race_slug => @race.slug,
           :date => @race.date,
-          :distance => @race.distance
+          :distance => @race.distance,
+          :date_and_time => @race.date_and_time,
+          :location => @race.location,
+          :weather => @race.weather
         }
         male_results = male_team_results.map do |result|
           {
