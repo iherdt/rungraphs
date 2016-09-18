@@ -116,20 +116,25 @@ namespace :nyrr do
       return
     end
 
-    race = Race.new
-    race.name = link.text
-    race.date = format_date(date)
+    begin
+      race = Race.new
+      race.name = link.text
+      race.date = format_date(date)
 
-    scrape_race_info(race_results_page, race)
-    race.save!
+      scrape_race_info(race_results_page, race)
+      race.save!
 
-    scrape_race_individual_page(race_results_page, race, type_of_result)
-    race.set_team_results
+      scrape_race_individual_page(race_results_page, race, type_of_result)
+      race.set_team_results
 
-    if type_of_result == "new"
-      # email NBR result report
-      NyrrRaceResultsMailer.team_results_report(race.slug, 'nbr').deliver_now
-      NyrrRaceResultsMailer.unattached_brooklyn_runners_report(race.slug).deliver_now
+      if type_of_result == "new"
+        # email NBR result report
+        NyrrRaceResultsMailer.team_results_report(race.slug, 'nbr').deliver_now
+        NyrrRaceResultsMailer.unattached_brooklyn_runners_report(race.slug).deliver_now
+      end
+    rescue
+      puts "error creating new race #{race.name}"
+      race.destroy
     end
   end
 
