@@ -110,7 +110,7 @@
               <% if !TEAMS[result[:men][i]["team"]].nil? %>
                 <a href="<%=team_url(result[:men][i]["team"])%>"> <%= TEAMS[result[:men][i]["team"]] %> </a>
               <% else %>
-                <%= result[:men]["team"].upcase %>
+                <%= result[:men][i]["team"].upcase %>
               <% end %>
             </div>
             <div class="team-time"><%= result[:men][i]["total_time"].prepend(' ').sub!(/\s0{1,2}:*0*|\s/, "") %></div>
