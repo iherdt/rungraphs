@@ -5,7 +5,7 @@
 
 =begin
 
-bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-MARATHONTUNEUP-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","18.0","TCS New York City Marathon Tune-Up (18M)","September 18th 2016 7:00am","09/18/16"]
+bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-BRONX-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","10.0","New Balance Bronx 10 Mile","September 25th 2016 8:00am","09/25/16"]
 
 =end
 namespace :projection do
@@ -62,6 +62,10 @@ namespace :projection do
 
     puts "total results: #{roster_data.count}"
     roster_data.each do |runner_info|
+      if runner_info['race'] != '10m'
+        next
+      end
+      
       if projected_race.projected_results.any? do |projected_result|
         projected_result.first_name == runner_info['fname'] &&
         projected_result.last_name == runner_info['lname'] &&

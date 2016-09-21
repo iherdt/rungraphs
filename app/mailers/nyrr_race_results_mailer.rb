@@ -19,6 +19,10 @@ class NyrrRaceResultsMailer < ApplicationMailer
     if @race_data.nil?
       puts "No race found. Bailing on email."
       return
+    elsif
+      @race_data[:male_results] == 0 && @race_data[:female_results] == 0
+      puts "No runners on team. Bailing on email."
+      return
     else
       mail(:to => report_email, :subject => "#{team_code.upcase} #{@race_data[:race_info][:name]} Race Results")
     end
