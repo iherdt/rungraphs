@@ -115,18 +115,17 @@ namespace :projection do
 
         projected_result.update_attributes("runner_id" => runner.id, "team" => runner.team, "state" => runner.state, "age" => Time.now.year - runner.birth_year)
 
-        # TODO, limit best to races within the last 6 months
         # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
-        best_result = runner.results.where.not(ag_percent: nil, distance: 1.0, distance: 0.2).where("date > ?", 6.months.ago).order('ag_percent DESC')[0]
+        best_result = runner.results.where("((ag_percent != NULL OR (distance != 1.0 AND distance != 0.2)) AND date > ?)", 6.months.ago).order('ag_percent DESC')[0]
 
-        # if runner has results in last 6 months, find all time best result
+        # if runner has no results in last 6 months, find all time best result that is not a mile or 18 mile
         if best_result.nil?
-          best_result = runner.results.where.not(ag_percent: nil, distance: 1.0, distance: 0.2).where("date > ?", 6.months.ago).order('ag_percent DESC')[0]
+          best_result = runner.results.where("ag_percent != NULL OR (distance != 1.0 AND distance != 0.2)").order('ag_percent DESC')[0]
         end
 
         # if still no best time, find the most recent race
         if best_result.nil?
-          best_result = runner.results.where.not(distance: 1.0, distance: 0.2).order('date DESC')[0]
+          best_result = runner.results.order('date DESC').first
         end
 
         puts counter
