@@ -5,7 +5,7 @@
 
 =begin
 
-bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-BRONX-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","10.0","New Balance Bronx 10 Mile","September 25th 2016 8:00am","09/25/16","5k"]
+bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-BRONX-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","10.0","New Balance Bronx 10 Mile","September 25th 2016 8:00am","09/25/16","10m"]
 
 
 =end
@@ -52,7 +52,7 @@ namespace :projection do
       start += 1000
       break if start > total
 
-      puts "requesting runners from #{start} to #{start + 1000}"
+      puts "requesting runners from #{start} to #{start + 999}"
       params[:start] = start
       response = RestClient.post url, params, :content_type => :json, :accept => :json
       json_roster_data = /{.+}/.match(response)[0]
