@@ -9,20 +9,21 @@ ml
 =end
 namespace :projection do
 
-  task :new, [:url, :apiid, :token, :distance, :name, :date_and_time, :date] => :environment do |t, arg|
+  task :new, [:url, :apiid, :token, :distance, :name, :date_and_time, :date, :distance_string] => :environment do |t, arg|
     distance = arg[:distance]
     name = arg[:name]
     date_and_time = arg[:date_and_time]
     date = format_date(arg[:date])
+    distance_string = arg[:distance_string]
 
     projected_race = ProjectedRace.create(name: name, date_and_time: date_and_time, distance: distance, date: date)
-    create_new_result_projections(projected_race, arg[:url], arg[:apiid], arg[:token])
+    create_new_result_projections(projected_race, arg[:url], arg[:apiid], arg[:token], distance_string)
     projected_race.save!
     projected_race.reload
     projected_race.set_team_results
   end
 
-  def create_new_result_projections(projected_race, url, apiid, token)
+  def create_new_result_projections(projected_race, url, apiid, token, distance_string)
     url = url
     start = 1
     params = {
@@ -61,8 +62,10 @@ namespace :projection do
 
     puts "total results: #{roster_data.count}"
     roster_data.each do |runner_info|
-      if runner_info['race'] != '5k'
-        next
+      if distance_string?
+        if runner_info['race'] != distance_string
+          next
+        end
       end
       
       if projected_race.projected_results.any? do |projected_result|
@@ -115,11 +118,11 @@ namespace :projection do
         projected_result.update_attributes("runner_id" => runner.id, "team" => runner.team, "state" => runner.state, "age" => Time.now.year - runner.birth_year)
 
         # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
-        best_result = runner.results.where("((ag_percent != NULL OR (distance != 1.0 AND distance != 0.2)) AND date > ?)", 6.months.ago).order('ag_percent DESC')[0]
+        best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 6.months.ago).order('ag_percent DESC')[0]
 
         # if runner has no results in last 6 months, find all time best result that is not a mile or 18 mile
         if best_result.nil?
-          best_result = runner.results.where("ag_percent != NULL OR (distance != 1.0 AND distance != 0.2)").order('ag_percent DESC')[0]
+          best_result = runner.results.where.not(:ag_percent => nil).where("distance != 1.0 AND distance != 0.2").order('ag_percent DESC')[0]
         end
 
         # if still no best time, find the most recent race
