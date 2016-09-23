@@ -5,7 +5,9 @@
 
 =begin
 
-ml
+bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-BRONX-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","10.0","New Balance Bronx 10 Mile","September 25th 2016 8:00am","09/25/16","5k"]
+
+
 =end
 namespace :projection do
 
@@ -62,7 +64,7 @@ namespace :projection do
 
     puts "total results: #{roster_data.count}"
     roster_data.each do |runner_info|
-      if distance_string?
+      if !distance_string.blank?
         if runner_info['race'] != distance_string
           next
         end
