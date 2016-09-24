@@ -122,12 +122,17 @@ namespace :projection do
         # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
         best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 6.months.ago).order('ag_percent DESC')[0]
 
-        # if runner has no results in last 6 months, find all time best in the last year
+        # if runner has no results in last 6 months, find best in the last year
         if best_result.nil?
           best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 1.year.ago).order('ag_percent DESC')[0]
         end
 
-        # if still no best time, find the most recent race
+        # if still no best time, find the most recent race that is not the mile or 18 miler
+        if best_result.nil?
+          best_result = runner.results.where.not(:ag_percent => nil).where("distance != 1.0 AND distance != 0.2").order('date DESC').first
+        end
+
+        # if still no best time, find the most recent race including the mile and 18 mile
         if best_result.nil?
           best_result = runner.results.order('date DESC').first
         end
