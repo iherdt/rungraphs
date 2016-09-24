@@ -5,7 +5,7 @@
 
 =begin
 
-bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-BRONX-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","10.0","New Balance Bronx 10 Mile","September 25th 2016 8:00am","09/25/16","10m"]
+bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-BRONX-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","3.1","New Balance Bronx 5k","September 25th 2016 7:30am","09/25/16","5k"]
 
 
 =end
@@ -122,9 +122,9 @@ namespace :projection do
         # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
         best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 6.months.ago).order('ag_percent DESC')[0]
 
-        # if runner has no results in last 6 months, find all time best result that is not a mile or 18 mile
+        # if runner has no results in last 6 months, find all time best in the last year
         if best_result.nil?
-          best_result = runner.results.where.not(:ag_percent => nil).where("distance != 1.0 AND distance != 0.2").order('ag_percent DESC')[0]
+          best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 1.year.ago).order('ag_percent DESC')[0]
         end
 
         # if still no best time, find the most recent race
