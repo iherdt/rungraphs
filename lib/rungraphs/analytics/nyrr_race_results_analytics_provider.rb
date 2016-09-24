@@ -42,6 +42,55 @@ module Rungraphs
         return race_data
       end
 
+      def get_local_competitive_qualifiers(team_code)
+        lc_results = @race.results.where(:ag_percent => 70..100, :team => team_code).order(:net_time)
+        if lc_results.length == 0
+          return
+        end
+        race_info = {
+          :name => @race.name,
+          :race_slug => @race.slug,
+          :date => @race.date,
+          :date_and_time => @race.date_and_time,
+          :location => @race.location,
+          :weather => @race.weather,
+          :team_code => team_code
+        }
+
+        lc_qualifiers = []
+        lc_results.each do |result|
+          runner = Runner.find(result.runner_id)
+
+          qualifying_result = runner.results.where("ag_percent > 70 AND (distance != 1.0 AND distance != 0.2) AND date > ? AND date < ?", 1.year.ago, result.date).order('date DESC').first
+          if !qualifying_result.nil?
+            qualifying_race = Race.select(:slug, :name).find(qualifying_result.race_id)
+            lc_qualifiers << {
+              :name => runner.full_name,
+              :runner_slug => runner.slug,
+              :gender => runner.sex,
+              :age => result.age,
+              :pace => result.pace_per_mile,
+              :net_time => result.net_time,
+              :ag_percent => result.ag_percent,
+              :first_result_net_time => qualifying_result.net_time,
+              :first_race_slug => qualifying_race.slug,
+              :first_race_name => qualifying_race.name,
+              :first_result_date => qualifying_result.date,
+              :first_result_ag_percent => qualifying_result.ag_percent,
+              :first_result_pace => qualifying_result.pace_per_mile
+            }
+          end
+        end
+
+
+        race_data = {
+          :race_info => race_info,
+          :lc_qualifiers => lc_qualifiers
+        }
+
+        return race_data
+      end
+
       def get_team_race_data(team_name, team_champs = false)
         if @race.nil?
           return
@@ -144,7 +193,7 @@ module Rungraphs
             previous_best_result_array = other_results_by_time.sort.first
             previous_best_result = previous_best_result_array[1]
             previous_best_time = previous_best_result_array[0]
-            previous_best_race = Race.find(previous_best_result.race_id)
+            previous_best_race = Race.select(:name, :date).find(previous_best_result.race_id)
             prs << {
               :name => "#{result.first_name} #{result.last_name}",
               :pr_time => result.net_time,
