@@ -16,19 +16,23 @@ class ProjectedRace < ActiveRecord::Base
       pr.overall_place = i + 1
       pr.save!
     end
+    puts "overall places set"
     projected_results.where(sex: 'M').order(:net_time).each_with_index do |pr, i|
       pr.gender_place = i + 1
       pr.save!
     end
+    puts "male places set"
     projected_results.where(sex: 'F').order(:net_time).each_with_index do |pr, i|
       pr.gender_place = i + 1
       pr.save!
     end
+    puts "female places set"
 
     puts 'setting_team_results'
     categories = ["open", "40", "50", "60"]
 
     categories.each do |category|
+      puts "category is #{category}"
 
       if category == "open"
         scoring_results = projected_results
