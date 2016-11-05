@@ -5,7 +5,7 @@
 
 =begin
 
-bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-POLANDSPRING-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","5.0","Poland Spring Marathon Kickoff","October 30th 2016 8:30am","10/30/16"]
+bundle exec rake projection:new["http://api.rtrt.me/events/NY2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","26.2","NYC Marathon 2016","November 6th 2016 9:50am","11/06/16"]
 
 
 =end
@@ -75,130 +75,131 @@ namespace :projection do
         projected_result.last_name == runner_info['lname'] &&
         projected_result.city == runner_info['city']
       end
-        if runner_info['bib'] < projected_result.bib
-          projected_result.update_attributes("bib" => runner_info['bib'])
-          projected_result.save!
-          next
-        end
+
+      if runner_info['bib'] < projected_result.bib
+        projected_result.update_attributes("bib" => runner_info['bib'])
+        projected_result.save!
+        next
       end
-      counter += 1
+    end
+    counter += 1
 
-      # create result
-      projected_result = ProjectedResult.create(
-          first_name: runner_info['fname'],
-          last_name: runner_info['lname'],
-          sex: runner_info['sex'],
-          full_name: "#{runner_info['name']}",
-          city: runner_info['city'],
-          country: runner_info['country'],
-          bib: runner_info['bib'],
-          projected_race_id: projected_race.id
-        )
+    # create result
+    projected_result = ProjectedResult.create(
+        first_name: runner_info['fname'],
+        last_name: runner_info['lname'],
+        sex: runner_info['sex'],
+        full_name: "#{runner_info['name']}",
+        city: runner_info['city'],
+        country: runner_info['country'],
+        bib: runner_info['bib'],
+        projected_race_id: projected_race.id
+      )
 
-      if runner_info['city']
-        city = runner_info['city'].downcase
-      else
-        city = nil
+    if runner_info['city']
+      city = runner_info['city'].downcase
+    else
+      city = nil
+    end
+
+    if runner_info['fname'].nil? || runner_info['lname'].nil?
+      puts "missing name for #{runner_info.inspect}"
+      next
+    end
+
+    # add runner and projected time
+    runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase, city: city)
+
+    # if a runner changes cities or if runner with same name without city
+    # if runners.empty?
+    #   runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase).where.not(city: city)
+    # end
+
+    if !runners.empty? && !runners[0].results.empty?
+      runner = runners[0]
+
+      projected_result.update_attributes("runner_id" => runner.id, "team" => runner.team, "state" => runner.state, "age" => Time.now.year - runner.birth_year)
+
+      # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
+      best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 6.months.ago).order('ag_percent DESC')[0]
+
+      # if runner has no results in last 6 months, find best in the last year
+      if best_result.nil?
+        best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 1.year.ago).order('ag_percent DESC')[0]
       end
 
-      if runner_info['fname'].nil? || runner_info['lname'].nil?
-        puts "missing name for #{runner_info.inspect}"
+      # if still no best time, find the most recent race that is not the mile or 18 miler
+      if best_result.nil?
+        best_result = runner.results.where.not(:ag_percent => nil).where("distance != 1.0 AND distance != 0.2").order('date DESC').first
+      end
+
+      # if still no best time, find the most recent race including the mile and 18 mile
+      if best_result.nil?
+        best_result = runner.results.order('date DESC').first
+      end
+
+      puts counter
+      puts runner.full_name
+      p best_result
+
+      if best_result.nil?
+        puts "No best result: #{runner_info['name']} "
         next
       end
 
-      # add runner and projected time
-      runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase, city: city)
-
-      # if a runner changes cities or if runner with same name without city
-      if runners.empty?
-        runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase).where.not(city: city)
-      end
-
-      if !runners.empty? && !runners[0].results.empty?
-        runner = runners[0]
-
-        projected_result.update_attributes("runner_id" => runner.id, "team" => runner.team, "state" => runner.state, "age" => Time.now.year - runner.birth_year)
-
-        # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
-        best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 6.months.ago).order('ag_percent DESC')[0]
-
-        # if runner has no results in last 6 months, find best in the last year
-        if best_result.nil?
-          best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 1.year.ago).order('ag_percent DESC')[0]
+      # check type of result time
+      if best_result.net_time && !best_result.net_time.blank?
+        if /^\d\d.\d\d$/ =~ best_result.net_time
+          best_result.net_time = '00:' + best_result.net_time
         end
-
-        # if still no best time, find the most recent race that is not the mile or 18 miler
-        if best_result.nil?
-          best_result = runner.results.where.not(:ag_percent => nil).where("distance != 1.0 AND distance != 0.2").order('date DESC').first
+        best_time = DateTime.parse(best_result.net_time)
+      elsif best_result.finish_time && !best_result.finish_time.blank?
+        if /^\d\d.\d\d$/ =~ best_result.finish_time
+          best_result.finish_time = '00:' + best_result.finish_time
         end
-
-        # if still no best time, find the most recent race including the mile and 18 mile
-        if best_result.nil?
-          best_result = runner.results.order('date DESC').first
+        best_time = DateTime.parse(best_result.finish_time)
+      elsif best_result.gun_time && !best_result.gun_time.blank?
+        if /^\d\d.\d\d$/ =~ best_result.gun_time
+          best_result.gun_time = '00:' + best_result.gun_time
         end
-
-        puts counter
-        puts runner.full_name
-        p best_result
-
-        if best_result.nil?
-          puts "No best result: #{runner_info['name']} "
-          next
-        end
-
-        # check type of result time
-        if best_result.net_time && !best_result.net_time.blank?
-          if /^\d\d.\d\d$/ =~ best_result.net_time
-            best_result.net_time = '00:' + best_result.net_time
-          end
-          best_time = DateTime.parse(best_result.net_time)
-        elsif best_result.finish_time && !best_result.finish_time.blank?
-          if /^\d\d.\d\d$/ =~ best_result.finish_time
-            best_result.finish_time = '00:' + best_result.finish_time
-          end
-          best_time = DateTime.parse(best_result.finish_time)
-        elsif best_result.gun_time && !best_result.gun_time.blank?
-          if /^\d\d.\d\d$/ =~ best_result.gun_time
-            best_result.gun_time = '00:' + best_result.gun_time
-          end
-          best_time = DateTime.parse(best_result.gun_time)
-        else
-          next
-        end
-
-        puts "best_time #{best_time.hour}:#{(best_time.min)}:#{best_time.sec}"
-        best_time_in_seconds = best_time.hour * 60 * 60 + best_time.min * 60 + best_time.sec
-        puts "best_time_in_seconds #{best_time_in_seconds}"
-        puts "projected_race.distance #{projected_race.distance}"
-        puts "best_result.distance #{best_result.distance}"
-        # calculate projected time with Riegel formula
-        # http://www.runningforfitness.org/faq/rp
-        # T2 = T1 x (D2/D1)1.06
-        if projected_race.distance > best_result.distance
-          projected_time_in_seconds = best_time_in_seconds * ((projected_race.distance / best_result.distance )**1.06)
-        else
-          # T1 = T2 / (D2/D1)1.06
-          projected_time_in_seconds = best_time_in_seconds / ((best_result.distance / projected_race.distance )**1.06)
-        end
-        puts "projected_time_in_seconds #{projected_time_in_seconds}"
-        projected_time = "#{sprintf "%02d",(projected_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) % 60).round}"
-        puts "projected_time #{projected_time}"
-        projected_pace_in_seconds = projected_time_in_seconds / projected_race.distance
-        projected_pace = "#{sprintf "%02d", (projected_pace_in_seconds / 60).floor}:#{sprintf "%02d", ((projected_pace_in_seconds % 3600) % 60).round}"
-        projected_result.update_attributes("net_time" => projected_time, "pace_per_mile" => projected_pace, "ag_percent" => best_result.ag_percent)
-
+        best_time = DateTime.parse(best_result.gun_time)
       else
-        puts "Not found: #{runner_info['name']} "
-        projected_result.update_attributes("team" => '---')
+        next
       end
 
-      puts
+      puts "best_time #{best_time.hour}:#{(best_time.min)}:#{best_time.sec}"
+      best_time_in_seconds = best_time.hour * 60 * 60 + best_time.min * 60 + best_time.sec
+      puts "best_time_in_seconds #{best_time_in_seconds}"
+      puts "projected_race.distance #{projected_race.distance}"
+      puts "best_result.distance #{best_result.distance}"
+      # calculate projected time with Riegel formula
+      # http://www.runningforfitness.org/faq/rp
+      # T2 = T1 x (D2/D1)1.06
+      if projected_race.distance > best_result.distance
+        projected_time_in_seconds = best_time_in_seconds * ((projected_race.distance / best_result.distance )**1.06)
+      else
+        # T1 = T2 / (D2/D1)1.06
+        projected_time_in_seconds = best_time_in_seconds / ((best_result.distance / projected_race.distance )**1.06)
+      end
+      puts "projected_time_in_seconds #{projected_time_in_seconds}"
+      projected_time = "#{sprintf "%02d",(projected_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) % 60).round}"
+      puts "projected_time #{projected_time}"
+      projected_pace_in_seconds = projected_time_in_seconds / projected_race.distance
+      projected_pace = "#{sprintf "%02d", (projected_pace_in_seconds / 60).floor}:#{sprintf "%02d", ((projected_pace_in_seconds % 3600) % 60).round}"
+      projected_result.update_attributes("net_time" => projected_time, "pace_per_mile" => projected_pace, "ag_percent" => best_result.ag_percent)
 
-      projected_result.save!
+    else
+      puts "Not found: #{runner_info['name']} "
+      projected_result.update_attributes("team" => '---')
     end
-  end
 
-  def format_date(date_str)
-    date = Date.strptime(date_str, '%m/%d/%y')
+    puts
+
+    projected_result.save!
   end
+end
+
+def format_date(date_str)
+  date = Date.strptime(date_str, '%m/%d/%y')
+end
 end

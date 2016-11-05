@@ -14,18 +14,27 @@ class ProjectedRace < ActiveRecord::Base
 
     projected_results.order(:net_time).each_with_index do |pr, i|
       pr.overall_place = i + 1
+      if i % 100 == 0
+        puts "on overall results #{i}"
+      end
       pr.save!
-    end
+    end;nil
     puts "overall places set"
     projected_results.where(sex: 'M').order(:net_time).each_with_index do |pr, i|
       pr.gender_place = i + 1
+      if i % 100 == 0
+        puts "on male results #{i}"
+      end
       pr.save!
-    end
+    end;nil
     puts "male places set"
     projected_results.where(sex: 'F').order(:net_time).each_with_index do |pr, i|
       pr.gender_place = i + 1
+      if i % 100 == 0
+        puts "on female results #{i}"
+      end
       pr.save!
-    end
+    end;nil
     puts "female places set"
 
     puts 'setting_team_results'
@@ -37,20 +46,20 @@ class ProjectedRace < ActiveRecord::Base
       if category == "open"
         scoring_results = projected_results
         if team_champs
-          men_scoring_count = 3
-          women_scoring_count = 3
-          display_count = 10
+          men_scoring_count = 10
+          women_scoring_count = 10
+          display_count = 12
         else
-          men_scoring_count = 3
-          women_scoring_count = 3
+          men_scoring_count = 5
+          women_scoring_count = 5
           display_count = 10
         end
       else
         scoring_results = projected_results.includes(:runner).where("age >= ?", category)
         if team_champs
           if category == "40"
-            men_scoring_count = 3
-            display_count = 6
+            men_scoring_count = 5
+            display_count = 10
           else
             men_scoring_count = 3
             display_count = 6
@@ -69,7 +78,12 @@ class ProjectedRace < ActiveRecord::Base
       scoring_results.select{|pr| pr.team != '---' && !pr.team.blank?}.each do |pr|
         next if pr.net_time.blank? || pr.team.blank? || pr.team == "0"
         runner_time = pr.net_time
-        net_time_date = DateTime.parse(runner_time)
+        begin
+          net_time_date = DateTime.parse(runner_time)
+        rescue => e
+          puts "error parsing net time for #{pr.inspect} #{e}"
+          next
+        end
         net_time_in_seconds = net_time_date.hour * 60 * 60 + net_time_date.min * 60 + net_time_date.sec
         net_time = "#{sprintf "%02d",(net_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((net_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((net_time_in_seconds % 3600) % 60).round}"
 
