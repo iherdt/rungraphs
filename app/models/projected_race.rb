@@ -33,20 +33,20 @@ class ProjectedRace < ActiveRecord::Base
       if category == "open"
         scoring_results = projected_results
         if team_champs
-          men_scoring_count = 10
-          women_scoring_count = 10
-          display_count = 12
+          men_scoring_count = 3
+          women_scoring_count = 3
+          display_count = 10
         else
-          men_scoring_count = 5
-          women_scoring_count = 5
+          men_scoring_count = 3
+          women_scoring_count = 3
           display_count = 10
         end
       else
         scoring_results = projected_results.includes(:runner).where("age >= ?", category)
         if team_champs
           if category == "40"
-            men_scoring_count = 5
-            display_count = 10
+            men_scoring_count = 3
+            display_count = 6
           else
             men_scoring_count = 3
             display_count = 6
