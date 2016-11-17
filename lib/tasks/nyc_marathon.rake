@@ -44,7 +44,7 @@ namespace :nyrr do
 
   def get_marathon_results_page(all_results_page, year)
     $a.get(all_results_page).form_with(:method => "POST") do |f|
-      f["input.searchyear"] = "2015"
+      f["input.searchyear"] = year
       f["input.f.age"] = "0"
       f["input.t.age"] = "99"
       f.radiobutton_with(:value => "search.age").check
@@ -106,10 +106,10 @@ namespace :nyrr do
           elsif race_fields_array[index] == "Country ofResidence/Citizenship"
             if !field.text.empty?
               if first_field
-                result.update_attributes("residence" => field.text[0].downcase)
+                result.update_attributes("residence" => field.text)
                 first_field = false
               else
-                result.update_attributes("country" => field.text[1..2].to_i)
+                result.update_attributes("country" => field.text)
                 first_field = true
               end
             end
