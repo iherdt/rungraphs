@@ -36,6 +36,16 @@ namespace :nyrr do
 
   $a = Mechanize.new
 
+  task :destroy_marathon_results do
+    races = []
+    races << Race.where(slug: 'nyc-marathon-2015-2015').first
+    races << Race.where(slug: 'nyc-marathon-2014-2014').first
+    races << Race.where(slug: 'nyc-marathon-2013-2013').first
+    races.each do |r|
+      r.destroy
+    end
+  end
+
   # when scraping old race results, start from most recent to least recent to set teams to the most recent team
   task :old_results, [:year] => :environment do |t, arg|
     all_results_page = "http://web2.nyrrc.org/cgi-bin/start.cgi/aes-programs/results/resultsarchive.htm"
