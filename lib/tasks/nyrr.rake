@@ -36,7 +36,7 @@ namespace :nyrr do
 
   $a = Mechanize.new
 
-  task :destroy_marathon_results do
+  task :destroy_marathon_results => :environment do |t, arg|
     races = []
     races << Race.where(slug: 'nyc-marathon-2015-2015').first
     races << Race.where(slug: 'nyc-marathon-2014-2014').first
