@@ -38,8 +38,6 @@ namespace :nyrr do
 
   task :destroy_marathon_results => :environment do |t, arg|
     races = []
-    races << Race.where(slug: 'nyc-marathon-2015-2015').first
-    races << Race.where(slug: 'nyc-marathon-2014-2014').first
     races << Race.where(slug: 'nyc-marathon-2013-2013').first
     races.each do |r|
       r.destroy
