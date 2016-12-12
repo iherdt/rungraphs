@@ -51,12 +51,12 @@ namespace :nyrr do
       end
     end
     year = arg[:year].to_i
-    race = Race.new
-    race.name = "NYC Marathon #{year}"
-    date = Date.new(arg[:year].to_i, arg[:month].to_i, arg[:day].to_i)
-    race.date = date
-    race.distance = 26.2
-    race.save!
+    race = Race.last
+    # race.name = "NYC Marathon #{year}"
+    # date = Date.new(arg[:year].to_i, arg[:month].to_i, arg[:day].to_i)
+    # race.date = date
+    # race.distance = 26.2
+    # race.save!
     begin
       age_group_fields.each do |age_group_field|
         marathon_results_page = get_current_marathon_results_page(current_marathon_results_page, age_group_field)
