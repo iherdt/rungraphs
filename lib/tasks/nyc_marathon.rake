@@ -344,8 +344,6 @@ namespace :nyrr do
             state: result.state,
             country: result.country
           )
-        end
-        
         else
           found = false
 
