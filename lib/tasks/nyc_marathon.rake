@@ -149,10 +149,10 @@ namespace :nyrr do
           elsif race_fields_array[index] == "Country ofResidence/Citizenship"
             if !field.text.empty?
               if first_field
-                result.update_attributes("residence" => field.text)
+                result.update_attributes("residence" => field.text.encode('UTF-8'))
                 first_field = false
               else
-                result.update_attributes("country" => field.text)
+                result.update_attributes("country" => field.text.encode('UTF-8'))
                 first_field = true
               end
             end
@@ -285,10 +285,10 @@ namespace :nyrr do
           elsif race_fields_array[index] == "State/Country"
             if !field.text.empty?
               if first_field
-                result.update_attributes("state" => field.text)
+                result.update_attributes("state" => field.text.encode('UTF-8'))
                 first_field = false
               else
-                result.update_attributes("country" => field.text)
+                result.update_attributes("country" => field.text.encode('UTF-8'))
                 first_field = true
               end
             end
@@ -303,7 +303,7 @@ namespace :nyrr do
             result.update_attributes("bib" => field.text)
           elsif property
             if !field.text.empty?
-              result.update_attributes(property => field.text.downcase)
+              result.update_attributes(property => field.text.downcase.encode('UTF-8'))
             end
           end
           if first_field == true
