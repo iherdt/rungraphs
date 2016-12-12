@@ -53,7 +53,7 @@ namespace :nyrr do
     year = arg[:year].to_i
     race = Race.last
     # race.name = "NYC Marathon #{year}"
-    # date = Date.new(arg[:year].to_i, arg[:month].to_i, arg[:day].to_i)
+    date = Date.new(arg[:year].to_i, arg[:month].to_i, arg[:day].to_i)
     # race.date = date
     # race.distance = 26.2
     # race.save!
