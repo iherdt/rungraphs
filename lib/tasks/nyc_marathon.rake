@@ -45,7 +45,7 @@ namespace :nyrr do
   task :current_marathon_results, [:year, :month, :day] => :environment do |t, arg|
     current_marathon_results_page = "http://web2.nyrrc.org/cgi-bin/start.cgi/nyrrc/monitor/pages/postrace/postracestartup.html"
     age_group_fields = []
-    ("e".."o").each do |age|
+    ("d".."o").each do |age|
       ["m", "f"].each do |gender|
         age_group_fields << "#{gender}#{age}"
       end
