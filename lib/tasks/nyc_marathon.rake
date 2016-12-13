@@ -42,10 +42,16 @@ namespace :nyrr do
     scrape_marathon_results(marathon_results_page, arg[:year], date)
   end
 
+  task :set_current_marathon_results => :environment do |t, arg|
+    race = Race.last
+    race.set_team_results
+    race.save
+  end
+
   task :current_marathon_results, [:year, :month, :day] => :environment do |t, arg|
     current_marathon_results_page = "http://web2.nyrrc.org/cgi-bin/start.cgi/nyrrc/monitor/pages/postrace/postracestartup.html"
     age_group_fields = []
-    ("d".."o").each do |age|
+    ("a".."o").each do |age|
       ["m", "f"].each do |gender|
         age_group_fields << "#{gender}#{age}"
       end
