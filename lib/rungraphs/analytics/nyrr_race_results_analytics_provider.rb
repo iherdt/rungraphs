@@ -8,7 +8,7 @@ module Rungraphs
       end
 
       def get_local_competitive_race_results
-        lc_results = @race.results.where(:ag_percent => 70..100, :team => 0, :city => "brooklyn").order(:net_time)
+        lc_results = @race.results.where(:ag_percent => 70..100, :team => 0, :city => "brooklyn").order(:overall_place)
         if lc_results.length == 0
           return
         end
@@ -21,12 +21,16 @@ module Rungraphs
           :weather => @race.weather
         }
         results = lc_results.map do |result|
+          current_race_time = result.net_time || result.finish_time || result.gun_time
+          if current_race_time[0] == "0"
+            current_race_time = current_race_time[1..-1]
+          end
           {
             :name => "#{result.first_name} #{result.last_name}",
             :gender => result.sex,
             :age => result.age,
             :ag_percent => result.ag_percent,
-            :net_time => result.net_time,
+            :net_time => current_race_time,
             :pace => result.pace_per_mile,
             :runner_slug => Runner.find(result.runner_id).slug,
             :city => result.city,
@@ -43,7 +47,7 @@ module Rungraphs
       end
 
       def get_local_competitive_qualifiers(team_code)
-        lc_results = @race.results.where(:ag_percent => 70..100, :team => team_code).order(:net_time)
+        lc_results = @race.results.where(:ag_percent => 70..100, :team => team_code).order(:overall_place)
         if lc_results.length == 0
           return
         end
@@ -59,6 +63,10 @@ module Rungraphs
 
         lc_qualifiers = []
         lc_results.each do |result|
+          current_race_time = result.net_time || result.finish_time || result.gun_time
+          if current_race_time[0] == "0"
+            current_race_time = current_race_time[1..-1]
+          end
           runner = Runner.find(result.runner_id)
 
           qualifying_result = runner.results.where("ag_percent > 70 AND (distance != 1.0 AND distance != 0.2) AND date > ? AND date < ?", 1.year.ago, result.date).order('date DESC').first
@@ -70,7 +78,7 @@ module Rungraphs
               :gender => runner.sex,
               :age => result.age,
               :pace => result.pace_per_mile,
-              :net_time => result.net_time,
+              :net_time => current_race_time,
               :ag_percent => result.ag_percent,
               :first_result_net_time => qualifying_result.net_time,
               :first_race_slug => qualifying_race.slug,
@@ -95,9 +103,9 @@ module Rungraphs
         if @race.nil?
           return
         end
-        team_results = @race.results.where(:team => team_name).order(:net_time)
-        male_team_results = @race.results.where(:team => team_name, :sex => 'm').order(:net_time)
-        female_team_results = @race.results.where(:team => team_name, :sex => 'f').order(:net_time)
+        team_results = @race.results.where(:team => team_name).order(:overall_place)
+        male_team_results = @race.results.where(:team => team_name, :sex => 'm').order(:overall_place)
+        female_team_results = @race.results.where(:team => team_name, :sex => 'f').order(:overall_place)
         if male_team_results.length == 0 && female_team_results == 0
           return
         end
@@ -111,12 +119,16 @@ module Rungraphs
           :weather => @race.weather
         }
         male_results = male_team_results.map do |result|
+          current_race_time = result.net_time || result.finish_time || result.gun_time
+          if current_race_time[0] == "0"
+            current_race_time = current_race_time[1..-1]
+          end
           {
             :name => "#{result.first_name} #{result.last_name}",
             :gender => result.sex,
             :age => result.age,
             :ag_percent => result.ag_percent,
-            :net_time => result.net_time,
+            :net_time => current_race_time,
             :pace => result.pace_per_mile,
             :runner_slug => Runner.find(result.runner_id).slug,
             :city => result.city,
@@ -130,12 +142,16 @@ module Rungraphs
         end
 
         female_results = female_team_results.map do |result|
+          current_race_time = result.net_time || result.finish_time || result.gun_time
+          if current_race_time[0] == "0"
+            current_race_time = current_race_time[1..-1]
+          end
           {
             :name => "#{result.first_name} #{result.last_name}",
             :gender => result.sex,
             :age => result.age,
             :ag_percent => result.ag_percent,
-            :net_time => result.net_time,
+            :net_time => current_race_time,
             :pace => result.pace_per_mile,
             :runner_slug => Runner.find(result.runner_id).slug,
             :city => result.city,
@@ -150,10 +166,14 @@ module Rungraphs
 
         ag_award_results = []
         team_results.each do |result|
+          current_race_time = result.net_time || result.finish_time || result.gun_time
+          if current_race_time[0] == "0"
+            current_race_time = current_race_time[1..-1]
+          end
           if result.age_place <= 10
             ag_award_results << {
               :name => "#{result.first_name} #{result.last_name}",
-              :time => result.net_time,
+              :time => current_race_time,
               :age_place => result.age_place,
               :age => result.age,
               :gender => result.sex
@@ -167,17 +187,22 @@ module Rungraphs
         team_results.each do |result|
           runner = Runner.find(result.runner_id)
           other_results_in_distance = runner.results.where(:distance => result.distance).where("date < ?", result.date)
-          if !other_results_in_distance.empty? && other_results_in_distance.all? do |other_result|
-              if other_result.net_time? && other_result.net_time > result.net_time
-                true
-              elsif other_result.finish_time? && other_result.finish_time > result.net_time
-                true
-              elsif other_result.gun_time? && other_result.gun_time > result.net_time
-                true
-              else
-                false
+          current_race_time = result.net_time || result.finish_time || result.gun_time
+          if current_race_time[0] == "0"
+            current_race_time = current_race_time[1..-1]
+          end
+
+            if !other_results_in_distance.empty? && other_results_in_distance.all? do |other_result|
+                if other_result.net_time? && other_result.net_time > current_race_time
+                  true
+                elsif !other_result.net_time? && other_result.finish_time? && other_result.finish_time > current_race_time
+                  true
+                elsif !other_result.net_time? && !other_result.finish_time? && other_result.gun_time? && other_result.gun_time > current_race_time
+                  true
+                else
+                  false
+                end
               end
-            end
             other_results_by_time = {}
             other_results_in_distance.each do |result|
               if result.net_time
@@ -196,7 +221,7 @@ module Rungraphs
             previous_best_race = Race.select(:name, :date).find(previous_best_result.race_id)
             prs << {
               :name => "#{result.first_name} #{result.last_name}",
-              :pr_time => result.net_time,
+              :pr_time => current_race_time,
               :old_pr_race => previous_best_race.name,
               :old_pr_date => previous_best_race.date,
               :old_pr_time => previous_best_time
