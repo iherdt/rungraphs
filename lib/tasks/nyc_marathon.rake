@@ -1,35 +1,35 @@
 namespace :nyrr do
 
   MARATHON_RESULT_PROPERTIES = {
-  "Last Name" => "last_name",
-  "First Name" => "first_name",
-  "Bib" => "bib",
-  "Team" => "team",
-  "City" => "city",
-  "State" => "state",
-  "Country" => "country",
-  "OverallPlace" => "overall_place",
-  "GenderPlace" => "gender_place",
-  "AgePlace" => "age_place",
-  "FinishTime" => "finish_time",
-  "PaceperMile" => "pace_per_mile",
-  "Minutesper Mile" => "pace_per_mile",
-  "AGTime" => "ag_time",
-  "Age-GradedTime" => "ag_time",
-  "AGGenderPlace" => "ag_gender_place",
-  "AG %" => "ag_percent",
-  "Age-GradedPerformance %" => "ag_percent",
-  "NetTime" => "net_time",
-  "GunTime" => "gun_time",
-  "5 km" => "split_5km",
-  "10 km" => "split_10km",
-  "15 km" => "split_15km",
-  "20 km" => "split_20km",
-  "13.1 mi" => "split_131m",
-  "25 km" => "split_25km",
-  "30 km" => "split_30km",
-  "35 km" => "split_35km",
-  "40 km" => "split_40km"
+    "Last Name" => "last_name",
+    "First Name" => "first_name",
+    "Bib" => "bib",
+    "Team" => "team",
+    "City" => "city",
+    "State" => "state",
+    "Country" => "country",
+    "Place" => "overall_place",
+    "GenderPlace" => "gender_place",
+    "AgePlace" => "age_place",
+    "FinishTime" => "finish_time",
+    "PaceperMile" => "pace_per_mile",
+    "Minutesper Mile" => "pace_per_mile",
+    "AGTime" => "ag_time",
+    "Age-GradedTime" => "ag_time",
+    "AGGenderPlace" => "ag_gender_place",
+    "AG %" => "ag_percent",
+    "Age-GradedPerformance %" => "ag_percent",
+    "NetTime" => "net_time",
+    "GunTime" => "gun_time",
+    "5 km" => "split_5km",
+    "10 km" => "split_10km",
+    "15 km" => "split_15km",
+    "20 km" => "split_20km",
+    "13.1 mi" => "split_131m",
+    "25 km" => "split_25km",
+    "30 km" => "split_30km",
+    "35 km" => "split_35km",
+    "40 km" => "split_40km"
   }
 
   $a = Mechanize.new
@@ -311,6 +311,8 @@ namespace :nyrr do
             end
           elsif race_fields_array[index] == "Bib No."
             result.update_attributes("bib" => field.text)
+          elsif race_fields_array[index] == "OverallPlace"
+            result.update_attributes("overall_place" => field.text)
           elsif property
             if !field.text.empty?
               result.update_attributes(property => field.text.downcase.force_encoding('iso8859-1').encode('utf-8'))
