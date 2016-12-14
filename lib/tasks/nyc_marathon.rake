@@ -3,7 +3,7 @@ namespace :nyrr do
   MARATHON_RESULT_PROPERTIES = {
   "Last Name" => "last_name",
   "First Name" => "first_name",
-  "Bib No." => "bib",
+  "Bib" => "bib",
   "Team" => "team",
   "City" => "city",
   "State" => "state",
@@ -122,6 +122,10 @@ namespace :nyrr do
   end
 
   def get_marathon_rows(marathon_results_page)
+    return marathon_results_page.parser.xpath("//table[@cellpadding='2'][@cellspacing='1'][@border='0'][@bgcolor='#C0C0C0']/tr")
+  end
+
+  def get_current_marathon_rows(marathon_results_page)
     return marathon_results_page.parser.xpath("//table[@cellpadding='2'][@cellspacing='1'][@border='0']/tr")
   end
 
@@ -265,7 +269,7 @@ namespace :nyrr do
     loop do
       i += 1
       puts "--------------------------scraping page #{i} for #{age_group_field}------------------------------"
-      rows = get_marathon_rows(marathon_results_page)
+      rows = get_current_marathon_rows(marathon_results_page)
       race_fields_array = []
       rows[0].css('td').each do |i|
         race_fields_array << i.text
