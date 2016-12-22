@@ -127,12 +127,12 @@ namespace :nyrr do
       scrape_race_individual_page(race_results_page, race, type_of_result)
       race.set_team_results
 
-      if type_of_result == "new"
-        # email NBR result report
-        NyrrRaceResultsMailer.team_results_report('nbr', race.slug).deliver_now
-        NyrrRaceResultsMailer.unattached_brooklyn_runners_report(race.slug).deliver_now
-        NyrrRaceResultsMailer.local_competitive_qualifiers_report('nbr', race.slug, ['yu.logan@gmail.com', 'menslocalcompetitive@northbrooklynrunners.org', 'womenslocalcompetitive@northbrooklynrunners.org']).deliver_now
-      end
+      # if type_of_result == "new"
+      #   # email NBR result report
+      #   NyrrRaceResultsMailer.team_results_report('nbr', race.slug).deliver_now
+      #   NyrrRaceResultsMailer.unattached_brooklyn_runners_report(race.slug).deliver_now
+      #   NyrrRaceResultsMailer.local_competitive_qualifiers_report('nbr', race.slug, ['yu.logan@gmail.com', 'menslocalcompetitive@northbrooklynrunners.org', 'womenslocalcompetitive@northbrooklynrunners.org']).deliver_now
+      # end
     rescue
       puts "error creating new race #{race.name}"
       race.destroy
