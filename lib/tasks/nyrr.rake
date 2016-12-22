@@ -50,6 +50,13 @@ namespace :nyrr do
     scrape_yearly_results(yearly_results_page, year, "new")
   end
 
+  task :destroy_races => :environment do |t, arg|
+    races = Race.where('date > ?', Time.new(2016,1,1)).where.not(:slug => "nyc-marathon-2016-2016")
+    races.each do |r|
+      r.destroy
+    end
+  end
+
   def get_yearly_results_page(all_results_page, year)
     $a.get(all_results_page).form_with(:name => "findOtherRaces") do |f|
       f["NYRRYEAR"] = year
