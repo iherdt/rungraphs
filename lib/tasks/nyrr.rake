@@ -50,13 +50,6 @@ namespace :nyrr do
     scrape_yearly_results(yearly_results_page, year, "new")
   end
 
-  task :destroy_races => :environment do |t, arg|
-    races = Race.where('date > ?', Time.new(2016,1,1)).where.not(:slug => "nyc-marathon-2016-2016")
-    races.each do |r|
-      r.destroy
-    end
-  end
-
   def get_yearly_results_page(all_results_page, year)
     $a.get(all_results_page).form_with(:name => "findOtherRaces") do |f|
       f["NYRRYEAR"] = year
@@ -134,12 +127,12 @@ namespace :nyrr do
       scrape_race_individual_page(race_results_page, race, type_of_result)
       race.set_team_results
 
-      # if type_of_result == "new"
-      #   # email NBR result report
-      #   NyrrRaceResultsMailer.team_results_report('nbr', race.slug).deliver_now
-      #   NyrrRaceResultsMailer.unattached_brooklyn_runners_report(race.slug).deliver_now
-      #   NyrrRaceResultsMailer.local_competitive_qualifiers_report('nbr', race.slug, ['yu.logan@gmail.com', 'menslocalcompetitive@northbrooklynrunners.org', 'womenslocalcompetitive@northbrooklynrunners.org']).deliver_now
-      # end
+      if type_of_result == "new"
+        # email NBR result report
+        NyrrRaceResultsMailer.team_results_report('nbr', race.slug).deliver_now
+        NyrrRaceResultsMailer.unattached_brooklyn_runners_report(race.slug).deliver_now
+        NyrrRaceResultsMailer.local_competitive_qualifiers_report('nbr', race.slug, ['yu.logan@gmail.com', 'menslocalcompetitive@northbrooklynrunners.org', 'womenslocalcompetitive@northbrooklynrunners.org']).deliver_now
+      end
     rescue
       puts "error creating new race #{race.name}"
       race.destroy

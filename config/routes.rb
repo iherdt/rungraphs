@@ -39,6 +39,11 @@ Rails.application.routes.draw do
   get 'search_races', to: 'search#search_races'
   get 'search_runners', to: 'search#search_runners'
   get 'search_all', to: 'search#search_all'
+
+
+  get 'blog', to: 'blog#index', :path => 'blog'
+  get 'club_points_2016', to: 'blog#club_points_2016', :path => "blog/club_points_2016"
+  get 'readme', to: 'blog#readme', :path => "blog/readme"
   #   resources :products do
   #     member do
   #       get 'short'
