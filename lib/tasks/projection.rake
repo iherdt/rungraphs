@@ -191,9 +191,10 @@ namespace :projection do
 
     projected_result.save!
   end
+end
 
-  def format_date(date_str)
-    date = Date.strptime(date_str, '%m/%d/%y')
-  end
+def format_date(date_str)
+  date = Date.strptime(date_str, '%m/%d/%y')
+end
 end
 
