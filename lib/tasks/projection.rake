@@ -107,13 +107,21 @@ namespace :projection do
       next
     end
 
-    # add runner and projected time
+    # add runner and projected time by team first
     runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase, city: city).where.not(team: "0")
 
+    if runners.empty?
+      runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase).where.not(team: "0")
+    end
+
+    if runners.empty?
+      runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase, city: city)
+    end
+
     # if a runner changes cities or if runner with same name without city
-    # if runners.empty?
-    #   runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase).where.not(city: city)
-    # end
+    if runners.empty?
+      runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase).where.not(city: city)
+    end
 
     if !runners.empty? && !runners[0].results.empty?
       runner = runners[0]
