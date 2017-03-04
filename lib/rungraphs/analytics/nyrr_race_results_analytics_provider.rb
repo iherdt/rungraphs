@@ -192,17 +192,17 @@ module Rungraphs
             current_race_time = current_race_time[2..-1]
           end
 
-            if !other_results_in_distance.empty? && other_results_in_distance.all? do |other_result|
-                if other_result.net_time? && other_result.net_time > current_race_time
-                  true
-                elsif !other_result.net_time? && other_result.finish_time? && other_result.finish_time > current_race_time
-                  true
-                elsif !other_result.net_time? && !other_result.finish_time? && other_result.gun_time? && other_result.gun_time > current_race_time
-                  true
-                else
-                  false
-                end
+          if !other_results_in_distance.empty? && other_results_in_distance.all? do |other_result|
+              if other_result.net_time? && other_result.net_time > result.net_time
+                true
+              elsif !other_result.net_time? && other_result.finish_time? && other_result.finish_time > result.net_time
+                true
+              elsif !other_result.net_time? && !other_result.finish_time? && other_result.gun_time? && other_result.gun_time > result.net_time
+                true
+              else
+                false
               end
+            end
             other_results_by_time = {}
             other_results_in_distance.each do |result|
               if result.net_time
@@ -218,6 +218,9 @@ module Rungraphs
             previous_best_result_array = other_results_by_time.sort.first
             previous_best_result = previous_best_result_array[1]
             previous_best_time = previous_best_result_array[0]
+            if previous_best_time[0] == "0"
+              previous_best_time = previous_best_time[2..-1]
+            end
             previous_best_race = Race.select(:name, :date).find(previous_best_result.race_id)
             prs << {
               :name => "#{result.first_name} #{result.last_name}",

@@ -5,7 +5,7 @@
 
 =begin
 
-bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-TEDCORBITT15K-2016/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","9.3","Ted Corbitt 15k","December 10th 2016 8:30am","12/10/16"]
+bundle exec rake projection:new["http://api.rtrt.me/events/NYRR-WASHINGTONHEIGHTS5K-2017/profiles","4d7a9ceb0be65b3cc4948ee9","DB46DA9BD41A9123CD26","3.1","Washington Heights 5k","March 5th 2017 9:00am","03/05/17"]
 
 
 =end
@@ -108,7 +108,7 @@ namespace :projection do
     end
 
     # add runner and projected time
-    runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase, city: city)
+    runners = Runner.where(first_name: runner_info['fname'].downcase, last_name: runner_info['lname'].downcase, city: city).where.not(team: "0")
 
     # if a runner changes cities or if runner with same name without city
     # if runners.empty?
@@ -121,12 +121,7 @@ namespace :projection do
       projected_result.update_attributes("runner_id" => runner.id, "team" => runner.team, "state" => runner.state, "age" => Time.now.year - runner.birth_year)
 
       # exclude mile since AG not as accurate and check for AG% since 18 mile Tune Up does not have AG%
-      best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 6.months.ago).order('ag_percent DESC')[0]
-
-      # if runner has no results in last 6 months, find best in the last year
-      if best_result.nil?
-        best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 1.year.ago).order('ag_percent DESC')[0]
-      end
+      best_result = runner.results.where.not(:ag_percent => nil).where("(distance != 1.0 AND distance != 0.2) AND date > ?", 1.year.ago).order('ag_percent DESC')[0]
 
       # if still no best time, find the most recent race that is not the mile or 18 miler
       if best_result.nil?
@@ -187,7 +182,6 @@ namespace :projection do
       projected_pace_in_seconds = projected_time_in_seconds / projected_race.distance
       projected_pace = "#{sprintf "%02d", (projected_pace_in_seconds / 60).floor}:#{sprintf "%02d", ((projected_pace_in_seconds % 3600) % 60).round}"
       projected_result.update_attributes("net_time" => projected_time, "pace_per_mile" => projected_pace, "ag_percent" => best_result.ag_percent)
-
     else
       puts "Not found: #{runner_info['name']} "
       projected_result.update_attributes("team" => '---')
@@ -197,9 +191,9 @@ namespace :projection do
 
     projected_result.save!
   end
+
+  def format_date(date_str)
+    date = Date.strptime(date_str, '%m/%d/%y')
+  end
 end
 
-def format_date(date_str)
-  date = Date.strptime(date_str, '%m/%d/%y')
-end
-end
