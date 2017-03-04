@@ -17,7 +17,6 @@ namespace :nyrr do
     "AGTime" => "ag_time",
     "Age-GradedTime" => "ag_time",
     "AGGenderPlace" => "ag_gender_place",
-    "AG %" => "ag_percent",
     "Age-GradedPerformance %" => "ag_percent",
     "NetTime" => "net_time",
     "GunTime" => "gun_time",
