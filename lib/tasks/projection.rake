@@ -182,12 +182,19 @@ namespace :projection do
       # calculate projected time with Riegel formula
       # http://www.runningforfitness.org/faq/rp
       # T2 = T1 x (D2/D1)1.06
+      # this doesn't translate well for women so trying 3% instead of 6
+      if runner.sex == "m"
+        coefficient = 1.06
+      else
+        coefficient = 1.03
+      end
       if projected_race.distance > best_result.distance
-        projected_time_in_seconds = best_time_in_seconds * ((projected_race.distance / best_result.distance )**1.06)
+        projected_time_in_seconds = best_time_in_seconds * ((projected_race.distance / best_result.distance )**coefficient)
       else
         # T1 = T2 / (D2/D1)1.06
-        projected_time_in_seconds = best_time_in_seconds / ((best_result.distance / projected_race.distance )**1.06)
+        projected_time_in_seconds = best_time_in_seconds / ((best_result.distance / projected_race.distance )**coefficient)
       end
+
       puts "projected_time_in_seconds #{projected_time_in_seconds}"
       projected_time = "#{sprintf "%02d",(projected_time_in_seconds / 3600).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) / 60).floor}:#{sprintf "%02d", ((projected_time_in_seconds % 3600) % 60).round}"
       puts "projected_time #{projected_time}"
