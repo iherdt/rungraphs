@@ -26,8 +26,7 @@ module Rungraphs
         "Brooklyn Bridge (Manhattan to Brooklyn)" => 6400998,
         "Columbia: Degraw to Atlantic" => 5701493,
         "Red Hook 400m Loop" => 3669529,
-        "Belt Parkway greenway From 91st to Pier" => 804505,
-        "Ocean Parkway - To Coney Island" => 5348874
+        "Belt Parkway greenway From 91st to Pier" => 804505
       }
 
       def initialize
