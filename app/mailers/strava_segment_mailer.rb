@@ -12,6 +12,6 @@ class StravaSegmentMailer < ApplicationMailer
       GENDER_TO_TITLE[gender] => strava_segment_data_provider.get_segment_leaderboard_data(gender)
     }
 
-    mail(:to => report_email, :subject => "Rungraphs Strava Segment Weekly Report #{Time.now.in_time_zone('Eastern Time (US & Canada)').to_date.strftime('%m/%d/%y')}")
+    mail(:to => report_email, :subject => "Rungraphs Strava Segment Weekly Report #{GENDER_TO_TITLE[gender]} #{Time.now.in_time_zone('Eastern Time (US & Canada)').to_date.strftime('%m/%d/%y')}")
   end
 end
