@@ -14,6 +14,7 @@ module Rungraphs
         "West Lake Bomb" => 2627325,
         "McCarren Park Lap" => 3673193,
         "Pulaski Bridge" => 6401050,
+        "The Brooklyn Mile" => 12472244,
         "Kent Ave 14th to Metropolitan" => 4857422,
         "Franklin - Huron to N 12th" => 8541301,
         "Williamsburg Bridge (Manhattan to Brooklyn)" => 6401036,
