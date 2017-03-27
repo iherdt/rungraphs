@@ -24,7 +24,7 @@ module Rungraphs
         "Brooklyn Bridge (Brooklyn to Manhattan)" => 6400995,
         "Brooklyn Bridge (Manhattan to Brooklyn)" => 6400998,
         "Columbia: Degraw to Atlantic" => 5701493,
-        "Red Hook 400m Loop" => 3669529,
+        "Red Hook 400m Loop" => 3669529
       }
 
       def initialize
